@@ -118,11 +118,22 @@ def upload_file():
         file.save(file_path)
         # 画像を処理
         class_name, confidence_score = process_image(file_path)
+        class_name = class_name.split(' ', 1)[1] if ' ' in class_name else class_name
         response_data = {
             'image_url': '/' + file_path,
             'class_name': class_name,
             'confidence_score': confidence_score
         }
+        print(class_name)
+        # データベースから食材IDを検索
+        ingredient = Ingredients.query.filter_by(name=class_name).first()
+        if ingredient:
+            ingredient_id = ingredient.IngredientID
+        else:
+            ingredient_id = None
+
+        print(ingredient_id)
+
         
         return jsonify(response_data)
         #return jsonify({'image_url': '/' + file_path})
