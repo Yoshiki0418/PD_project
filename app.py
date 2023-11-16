@@ -55,6 +55,7 @@ def foods():
             days_left = '不明'  # または適切なデフォルト値
 
         veg_data = {
+            "IngredientID": vegetable.IngredientID,
             'name': vegetable.name,
             'image_file': vegetable.image_path,
             'expiry': expiry_date.strftime('%Y-%m-%d') if expiry_date else '不明',  # 日付を文字列に変換、または'不明'
