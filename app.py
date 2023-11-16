@@ -131,8 +131,19 @@ def upload_file():
             ingredient_id = ingredient.IngredientID
         else:
             ingredient_id = None
-
         print(ingredient_id)
+
+        # 単一のIDをリストに変換
+        if not isinstance(ingredient_id, list):
+            ingredient_id = [ingredient_id]
+
+        query = db.session.query(IngredientsRecipes.RecipeID)\
+            .filter(IngredientsRecipes.IngredientID.in_(ingredient_id))\
+            .group_by(IngredientsRecipes.RecipeID)\
+            .having(db.func.count(db.distinct(IngredientsRecipes.IngredientID)) == len(ingredient_id))
+
+        recipe_ids = [recipe.RecipeID for recipe in query.all()]
+        print(recipe_ids)
 
         
         return jsonify(response_data)
