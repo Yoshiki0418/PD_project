@@ -24,6 +24,13 @@ class Ingredients(db.Model):
     is_present = db.Column(db.Integer)
     category = db.Column(db.Integer)
 
+class IngredientsRecipes(db.Model):
+    __tablename__ = 'IngredientsRecipes'  # テーブル名を指定
+
+    ID = db.Column(db.Integer, primary_key=True)
+    IngredientID = db.Column(db.Integer, db.ForeignKey('Ingredients.IngredientID'))
+    RecipeID = db.Column(db.Integer, db.ForeignKey('Recipes.RecipeID'))
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -73,6 +80,14 @@ def handle_data():
     selected_items = data['selectedItems']
     # ここで selected_items に対する処理を行う
     print(selected_items)
+    # SQLクエリの構築と実行
+    query = db.session.query(IngredientsRecipes.RecipeID)\
+        .filter(IngredientsRecipes.IngredientID.in_(selected_items))\
+        .group_by(IngredientsRecipes.RecipeID)\
+        .having(db.func.count(db.distinct(IngredientsRecipes.IngredientID)) == len(selected_items))
+
+    recipe_ids = [recipe.RecipeID for recipe in query.all()]
+    print(recipe_ids)
 
     return jsonify({'status': 'success'})
 
