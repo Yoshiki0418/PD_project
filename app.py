@@ -119,11 +119,6 @@ def upload_file():
         # 画像を処理
         class_name, confidence_score = process_image(file_path)
         class_name = class_name.split(' ', 1)[1] if ' ' in class_name else class_name
-        response_data = {
-            'image_url': '/' + file_path,
-            'class_name': class_name,
-            'confidence_score': confidence_score
-        }
         print(class_name)
         # データベースから食材IDを検索
         ingredient = Ingredients.query.filter_by(name=class_name).first()
@@ -136,19 +131,35 @@ def upload_file():
         # 単一のIDをリストに変換
         if not isinstance(ingredient_id, list):
             ingredient_id = [ingredient_id]
+        response_data = {
+            'image_url': '/' + file_path,
+            'class_name': class_name,
+            'confidence_score': confidence_score,
+            "ingredient_id": ingredient_id
+        }
 
-        query = db.session.query(IngredientsRecipes.RecipeID)\
-            .filter(IngredientsRecipes.IngredientID.in_(ingredient_id))\
-            .group_by(IngredientsRecipes.RecipeID)\
-            .having(db.func.count(db.distinct(IngredientsRecipes.IngredientID)) == len(ingredient_id))
-
-        recipe_ids = [recipe.RecipeID for recipe in query.all()]
-        print(recipe_ids)
-
-        
         return jsonify(response_data)
         #return jsonify({'image_url': '/' + file_path})
     return jsonify({'error': 'File upload failed'})
+
+@app.route('/get-recipes', methods=['POST'])
+def get_recipes():
+    print(request.json)
+    ingredient_ids = request.json.get('ingredient_id')
+    if not ingredient_ids:
+        return jsonify({'error': 'No ingredient IDs provided'}), 400
+    
+    query = db.session.query(IngredientsRecipes.RecipeID)\
+            .filter(IngredientsRecipes.IngredientID.in_(ingredient_ids))\
+            .group_by(IngredientsRecipes.RecipeID)\
+            .having(db.func.count(db.distinct(IngredientsRecipes.IngredientID)) == len(ingredient_ids))
+
+    recipe_ids = [recipe.RecipeID for recipe in query.all()]
+    print(recipe_ids)
+    
+
+    return jsonify(recipe_ids)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

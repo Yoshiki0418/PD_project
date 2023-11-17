@@ -59,6 +59,7 @@
 			  <!--Jsを使って処理を定義-->
 			  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 			  <script>
+				let ingredient_id;
 				$(document).ready(function() {
 				  $('#upload-form').on('submit', function(e) {
 					e.preventDefault();
@@ -70,6 +71,7 @@
 					  contentType: false,
 					  processData: false,
 					  success: function(response) {
+						ingredient_id = response.ingredient_id; // responseからingredient_idを取得
 						if(response.image_url) {
 						  $('#uploaded-image').attr('src', response.image_url);
 						  if(response.class_name) {
@@ -85,8 +87,31 @@
 					  }
 					});
 				  });
+			  
+				  // イベント委譲を使用して、動的に追加されたボタンにイベントハンドラを設定
+				  $(document).on('click', '.recipe_button', function() {
+					console.log('レシピ検索ボタンがクリックされました。');
+					// サーバーにAjaxリクエストを送信
+					$.ajax({
+					  url: '/get-recipes', // サーバーのレシピを取得するルート
+					  type: 'POST',
+					  contentType: 'application/json',
+					  data: JSON.stringify({ 'ingredient_id': ingredient_id }), // リクエストボディにingredient_idを含める
+					  dataType: 'json',
+					  success: function(recipes) {
+						// 成功した場合の処理
+						console.log(recipes);
+					  },
+					  error: function(error) {
+						// エラーが発生した場合の処理
+						console.error('Error fetching recipes:', error);
+					  }
+					});
+				  });
 				});
 			  </script>
+			  
+			  
 		</div>
 	</section>
 	
