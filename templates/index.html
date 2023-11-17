@@ -101,6 +101,21 @@
 					  success: function(recipes) {
 						// 成功した場合の処理
 						console.log(recipes);
+						recipes.forEach(function(recipe) {
+						const recipeCardHtml = `
+						<section>
+							<div class="recipe-card">
+								<img src="static/images/recipe/${recipe.ImageURL}" alt="${recipe.RecipeName }" class="recipe-image">
+								<div class="recipe-content">
+									<h2 class="recipe-title">${recipe.RecipeName}</h2>
+									<p class="recipe-description">${recipe.Description}</p>
+								</div>
+							</div>
+						</section>
+						`;
+						// 新しいレシピカードをDOMに追加します。
+						$('main').append(recipeCardHtml);
+					});
 					  },
 					  error: function(error) {
 						// エラーが発生した場合の処理
@@ -111,15 +126,7 @@
 				});
 			  </script>	  
 		</div>
-	</section>
-	<section>
-		<div class="recipe-card">
-			<img src="static/images/3.jpg" alt="トマトのオーブン焼き" class="recipe-image">
-			<div class="recipe-content">
-			  <h2 class="recipe-title">トマトのオーブン焼き(副菜)</h2>
-			  <p class="recipe-description">「トマトのオーブン焼き」は、美味しさとヘルシーさが絶妙に組み合わさった素晴らしい副菜です。トマトの自然な甘さとふわふわの卵焼き、豊かな味の相乗効果です。具体的な調理方法は好みでアレンジ可能で、ミートや野菜、おじさんを利用してバリエーション豊かな味わいを楽しめます。</p>
-			</div>
-		</div>
+		
 	</section>
 	
 	

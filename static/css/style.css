@@ -935,3 +935,30 @@ p.img {margin: 0 0 1rem !important;}
 	line-height: 1.4;
   }
   
+
+  .cssbk{position:relative;width:100%;padding-bottom:72%;}
+.cssbk input{display:none;}
+.cssbk input~span{
+transition:1.5s;
+-webkit-backface-visibility:hidden;
+backface-visibility:hidden;
+position:absolute;
+width:50%;height:100%;
+background-color:#fffff8;
+border:1px solid black;
+}
+.cssbk input+span{
+left:50%;transform-origin:left;
+transform:perspective(1500px) rotateY(0deg);
+}
+.cssbk input+span+span{
+right:50%;transform-origin:right;
+transform:perspective(1500px) rotateY(180deg);
+}
+.cssbk input:checked+span{
+transform:perspective(1500px) rotateY(-180deg);
+}
+.cssbk input:checked+span+span{
+transform:perspective(1500px) rotateY(0deg);
+}
+

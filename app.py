@@ -200,6 +200,7 @@ def get_recipes():
     
     # JSONとしてレシピデータを返す
     return jsonify(recipes_data)
+ 
 
 
 if __name__ == '__main__':
