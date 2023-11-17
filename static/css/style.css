@@ -803,7 +803,7 @@ p.img {margin: 0 0 1rem !important;}
 
 	}/*画面幅900px以上の追加指定ここまで*/
 
-/*自作プログラムの追加要素１*/
+
 .top_pic{
 	opacity: 0.5; /* 透明度を50%に設定 */
 
@@ -903,3 +903,35 @@ p.img {margin: 0 0 1rem !important;}
 .search-btn:hover {
     background-color: #2a6db2; /* ホバー時の色 */
 }
+
+.recipe-card {
+	max-width: 300px;
+	margin: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border: 1px solid #ddd;
+	overflow: hidden;
+  }
+  
+  .recipe-image {
+	width: 100%;
+	height: auto;
+	display: block;
+  }
+  
+  .recipe-content {
+	padding: 15px;
+  }
+  
+  .recipe-title {
+	margin: 0;
+	color: #333;
+	font-size: 18px;
+	font-weight: bold;
+  }
+  
+  .recipe-description {
+	font-size: 14px;
+	color: #666;
+	line-height: 1.4;
+  }
+  
