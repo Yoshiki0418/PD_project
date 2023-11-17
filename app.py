@@ -39,6 +39,10 @@ def index():
 def rogin():
     return render_template('login.html')
 
+@app.route('/recipe')
+def recipe():
+    return render_template('recipe.html')
+
 #コメント
 
 @app.route('/works')
