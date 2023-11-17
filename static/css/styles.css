@@ -1,0 +1,66 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* サイズ計算をより予測しやすくするためのプロパティ */
+}
+.head_rogo{
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+header{
+    margin: 0;
+    padding: 0;
+    background-color: chocolate;
+    /* background: cover; */
+}
+
+.mail_tagu{
+    position: absolute;
+    font-size: 20px;
+    left: 38%;
+    top: 29%;
+}
+
+.mail{
+    position: absolute;
+    left: 35%;
+    top: 35%;
+}
+
+.password_tagu{
+    position: absolute;
+    font-size: 20px;
+    left: 38%;
+    top: 44%;
+}
+
+.password{
+    position: absolute;
+    left: 35%;
+    top: 50%;
+}
+
+.large-input{
+    font-size: 20px; /* フォントサイズを調整 */
+    width: 300px;
+}
+
+.new_one{
+    text-align: center;
+    font-size: 30px; 
+}
+.sainin{
+    font-size: 30px; 
+    position: absolute;
+    left: 47%;
+    top: 70%;
+}
+
+.new_one{
+    font-size: 30px; 
+    position: absolute;
+    left: 43%;
+    top: 80%;
+
+}
