@@ -3,10 +3,10 @@ import cv2
 import numpy as np
 
 # Load the model
-model = load_model("/Users/yamamoto116/Desktop/PD_project/model/keras_model.h5", compile=False)
+model = load_model("model/keras_model.h5", compile=False)
 
 # Load the labels
-with open("/Users/yamamoto116/Desktop/PD_project/model/labels.txt", "r", encoding="utf-8") as file:
+with open("model/labels.txt", "r", encoding="utf-8") as file:
     class_names = file.readlines()
 
 def process_image(image_path):
