@@ -1,0 +1,154 @@
+/* Reset default margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+/* Header */
+header {
+    background-color: #F28E60;
+    font-size: 10px;
+    font-weight: normal;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Header Flexbox */
+.header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-flex h1 {
+    text-align: center;
+    flex: 1;
+}
+
+/* Recipe Container */
+.r_container {
+    margin-top: 2%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.r_content {
+    flex-basis: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 3px;
+    text-align: center;
+}
+
+.description {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.title_p {
+    display: inline-block;
+    background-color: #064C00;
+    color: #FFFFFF;
+    padding: 10px;
+    width: auto;
+}
+
+.long-line {
+    border-bottom: 3px solid black;
+    width: 70%;
+}
+
+/* Headings */
+h2 {
+    font-size: 20px;
+    font-weight: normal;
+}
+
+/* Main content */
+main {
+    padding: 20px;
+}
+
+/* Lists */
+ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: #fffde8;
+    box-shadow: 0px 0px 0px 10px #fffde8;
+    border: dashed 2px #ffb03f;
+    border-radius: 9px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 0.5em 0.5em 0.5em 2em;
+}
+
+ul li, ol li {
+    line-height: 1.5;
+    padding: 0.5em 0;
+}
+
+/* Paragraphs */
+p {
+    font-size: 20px;
+    font-weight: normal;
+    text-align: left;
+}
+
+/* List Items */
+li {
+    margin-bottom: 10px;
+}
+
+/* Images */
+img {
+    width: 100%;
+    height: 100%;
+    max-width: 350px;
+    max-height: 400px;
+    object-fit: contain;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Footer */
+footer {
+    background-color: #f9f9f9;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Ordered List */
+ol {
+    list-style-type: none;
+    counter-reset: my-counter;
+    padding-left: 0;
+}
+
+ol li {
+    position: relative;
+    margin-bottom: 10px;
+    padding-left: 70px;
+}
+
+ol li::before {
+    content: counter(my-counter);
+    counter-increment: my-counter;
+    position: absolute;
+    left: 20px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #FFFFFF;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #FF0000;
+}
