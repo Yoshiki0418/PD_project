@@ -24,6 +24,17 @@ class Ingredients(db.Model):
     is_present = db.Column(db.Integer)
     category = db.Column(db.Integer)
 
+class Recipe(db.Model):
+    __tablename__ = 'Recipes'
+
+    RecipeID = db.Column(db.Integer, primary_key=True)
+    RecipeName = db.Column(db.String(255), nullable=False)
+    Description = db.Column(db.Text, nullable=True)
+    CookingTime = db.Column(db.Integer, nullable=True)
+    ImageURL = db.Column(db.String(255), nullable=True)
+    Ingredients = db.Column(db.Text, nullable=True)
+    Instructions = db.Column(db.Text, nullable=True)
+
 class IngredientsRecipes(db.Model):
     __tablename__ = 'IngredientsRecipes'  # テーブル名を指定
 
@@ -139,6 +150,7 @@ def upload_file():
         # 単一のIDをリストに変換
         if not isinstance(ingredient_id, list):
             ingredient_id = [ingredient_id]
+
         response_data = {
             'image_url': '/' + file_path,
             'class_name': class_name,
@@ -164,9 +176,30 @@ def get_recipes():
 
     recipe_ids = [recipe.RecipeID for recipe in query.all()]
     print(recipe_ids)
-    
 
-    return jsonify(recipe_ids)
+    #作成できるレシピIDを用いてレシピIDを参照する
+    # 指定されたRecipeIDのレシピを取得
+    recipes = Recipe.query.filter(Recipe.RecipeID.in_(recipe_ids)).all()
+    
+    if not recipes:
+        # 指定されたIDのレシピが見つからない場合はエラーを返します。
+        return jsonify({'error': 'No Recipes found for provided IDs'}), 404
+    
+    # 取得したレシピオブジェクトを辞書リストに変換
+    recipes_data = [{
+        'RecipeID': recipe.RecipeID,
+        'RecipeName': recipe.RecipeName,
+        'Description': recipe.Description,
+        'CookingTime': recipe.CookingTime,
+        'ImageURL': recipe.ImageURL,
+        'Ingredients': recipe.Ingredients,
+        'Instructions': recipe.Instructions
+    } for recipe in recipes]
+
+    print(recipes_data)
+    
+    # JSONとしてレシピデータを返す
+    return jsonify(recipes_data)
 
 
 if __name__ == '__main__':
