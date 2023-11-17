@@ -35,7 +35,9 @@ class IngredientsRecipes(db.Model):
 def index():
     return render_template('index.html')
 
-
+@app.route('/Login')
+def rogin():
+    return render_template('login.html')
 
 @app.route('/works')
 def works():
