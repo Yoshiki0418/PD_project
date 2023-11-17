@@ -39,6 +39,8 @@ def index():
 def rogin():
     return render_template('login.html')
 
+#コメント
+
 @app.route('/works')
 def works():
     return render_template('works.html')
