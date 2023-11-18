@@ -38,6 +38,7 @@
 MySQLがまだインストールされていない場合は、公式のMySQLダウンロードページ https://dev.mysql.com/downloads/mysql/ からインストーラーをダウンロードしてインストールしてください。
 ##### ターミナルでインストール
 - macOS
+  
 1,Homebrewを使用:
 macOSでは、パッケージマネージャーのHomebrewを使用してMySQLをインストールすることが一般的です。まず、ターミナルを開きます。
 
