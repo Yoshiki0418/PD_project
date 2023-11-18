@@ -33,38 +33,43 @@
 - OpenCV
 
 ## セットアップ
-### MySQL
+### <MySQL>
 1. MySQLサーバーのインストール
 MySQLがまだインストールされていない場合は、公式のMySQLダウンロードページ https://dev.mysql.com/downloads/mysql/ からインストーラーをダウンロードしてインストールしてください。
 ##### ターミナルでインストール
 - macOS
   
-1,Homebrewを使用:
+1. Homebrewを使用:
 macOSでは、パッケージマネージャーのHomebrewを使用してMySQLをインストールすることが一般的です。まず、ターミナルを開きます。
 
 ```bash
 brew update
 brew install mysql
 ```
-2,MySQLの自動起動設定（オプション）:
+
+2. MySQLの自動起動設定（オプション）:
 MySQLをシステム起動時に自動的に起動させたい場合は、以下のコマンドを実行します。
 
 ```bash
 brew services start mysql
 ```
-3,MySQLのセキュリティ設定:
+
+3. MySQLのセキュリティ設定:
 初期セキュリティ設定を行います。
 
 ```bash
 mysql_secure_installation
 ```
-4,MySQLへのログイン:
+
+4. MySQLへのログイン:
 MySQLコマンドラインツールにログインします。
 
 ```bash
 Copy code
 mysql -u root -p
 ```
+
+
 
 2. データベースの作成
 MySQLコマンドラインツールを使用して、新しいデータベースを作成します。以下のコマンドを実行してください：
