@@ -102,20 +102,18 @@
 						// 成功した場合の処理
 						console.log(recipes);
 						recipes.forEach(function(recipe) {
-						const recipeCardHtml = `
-						<section>
+							const recipeCardHtml = `
 							<div class="recipe-card">
-								<img src="static/images/recipe/${recipe.ImageURL}" alt="${recipe.RecipeName }" class="recipe-image">
+								<img src="static/images/recipe/${recipe.ImageURL}" alt="${recipe.RecipeName}" class="recipe-image">
 								<div class="recipe-content">
 									<h2 class="recipe-title">${recipe.RecipeName}</h2>
 									<p class="recipe-description">${recipe.Description}</p>
 								</div>
 							</div>
-						</section>
-						`;
-						// 新しいレシピカードをDOMに追加します。
-						$('main').append(recipeCardHtml);
-					});
+							`;
+							// 新しいレシピカードをrecipe_sectionに追加します。
+							$('.recipe_section').append(recipeCardHtml);
+						});					
 					  },
 					  error: function(error) {
 						// エラーが発生した場合の処理
@@ -126,6 +124,9 @@
 				});
 			  </script>	  
 		</div>
+		<section class="recipe_section">
+			<!-- カードがここに追加される -->
+		</section>
 		
 	</section>
 	

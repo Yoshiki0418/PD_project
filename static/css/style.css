@@ -936,29 +936,27 @@ p.img {margin: 0 0 1rem !important;}
   }
   
 
-  .cssbk{position:relative;width:100%;padding-bottom:72%;}
-.cssbk input{display:none;}
-.cssbk input~span{
-transition:1.5s;
--webkit-backface-visibility:hidden;
-backface-visibility:hidden;
-position:absolute;
-width:50%;height:100%;
-background-color:#fffff8;
-border:1px solid black;
-}
-.cssbk input+span{
-left:50%;transform-origin:left;
-transform:perspective(1500px) rotateY(0deg);
-}
-.cssbk input+span+span{
-right:50%;transform-origin:right;
-transform:perspective(1500px) rotateY(180deg);
-}
-.cssbk input:checked+span{
-transform:perspective(1500px) rotateY(-180deg);
-}
-.cssbk input:checked+span+span{
-transform:perspective(1500px) rotateY(0deg);
+  .recipe_section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
+.recipe-card {
+    flex-basis: calc(33.333% - 20px); /* 3つのカードが一行に収まるように */
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .recipe-card {
+        flex-basis: calc(50% - 20px); /* 画面が狭い時は2列に */
+    }
+}
+
+@media (max-width: 480px) {
+    .recipe-card {
+        flex-basis: 100%; /* 画面がさらに狭い時は1列に */
+    }
+}
