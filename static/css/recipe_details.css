@@ -1,0 +1,99 @@
+.recipe_details{
+    margin-top: 160px;
+}
+.top_block{
+    margin-left: 50px;
+    margin-right: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.left_block{
+    width: 43%;
+}
+hr {
+    border-top: 2px solid #fe890d;  /* 上部のボーダーを設定 */
+    margin: 20px 0;  /* 上下のマージン */
+}
+.pic_block{
+    width: 43%;
+    box-shadow: 0px 4px 4px #000000c3;
+}
+.timer {
+    position: relative;
+    display: inline-block;
+    left: 90%;
+}
+
+.timer-body {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #8c8b8b;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+.timer-time {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.timer-top {
+    position: absolute;
+    top: -9px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background-color: #8c8b8b;
+    border-radius: 50%;
+}
+.Instruction{
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+    display: flex;
+    height: 240px;
+}
+.sub_title{
+    background-color: rgb(249, 113, 1);
+    width: 150px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 25px;
+    position: relative;
+    z-index: 2;
+    left: 20px;
+    bottom: 20px;
+}
+.sub_title h2{
+    color: aliceblue;
+    align-items: center;
+    justify-content: center;
+}
+.Cookitem_block{
+    position: absolute;
+    width: 90%;
+    height: 210px;
+    background-color: #fffde8;
+    border-radius: 25px;
+    z-index: 1;
+    border: 0.4px solid #ef8c1a;
+    box-shadow: 0px 4px 4px #000000c3;
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 20px;
+    padding-left: 30px;
+}
+.Cookitem_block li{
+    font-size: 20px;
+}
+.Cookitem_block ul{
+    margin-right: 100px;
+}

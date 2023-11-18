@@ -7,6 +7,7 @@
 <meta name="description" content="ここにサイト説明を入れます">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vegas/2.5.4/vegas.min.css">
 <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='css/recipe_details.css')}}">
 </head>
 
 <body>
@@ -14,7 +15,7 @@
 <div id="container">
 
 <header>
-<h1 id="logo"><a href="index.html"><img src="images/logo.png" alt="SAMPLE COMPANY"></a></h1>
+	<h1 id="logo"><a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/top.png') }}" class ="top_pic" alt="SAMPLE COMPANY"></a></h1>
 	<!--開閉ブロック-->
 	<div id="menubar">
 	<nav>
@@ -34,192 +35,51 @@
 	</div>
 	<!--/#menubar-->
 </header>
+<main>
+	<section class="recipe_details">
+		<div class="top_block">
+			<div class="left_block">
+				<h1>{{ recipe.RecipeName }}</h1>
+				<hr>
+				<p>{{ recipe.Description }}</p>
+				<div class="timer">
+					<div class="timer-body">
+						<span class="timer-time">{{ recipe.CookingTime }}min</span>
+					</div>
+					<div class="timer-top"></div>
+				</div>
+			</div>
+			<div class="pic_block">
+				<img src="{{ url_for('static', filename='images/1.jpg') }}" alt="" class="recipe-image">
+			</div>
+		</div>
+		<div class="Instruction">
+			<div class="sub_title"><h2>材料</h2></div>
+			<div class="Cookitem_block">
+				{% set ingredients = recipe.Ingredients.split(',') %}
+				{% for ingredient in ingredients %}
+					{# 新しい<ul>タグを4要素ごとに開始 #}
+					{% if loop.index0 % 4 == 0 %}
+						{% if not loop.first %}</ul>{% endif %}
+						<ul>
+					{% endif %}
+			
+					<li>{{ ingredient.strip() }}</li>
+			
+					{# 最後の要素であれば閉じる<ul>タグを追加 #}
+					{% if loop.last %}
+						</ul>
+					{% endif %}
+				{% endfor %}
+			</div>
+			
+			
+		</div>
 
-<div id="contents">
-
-<main class="column">
-
-<div class="main">
-
-<section>
-
-<h2><span class="uline">業務内容</span><span class="small">Works</span></h2>
-
-<div class="list-grid">
-
-<div class="list">
-<figure><a href="#"><img src="images/1.jpg" alt=""></a></figure>
-<div class="text">
-<h4><a href="#">ここにタイトルを入れます</a></h4>
-<p>ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-<div class="list">
-<figure><img src="images/1.jpg" alt=""></figure>
-<div class="text">
-<h4>ここにタイトルを入れます</h4>
-<p>ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-<div class="list">
-<figure><img src="images/1.jpg" alt=""></figure>
-<div class="text">
-<h4>ここにタイトルを入れます</h4>
-<p>ここに説明を入れます。サンプルテキスト。ここに説明を入れます。サンプルテキスト。ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-<div class="list">
-<figure><a href="#"><img src="images/2.jpg" alt=""></a></figure>
-<div class="text">
-<h4><a href="#">ここにタイトルを入れます</a></h4>
-<p>ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-<div class="list">
-<figure><img src="images/2.jpg" alt=""></figure>
-<div class="text">
-<h4>ここにタイトルを入れます</h4>
-<p>ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-<div class="list">
-<figure><img src="images/2.jpg" alt=""></figure>
-<div class="text">
-<h4>ここにタイトルを入れます</h4>
-<p>ここに説明を入れます。サンプルテキスト。ここに説明を入れます。サンプルテキスト。ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-<div class="list">
-<figure><a href="#"><img src="images/3.jpg" alt=""></a></figure>
-<div class="text">
-<h4><a href="#">ここにタイトルを入れます</a></h4>
-<p>ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-<div class="list">
-<figure><img src="images/3.jpg" alt=""></figure>
-<div class="text">
-<h4>ここにタイトルを入れます</h4>
-<p>ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-<div class="list">
-<figure><img src="images/3.jpg" alt=""></figure>
-<div class="text">
-<h4>ここにタイトルを入れます</h4>
-<p>ここに説明を入れます。サンプルテキスト。ここに説明を入れます。サンプルテキスト。ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-<div class="list">
-<div class="text">
-<h4><a href="#">ここにタイトルを入れます</a></h4>
-<p>ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-<div class="list">
-<div class="text">
-<h4>ここにタイトルを入れます</h4>
-<p>ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-<div class="list">
-<div class="text">
-<h4>ここにタイトルを入れます</h4>
-<p>ここに説明を入れます。サンプルテキスト。ここに説明を入れます。サンプルテキスト。ここに説明を入れます。サンプルテキスト。</p>
-</div>
-<!--/.text-->
-</div>
-<!--/.list-->
-
-</div>
-<!--/.list-grid-->
-
-</section>
-
-</div>
-<!--/.main-->
-
-<div class="sub">
-
-<div class="box1">
-
-<h3>見出し</h3>
-
-<nav>
-<ul class="submenu">
-<li><a href="">サブメニュー</a></li>
-<li><a href="">サブメニュー</a></li>
-<li><a href="">サブメニュー</a></li>
-<li><a href="">サブメニュー</a></li>
-<li><a href="">サブメニュー</a></li>
-</ul>
-</nav>
-
-</div>
-<!--/.box1-->
-
-<h3>見出し</h3>
-
-<nav>
-<ul class="submenu">
-<li><a href="">サブメニュー</a></li>
-<li><a href="">サブメニュー</a></li>
-<li><a href="">サブメニュー</a></li>
-<li><a href="">サブメニュー</a></li>
-<li><a href="">サブメニュー</a></li>
-</ul>
-</nav>
-
-<p class="img"><img src="images/2.jpg" alt=""></p>
-<p class="img"><img src="images/3.jpg" alt=""></p>
-
-</div>
-<!--/.sub-->
+	</section>
 
 </main>
 
-</div>
-<!--/#contents-->
-
-<ul id="footermenu">
-<li><a href="index.html">ホーム</a></li>
-<li><a href="company.html">会社概要</a></li>
-<li><a href="works.html">業務内容</a></li>
-<li><a href="contact.html">コンタクト</a></li>
-</ul>
 
 <footer>
 <small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
