@@ -82,14 +82,14 @@ Windowsでは、MySQLの公式サイトからMySQLインストーラーをダウ
 MySQL Workbenchを使用してMySQLサーバーに接続し、データベースの作成やユーザーの管理を行うことができます。**
 
 
-## 2. データベースの作成
+### 2. データベースの作成
 MySQLコマンドラインツールを使用して、新しいデータベースを作成します。以下のコマンドを実行してください：
 ```sql
 CREATE DATABASE your_database_name;
 ```
 your_database_name をプロジェクト用のデータベース名に置き換えてください。
 
-## 3. データベースユーザーの作成と権限の付与
+### 3. データベースユーザーの作成と権限の付与
 セキュリティを強化するために、プロジェクト専用のユーザーを作成し、作成したデータベースに対する権限を付与します。以下のコマンドを実行してください：
 ```sql
 CREATE USER 'your_username'@'localhost' IDENTIFIED BY 'your_password';
