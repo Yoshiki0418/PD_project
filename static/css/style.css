@@ -946,6 +946,7 @@ p.img {margin: 0 0 1rem !important;}
     flex-basis: calc(33.333% - 20px); /* 3つのカードが一行に収まるように */
     margin: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	height: 354px;
 }
 
 /* レスポンシブデザイン */
@@ -959,4 +960,9 @@ p.img {margin: 0 0 1rem !important;}
     .recipe-card {
         flex-basis: 100%; /* 画面がさらに狭い時は1列に */
     }
+}
+
+.recipe-image{
+	width: 298px;
+	height: 199px;
 }
