@@ -205,7 +205,23 @@ def get_recipes():
 def recipe_details(recipe_id):
     print(recipe_id)
     # レシピIDに基づいてデータを取得
-    recipe_data = ...  # レシピデータの取得ロジック
+    # 指定されたRecipeIDのレシピを取得
+    recipe = Recipe.query.filter_by(RecipeID=recipe_id).first()
+    if not recipe:
+        # 指定されたIDのレシピが見つからない場合はエラーを返します。
+        return jsonify({'error': 'No Recipes found for provided IDs'}), 404
+    
+    # 取得したレシピオブジェクトを辞書リストに変換
+    recipe_data = {
+        'RecipeID': recipe.RecipeID,
+        'RecipeName': recipe.RecipeName,
+        'Description': recipe.Description,
+        'CookingTime': recipe.CookingTime,
+        'ImageURL': recipe.ImageURL,
+        'Ingredients': recipe.Ingredients,
+        'Instructions': recipe.Instructions
+    }
+
     return render_template('recipe_details.html', recipe=recipe_data)
  
 
