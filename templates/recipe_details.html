@@ -50,10 +50,10 @@
 				</div>
 			</div>
 			<div class="pic_block">
-				<img src="{{ url_for('static', filename='images/1.jpg') }}" alt="" class="recipe-image">
+				<img src="{{ url_for('static', filename='images/recipe/' + recipe.ImageURL) }}" alt="" class="recipe-image">
 			</div>
 		</div>
-		<div class="Instruction">
+		<div class="Cook_item">
 			<div class="sub_title"><h2>材料</h2></div>
 			<div class="Cookitem_block">
 				{% set ingredients = recipe.Ingredients.split(',') %}
@@ -72,10 +72,18 @@
 					{% endif %}
 				{% endfor %}
 			</div>
-			
-			
 		</div>
-
+		<div class="Instruction">
+			<div class="sub_title"><h2>手順</h2></div>
+			<div class="Cookitem_block">
+				{% set instructions = recipe.Instructions.split(',') %}
+				<ul>
+					{% for instruction in instructions %}
+						<li>{{ instruction.strip() }}</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
 	</section>
 
 </main>

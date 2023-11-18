@@ -1,5 +1,6 @@
 .recipe_details{
     margin-top: 160px;
+    height: auto;
 }
 .top_block{
     margin-left: 50px;
@@ -51,7 +52,7 @@ hr {
     background-color: #8c8b8b;
     border-radius: 50%;
 }
-.Instruction{
+.Cook_item{
     margin-top: 50px;
     margin-left: 50px;
     margin-right: 50px;
@@ -66,10 +67,10 @@ hr {
     align-items: center;
     justify-content: center;
     border-radius: 25px;
-    position: relative;
+    position: absolute;
     z-index: 2;
-    left: 20px;
-    bottom: 20px;
+    left: 120px;
+    margin-top: -20px;
 }
 .sub_title h2{
     color: aliceblue;
@@ -77,23 +78,32 @@ hr {
     justify-content: center;
 }
 .Cookitem_block{
-    position: absolute;
-    width: 90%;
-    height: 210px;
+    width: 95%;
+    height: auto;
     background-color: #fffde8;
     border-radius: 25px;
     z-index: 1;
     border: 0.4px solid #ef8c1a;
     box-shadow: 0px 4px 4px #000000c3;
-    width: 80%;
     display: flex;
     flex-wrap: wrap;
     padding-top: 20px;
     padding-left: 30px;
+    position: relative;
 }
 .Cookitem_block li{
     font-size: 20px;
 }
 .Cookitem_block ul{
     margin-right: 100px;
+}
+.Instruction{
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+    display: flex;
+    flex-direction: column;
+}
+.Instruction, .Cookitem_block {
+    box-sizing: border-box; /* パディングとボーダーを要素の次元に含める */
 }

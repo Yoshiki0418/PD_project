@@ -12,6 +12,7 @@ header{
     margin: 0;
     padding: 0;
     background-color: chocolate;
+    z-index: 10;
     /* background: cover; */
 }
 
