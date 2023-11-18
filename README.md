@@ -33,6 +33,7 @@
 - OpenCV
 
 ## セットアップ
+### MySQL
 1. MySQLサーバーのインストール
 MySQLがまだインストールされていない場合は、公式のMySQLダウンロードページ https://dev.mysql.com/downloads/mysql/ からインストーラーをダウンロードしてインストールしてください。
 
