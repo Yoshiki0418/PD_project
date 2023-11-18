@@ -203,7 +203,6 @@ def get_recipes():
 
 @app.route('/recipe-details/<recipe_id>')
 def recipe_details(recipe_id):
-    recipe_id = request.args.get('id')  # URLパラメータからレシピIDを取得
     print(recipe_id)
     # レシピIDに基づいてデータを取得
     recipe_data = ...  # レシピデータの取得ロジック
