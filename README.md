@@ -32,7 +32,31 @@
 - teachable machine
 - OpenCV
 
+セットアップ
+1. MySQLサーバーのインストール
+MySQLがまだインストールされていない場合は、公式のMySQLダウンロードページからインストーラーをダウンロードしてインストールしてください。
+
+2. データベースの作成
+MySQLコマンドラインツールを使用して、新しいデータベースを作成します。以下のコマンドを実行してください：
+
+sql
+Copy code
+CREATE DATABASE your_database_name;
+your_database_name をプロジェクト用のデータベース名に置き換えてください。
+
+3. データベースユーザーの作成と権限の付与
+セキュリティを強化するために、プロジェクト専用のユーザーを作成し、作成したデータベースに対する権限を付与します。以下のコマンドを実行してください：
+
+sql
+Copy code
+CREATE USER 'your_username'@'localhost' IDENTIFIED BY 'your_password';
+GRANT ALL PRIVILEGES ON your_database_name.* TO 'your_username'@'localhost';
+FLUSH PRIVILEGES;
+your_username と your_password を適切な値に置き換えてください。
+
 ## セットアップ
 
 ```bash
 Coming Soon
+
+
