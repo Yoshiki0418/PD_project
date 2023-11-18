@@ -11,7 +11,8 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'static/UPLOAD_FOLDER'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # MySQLの設定
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://yamamoto116:Y.yoshiki116@localhost/ingredients_management'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
