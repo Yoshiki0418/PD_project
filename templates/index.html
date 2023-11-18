@@ -103,13 +103,15 @@
 						console.log(recipes);
 						recipes.forEach(function(recipe) {
 							const recipeCardHtml = `
-							<div class="recipe-card">
-								<img src="static/images/recipe/${recipe.ImageURL}" alt="${recipe.RecipeName}" class="recipe-image">
-								<div class="recipe-content">
-									<h2 class="recipe-title">${recipe.RecipeName}</h2>
-									<p class="recipe-description">${recipe.Description}</p>
+							<a href="/recipe-details/${recipe.ID}" class="recipe-link">
+								<div class="recipe-card">
+									<img src="static/images/recipe/${recipe.ImageURL}" alt="${recipe.RecipeName}" class="recipe-image">
+									<div class="recipe-content">
+										<h2 class="recipe-title">${recipe.RecipeName}</h2>
+										<p class="recipe-description">${recipe.Description}</p>
+									</div>
 								</div>
-							</div>
+							</a>
 							`;
 							// 新しいレシピカードをrecipe_sectionに追加します。
 							$('.recipe_section').append(recipeCardHtml);
@@ -134,6 +136,8 @@
 	
 	
 </main>
+
+
 	
 
 
