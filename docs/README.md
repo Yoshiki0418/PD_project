@@ -163,7 +163,7 @@ IGNORE 1 LINES;
 
 
 ## 学習
-- [なぜ、前処理方法を変更して画像処理の精度が上がったのか](docs/Improved_accuracy.md)
+- [なぜ、前処理方法を変更して画像処理の精度が上がったのか](Improved_accuracy.md)
 
 
 
