@@ -162,7 +162,8 @@ IGNORE 1 LINES;
 | RecipeID     | int  | YES  | MUL | NULL    |                |
 
 
-
+## 学習
+- [なぜ、前処理方法を変更して画像処理の精度が上がったのか](docs/Improved_accuracy.md)
 
 
 
