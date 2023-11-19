@@ -101,11 +101,68 @@ your_username と your_password を適切な値に置き換えてください。
 ### 4.テーブルの作成
 - [食材テーブル](resource/vegetable.csv)
   
-| 列名1 | 列名2 | 列名3 |
-|-------|-------|-------|
-| データ1 | データ2 | データ3 |
-| データ4 | データ5 | データ6 |
-| データ7 | データ8 | データ9 | 
+| Field           | Type         | Null | Key | Default | Extra          |
+------------------|--------------|------|-----|---------|----------------|
+| IngredientID    | int          | NO   | PRI | NULL    | auto_increment |
+| name            | varchar(255) | NO   |     | NULL    |                |
+| expiration_date | date         | YES  |     | NULL    |                |
+| image_path      | varchar(255) | YES  |     | NULL    |                |
+| is_present      | tinyint(1)   | YES  |     | 1       |                |
+| Category        | int          | YES  |     | NULL    |                |
+
+＃以下のコマンドでテーブルを作成
+```sql
+CREATE TABLE Ingredients (
+    IngredientID INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    expiration_date DATE,
+    image_path VARCHAR(255),
+    is_present TINYINT(1) DEFAULT 1,
+    Category INT
+);
+```
+次に、以下のコマンドを実行します：
+
+```sql
+LOAD DATA INFILE '/path/to/vegetable.csv' 
+INTO TABLE Ingredients 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n' 
+IGNORE 1 LINES;
+```
+※/path/to/vegetable.csvはCSVファイルのパスを指定します。実際のファイルパスに置き換えてください。
+
+- レシピテーブル
+ 
+| Field        | Type         | Null | Key | Default | Extra |
+|--------------|--------------|------|-----|---------|-------|
+| RecipeID     | int          | NO   | PRI | NULL    |       |
+| RecipeName   | varchar(255) | NO   |     | NULL    |       |
+| Description  | text         | YES  |     | NULL    |       |
+| CookingTime  | int          | YES  |     | NULL    |       |
+| ImageURL     | varchar(255) | YES  |     | NULL    |       |
+| Ingredients  | text         | YES  |     | NULL    |       |
+| Instructions | text         | YES  |     | NULL    |       |
+
+- カテゴリーテーブル
+
+| Field        | Type         | Null | Key | Default | Extra |
+|--------------|--------------|------|-----|---------|-------|
+| CategoryID   | int          | NO   | PRI | NULL    |       |
+| CategoryName | varchar(255) | NO   |     | NULL    |       |
+
+
+- 食材とレシピの中間テーブル
+
+| Field        | Type | Null | Key | Default | Extra          |
+|--------------|------|------|-----|---------|----------------|
+| ID           | int  | NO   | PRI | NULL    | auto_increment |
+| IngredientID | int  | YES  | MUL | NULL    |                |
+| RecipeID     | int  | YES  | MUL | NULL    |                |
+
+
+
 
 
 
