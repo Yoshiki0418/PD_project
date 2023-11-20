@@ -164,3 +164,29 @@
     font-size: 20px; /* テキストサイズ */
 }
 
+.foods_container2 {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 82.5%;
+}
+.select_show_space{
+    margin-top: 40px;
+    width: 17.5%;
+}
+.select_show_block{
+    bottom: 0; /* 位置を下端に設定 */
+    height: 681px;
+    width: 180px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.234);
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    right: 5.3%;   /* 右からの距離 */
+    bottom: 1.8%;  /* 下からの距離 */
+    border-radius: 30px;
+    border: 4px solid #000000;
+}
+.select_food{
+    display: flex;
+    flex-wrap: wrap;
+}

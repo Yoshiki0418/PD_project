@@ -14,7 +14,7 @@
 
 <div id="container">
 
-<header>
+<header id ="head">
 <h1 id="logo"><a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/top.png') }}" class ="top_pic" alt="SAMPLE COMPANY"></a></h1>
 	<!--開閉ブロック-->
 	<div id="menubar">
@@ -132,23 +132,27 @@
 		{% endfor %}
 		<img src="static/images/決定.png" id="fixed-button" style="display: none;" class="button1">
 	</div>
-	
-	<div class="foods_container">
-		{% for item in items %}
-			{% if item.is_present %}
-				<div class="item" id="food_{{ item.id }}" data-expiry="{{ item.expiry }}" data-days-left="{{ item.days_left }}">
-					<div class="item_set">
-						<div class="circle-container">
-							<div class="circle"></div>
-							<img src="{{ url_for('static', filename='images/ingredients/' + item.image_file) }}" alt="{{ item.name }}" class="image">
+	<div class="select_food">
+		<div class="foods_container2">
+			{% for item in items %}
+				{% if item.is_present %}
+					<div class="item" id="food_{{ item.id }}" data-expiry="{{ item.expiry }}" data-days-left="{{ item.days_left }}">
+						<div class="item_set">
+							<div class="circle-container">
+								<div class="circle"></div>
+								<img src="{{ url_for('static', filename='images/ingredients/' + item.image_file) }}" alt="{{ item.name }}" class="image">
+							</div>
+							<span class="item_name">{{ item.name }}</span>
+							<span class="item_IngredientID" style="display: none;">{{ item.IngredientID }}</span> 
 						</div>
-						<span class="item_name">{{ item.name }}</span>
-						<span class="item_IngredientID" style="display: none;">{{ item.IngredientID }}</span> 
 					</div>
-				</div>
-			{% endif %}
-		{% endfor %}
-		<button id="confirm-button">確定</button>
+				{% endif %}
+			{% endfor %}
+		</div>
+		<div class="select_show_space">
+			<div class="select_show_block" id ="select_show">
+			</div>
+		</div>
 	</div>
 	
 	
@@ -375,6 +379,32 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
 </script>
 
 <script>
+	window.addEventListener('scroll', function() {
+  var fixedButton = document.getElementById('select_show');
+  var desiredHeight = 500; // この高さに達したら表示
+
+  if (window.scrollY > desiredHeight) {
+    fixedButton.style.display = 'block';
+  } else {
+    fixedButton.style.display = 'none';
+  }
+});
+</script>
+
+<script>
+	window.addEventListener('scroll', function() {
+  var fixedButton = document.getElementById('head');
+  var desiredHeight = 500; // この高さに達したら非表示
+
+  if (window.scrollY > desiredHeight) {
+    fixedButton.style.display = 'none';
+  } else {
+    fixedButton.style.display = '';
+  }
+});
+</script>
+
+<script>
 	document.querySelectorAll('.item').forEach(item => {
     item.addEventListener('click', function() {
         this.classList.toggle('selected');
@@ -391,9 +421,8 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
         overlay.style.display = this.classList.contains('selected') ? 'block' : 'none';
     });
 });
-
-
 </script>
+
 
 <script>
 	document.getElementById('confirm-button').addEventListener('click', function() {
