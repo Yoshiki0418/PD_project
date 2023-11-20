@@ -33,8 +33,11 @@
 - OpenCV
 
 ## セットアップ
+### サーバーサイド
+- [Flaskのセットアップ](Flask.md)
 ### データベース
 - [MySQLのセットアップ](MySQL.md)
+- [Flaskでデータベースを定義する](Flask_db.md)
 
 ## 学習
 - [なぜ、前処理方法を変更して画像処理の精度が上がったのか](Improved_accuracy.md)
