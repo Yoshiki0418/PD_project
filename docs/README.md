@@ -20,6 +20,13 @@
   ↪︎そのレシピが作成されたら、その量だけ材料を減らせるようにテーブルの情報を更新
 - ユーザーの食材消費量を学習させて、無駄な買い物を減らす
 
+
+## システム駆逐メモ
+### 複数の食材検知をどう実現するか
+-  [AutoML Vision(GCP)](https://cloud.google.com/vision/automl/docs/label-images?hl=ja)
+-  Amazon Rekognition(AWS)
+-  YoLo
+
 ## 技術スタック
 
 - HTML/CSS
