@@ -222,3 +222,7 @@
     align-items: center; /* 垂直方向の中心に配置 */
     margin-left: 10px;
 }
+#select_show {
+    max-height: 580px; /* 表示領域の最大高さを設定 */
+    overflow-y: auto; /* 内容が最大高さを超えたら縦スクロールを表示 */
+  }
