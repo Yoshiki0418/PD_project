@@ -41,7 +41,7 @@
 <main>
 
 <section>
-	<div class="add">
+	<div class="add" id="display0">
 		<h2><span class="uline">食材追加</span></h2>
 		<div class="add_block">
 			<div class="pic_block">
@@ -114,7 +114,7 @@
 			</form>
 		</div>
 	</div>
-	<div class="foods_container">
+	<div class="foods_container" id="display1">
 		{% for item in items %}
 			{% if item.category == 1 %}
 				<div class="item1" data-expiry="{{ item.expiry }}" data-days-left="{{ item.days_left }}" data-is-present="{{ item.is_present }}">
@@ -133,7 +133,7 @@
 		<a><div id="edit-button" style="display: none;" class="button1"><div>編集</div></div></a>
 		<a><div id="fixed-button" style="display: none;" class="button1"><div>レシピ</div></div></a>
 	</div>
-	<div class="select_food">
+	<div class="select_food" id="display2" style="display: none;">
 		<div class="foods_container2">
 			{% for item in items %}
 				{% if item.is_present %}
@@ -494,8 +494,35 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
 			}
 		};
 	}
-
 </script>
+<script>
+	document.addEventListener('DOMContentLoaded', function() {
+		var linkSection10 = document.getElementById('fixed-button');
+		var linkSection20 = document.getElementById('move2');
+
+		var section10 = document.getElementById('display1');
+		var section11 = document.getElementById('display0');
+		var section20 = document.getElementById('display2');
+
+		if(linkSection10 && section10 && section20) {
+			linkSection10.addEventListener('click', function(event) {
+				event.preventDefault(); 
+				section10.style.display = 'none'; // 表示スタイルに応じて変更
+				section11.style.display = 'none';
+				section20.style.display = '';
+			});
+		}
+
+		if(linkSection20 && section10 && section20) {
+			linkSection20.addEventListener('click', function(event) {
+			event.preventDefault();
+			section10.style.display = '';
+			section11.style.display = '';
+			section20.style.display = 'none'; // 表示スタイルに応じて変更
+			});
+		}
+	});
+ </script>
 
 </body>
 </html>
