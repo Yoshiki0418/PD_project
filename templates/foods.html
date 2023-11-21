@@ -153,7 +153,7 @@
 		<div class="select_show_space">
 			<div class="select_show_block"id ="select_show1" >
 				<div class="show_space" id ="select_show"></div>
-				<a><div class="select_botton">作成</div></a>
+				<a><div class="select_botton" id="confirm">作成</div></a>
 			</div>
 		</div>
 	</div>
@@ -455,12 +455,13 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
 
 
 <script>
-	document.getElementById('confirm-button').addEventListener('click', function() {
-    var selectedItems = document.querySelectorAll('.item.selected');
-    var selectedNames = Array.from(selectedItems).map(item => item.querySelector('.item_IngredientID').textContent);
+	document.getElementById('confirm').addEventListener('click', function() {
+		console.log('Button clicked');
+	    var selectedItems = document.querySelectorAll('.item.selected');
+	    var selectedNames = Array.from(selectedItems).map(item => item.querySelector('.item_IngredientID').textContent);
 
-    // 選択された食材の名前をサーバーに送信
-    sendDataToServer(selectedNames);
+	    // 選択された食材の名前をサーバーに送信
+	    sendDataToServer(selectedNames);
 	});
 
 	function sendDataToServer(data) {
@@ -479,6 +480,7 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
 		};
 	}
 </script>
+
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
 		var linkSection10 = document.getElementById('fixed-button');
