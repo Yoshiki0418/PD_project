@@ -130,7 +130,8 @@
 				</div>
 			{% endif %}
 		{% endfor %}
-		<img src="static/images/決定e.png" id="fixed-button" style="display: none;" class="button1">
+		<a><div id="edit-button" style="display: none;" class="button1"><div>編集</div></div></a>
+		<a><div id="fixed-button" style="display: none;" class="button1"><div>レシピ</div></div></a>
 	</div>
 	<div class="select_food">
 		<div class="foods_container2">
@@ -150,7 +151,7 @@
 			{% endfor %}
 		</div>
 		<div class="select_show_space">
-			<div class="select_show_block" >
+			<div class="select_show_block"id ="select_show1" >
 				<div class="show_space" id ="select_show"></div>
 				<a><div class="select_botton">作成</div></a>
 			</div>
@@ -379,10 +380,22 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
   }
 });
 </script>
+<script>
+	window.addEventListener('scroll', function() {
+  var fixedButton = document.getElementById('edit-button');
+  var desiredHeight = 500; // この高さに達したら表示
+
+  if (window.scrollY > desiredHeight) {
+    fixedButton.style.display = 'block';
+  } else {
+    fixedButton.style.display = 'none';
+  }
+});
+</script>
 
 <script>
 	window.addEventListener('scroll', function() {
-  var fixedButton = document.getElementById('select_show');
+  var fixedButton = document.getElementById('select_show1');
   var desiredHeight = 500; // この高さに達したら表示
 
   if (window.scrollY > desiredHeight) {
