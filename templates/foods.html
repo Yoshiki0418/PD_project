@@ -393,18 +393,7 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
 });
 </script>
 
-<script>
-	window.addEventListener('scroll', function() {
-  var fixedButton = document.getElementById('select_show1');
-  var desiredHeight = 500; // この高さに達したら表示
 
-  if (window.scrollY > desiredHeight) {
-    fixedButton.style.display = 'block';
-  } else {
-    fixedButton.style.display = 'none';
-  }
-});
-</script>
 
 <script>
 	window.addEventListener('scroll', function() {
@@ -424,7 +413,7 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
     item.addEventListener('click', function() {
         this.classList.toggle('selected');
         var selectShowBlock = document.getElementById('select_show');
-        var itemName = this.querySelector('.item_name').textContent; // 食材の名前を取得
+        var itemName = this.querySelector('.item_name').textContent;
 
         var circleContainer = this.querySelector('.circle-container');
         var overlay = circleContainer.querySelector('.overlay');
@@ -437,26 +426,21 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
 
         overlay.style.display = this.classList.contains('selected') ? 'block' : 'none';
 
-        // 食材の画像をselect_show_blockに反映する
         var foodImage = this.querySelector('.image').cloneNode(true);
-        foodImage.classList.add('select_show_image'); // スタイルを適用するためのクラスを追加
+        foodImage.classList.add('select_show_image');
 
-        // 食材の名前を表示する要素を作成
         var nameTag = document.createElement('div');
         nameTag.textContent = itemName;
-        nameTag.classList.add('select_show_name'); // 名前のスタイル適用
+        nameTag.classList.add('select_show_name');
 
-        // アイテムと名前を格納するコンテナ
         var itemContainer = document.createElement('div');
         itemContainer.classList.add('select_show_item_container');
 
         if (this.classList.contains('selected')) {
-            // アイテムを追加
             itemContainer.appendChild(foodImage);
-            itemContainer.appendChild(nameTag); // 名前の要素を追加
+            itemContainer.appendChild(nameTag);
             selectShowBlock.appendChild(itemContainer);
         } else {
-            // アイテムを削除
             var containers = selectShowBlock.getElementsByClassName('select_show_item_container');
             Array.from(containers).forEach(container => {
                 if (container.querySelector('.select_show_image').src === foodImage.src) {

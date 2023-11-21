@@ -175,8 +175,8 @@
     width: 180px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.234);
     background-color: rgb(255, 255, 255);
-    position: fixed;
-    right: 5.3%;   /* 右からの距離 */
+    position: relative;
+    left: 5.3%;   /* 右からの距離 */
     bottom: 1.8%;  /* 下からの距離 */
     border-radius: 30px;
     border: 4px solid #000000;
@@ -189,7 +189,7 @@
     width: 160px;
     display: flex; /* Flexboxコンテナとして設定 */
     flex-direction: column;
-    justify-content: center; /* 水平方向の中央に配置 */
+
     align-items: center; /* 垂直方向の中心に配置 */
 }
 .select_food{
