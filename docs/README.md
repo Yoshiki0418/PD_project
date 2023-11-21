@@ -30,7 +30,7 @@
 - [ ] 買い物補助システム
 
 
-## システム駆逐メモ
+## システム構築メモ
 ### 複数の食材検知をどう実現するか
 -  [AutoML Vision(GCP)](https://cloud.google.com/vision/automl/docs/label-images?hl=ja)
 -  Amazon Rekognition(AWS)
@@ -42,7 +42,7 @@
 - JavaScript
 - Python(Flask)
   
-## 仕様ツール
+## 使用ツール
 - Vision API
 - Open AI API
 - teachable machine
