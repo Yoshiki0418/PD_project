@@ -36,6 +36,10 @@
 -  Amazon Rekognition(AWS)
 -  YoLo
 
+## 評価指標
+### 　技術指標
+- 画像処理精度について
+
 ## 技術スタック
 
 - HTML/CSS
