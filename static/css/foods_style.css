@@ -260,3 +260,65 @@
     right: 20px;   /* 右からの距離 */
     bottom: 90px;  /* 下からの距離 */
 }
+.recipe-card {
+	max-width: 300px;
+	margin: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border: 1px solid #ddd;
+	overflow: hidden;
+  }
+  
+  .recipe-image {
+	width: 100%;
+	height: auto;
+	display: block;
+  }
+  
+  .recipe-content {
+	padding: 15px;
+  }
+  
+  .recipe-title {
+	margin: 0;
+	color: #333;
+	font-size: 18px;
+	font-weight: bold;
+  }
+  
+  .recipe-description {
+	font-size: 14px;
+	color: #666;
+	line-height: 1.4;
+  }
+  
+
+  .recipe_section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.recipe-card {
+    flex-basis: calc(33.333% - 20px); /* 3つのカードが一行に収まるように */
+    margin: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	height: 354px;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .recipe-card {
+        flex-basis: calc(50% - 20px); /* 画面が狭い時は2列に */
+    }
+}
+
+@media (max-width: 480px) {
+    .recipe-card {
+        flex-basis: 100%; /* 画面がさらに狭い時は1列に */
+    }
+}
+
+.recipe-image{
+	width: 298px;
+	height: 199px;
+}

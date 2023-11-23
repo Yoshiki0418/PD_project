@@ -31,3 +31,6 @@ def process_image(image_path):
     class_name = class_names[predicted_class_index]
 
     return class_name, confidence_score
+
+
+class_name, confidence_score=process_image("static/UPLOAD_FOLDER/1.png")

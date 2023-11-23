@@ -7,6 +7,7 @@
 <meta name="description" content="ここにサイト説明を入れます">
 <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 <link rel="stylesheet" href="{{url_for('static', filename='css/foods_style.css')}}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="{{url_for('static', filename='js/script.js')}}" defer></script>
 </head>
 
@@ -245,54 +246,17 @@
 		<div class="select_show_space">
 			<div class="select_show_block"id ="select_show1" >
 				<div class="show_space" id ="select_show"></div>
-				<a><div class="select_botton" id="confirm">作成</div></a>
+				<button id="confirm" class="select_botton">作成</button>
 			</div>
 		</div>
 	</div>
-	
-	
-
 </section>
 
-<!--
 <section>
-	<script>
-		$(document).on('click', '.confirm', function() {
-			console.log('レシピ検索ボタンがクリックされました。');
-			// サーバーにAjaxリクエストを送信
-			$.ajax({
-				url: '/get-recipes', // サーバーのレシピを取得するルート
-				type: 'POST',
-				contentType: 'application/json',
-				data: JSON.stringify({ 'ingredient_id': ingredient_id }), // リクエストボディにingredient_idを含める
-				dataType: 'json',
-				success: function(recipes) {
-				// 成功した場合の処理
-				console.log(recipes);
-				recipes.forEach(function(recipe) {
-					const recipeCardHtml = `
-					<a href="/recipe-details/${recipe.RecipeID}" class="recipe-link">
-						<div class="recipe-card">
-							<img src="static/images/recipe/${recipe.ImageURL}" alt="${recipe.RecipeName}" class="recipe-image">
-									<div class="recipe-content">
-								<h2 class="recipe-title">${recipe.RecipeName}</h2>
-								<p class="recipe-description">${recipe.Description}</p>
-							</div>
-						</div>
-					</a>
-					`;
-					// 新しいレシピカードをrecipe_sectionに追加します。
-					$('.recipe_section').append(recipeCardHtml);
-					});					
-				},
-				error: function(error) {
-				// エラーが発生した場合の処理
-				console.error('Error fetching recipes:', error);
-				}
-			});
-		});
-	</script>
-	-->
+	
+</section>
+<section class="recipe_section">
+	<!-- カードがここに追加される -->
 </section>
 
 
@@ -430,30 +394,50 @@
 
 <script>
 	document.getElementById('confirm').addEventListener('click', function() {
-		console.log('Button clicked');
-	    var selectedItems = document.querySelectorAll('.item.selected');
-	    var selectedNames = Array.from(selectedItems).map(item => item.querySelector('.item_IngredientID').textContent);
+    console.log('Button clicked');
+    var selectedItems = document.querySelectorAll('.item.selected');
+    var selectedNames = Array.from(selectedItems).map(item => item.querySelector('.item_IngredientID').textContent);
 
-	    // 選択された食材の名前をサーバーに送信
-	    sendDataToServer(selectedNames);
-	});
+    // 選択された食材の名前をサーバーに送信
+    sendDataToServer(selectedNames);
+});
 
-	function sendDataToServer(data) {
-		// ここにサーバーへの送信処理を記述
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', '/path/to/server/endpoint', true);
-		xhr.setRequestHeader('Content-Type', 'application/json');
-		xhr.send(JSON.stringify({selectedItems: data}));
+function displayRecipes(recipes) {
+    recipes.forEach(recipe => {
+        const recipeHtml = `
+            <a href="/recipe-details/${recipe.RecipeID}" class="recipe-link">
+                <div class="recipe-card">
+                    <img src="static/images/recipe/${recipe.ImageURL}" alt="${recipe.RecipeName}" class="recipe-image">
+                    <div class="recipe-content">
+                        <h2 class="recipe-title">${recipe.RecipeName}</h2>
+                        <p class="recipe-description">${recipe.Description}</p>
+                    </div>
+                </div>
+            </a>`;
+        $('.recipe_section').append(recipeHtml);
+    });
+}
 
-		xhr.onload = function() {
-			if (xhr.status === 200) {
-				console.log('サーバーへの送信が成功:', xhr.responseText);
-			} else {
-				console.log('サーバーへの送信に失敗:', xhr.status);
-			}
-		};
-	}
+function sendDataToServer(data) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/path/to/server/endpoint', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({selectedItems: data}));
+
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log('サーバーへの送信が成功:', xhr.responseText);
+            // レスポンスデータをJSON形式に変換し、displayRecipesに渡す
+            const responseData = JSON.parse(xhr.responseText);
+            displayRecipes(responseData);
+        } else {
+            console.log('サーバーへの送信に失敗:', xhr.status);
+        }
+    };
+}
+
 </script>
+	
 
 <script>
 	document.addEventListener('DOMContentLoaded', function() {

@@ -110,7 +110,30 @@ def handle_data():
     recipe_ids = [recipe.RecipeID for recipe in query.all()]
     print(recipe_ids)
 
-    return jsonify({'status': 'success'})
+    #作成できるレシピIDを用いてレシピIDを参照する
+    # 指定されたRecipeIDのレシピを取得
+    recipes = Recipe.query.filter(Recipe.RecipeID.in_(recipe_ids)).all()
+    
+    if not recipes:
+        # 指定されたIDのレシピが見つからない場合はエラーを返します。
+        return jsonify({'error': 'No Recipes found for provided IDs'}), 404
+    
+    # 取得したレシピオブジェクトを辞書リストに変換
+    recipes_data = [{
+        'RecipeID': recipe.RecipeID,
+        'RecipeName': recipe.RecipeName,
+        'Description': recipe.Description,
+        'CookingTime': recipe.CookingTime,
+        'ImageURL': recipe.ImageURL,
+        'Ingredients': recipe.Ingredients,
+        'Instructions': recipe.Instructions
+    } for recipe in recipes]
+
+    print(recipes_data)
+    
+    # JSONとしてレシピデータを返す
+    return jsonify(recipes_data)
+
 
 
 @app.route('/contact')
