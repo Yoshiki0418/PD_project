@@ -5,6 +5,7 @@ from datetime import datetime
 
 def analyze_food_categories(image_path):
     client = vision.ImageAnnotatorClient()
+    most_common_detailed = None
 
     with open(image_path, 'rb') as image_file:
         content = image_file.read()
@@ -26,7 +27,7 @@ def analyze_food_categories(image_path):
     # 詳細カテゴリーのマッピング
     detailed_mappings = {
         '小間切れ': ['小間切れ', '切り落とし'],
-        'ロース': ['牛ロース', '薄切りロース', "ステーキ"],
+        'ロース': ['薄切りロース', "ステーキ", "ロース"],
         'むね': ['胸', 'むね', 'ムネ'],
         'もも': ['もも', 'モモ', "モ　モ", "モ モ", "も　も", "も も", "も も"],
         '皮': ['皮'],
