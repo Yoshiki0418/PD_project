@@ -254,189 +254,47 @@
 
 </section>
 
+<!--
 <section>
-
-<h2><span class="uline">上部メニューについてno</span></h2>
-<p>画面幅が900px未満で、メインメニューが開閉ブロックタイプになります。<br>
-この数値を変更したい場合は、jsフォルダのmain.jsの、<br>
-<span class="look">if(window.innerWidth &lt; <span class="color-check">900</span>)</span><br>
-の、<span class="color-check">900</span>の数値を変更して下さい。</p>
-
-<h3>ドロップダウンメニューについて</h3>
-<p>「WRKS」のメニューはドロップダウンメニューになっています。<br>
-ドロップダウンを使う為の特別な設定は不要ですが、必ず親となるli要素の「中」に入れるようにして下さい。</p> 
-<p>※OKな例：<br>
-<span class="look">
-<span class="color-check">&lt;li&gt;&lt;a href=&quot;&quot;&gt;親となるメニュー&lt;/a&gt;</span><br>
-&lt;ul&gt;<br>
-&lt;li&gt;&lt;a href=&quot;list.html&quot;&gt;ドロップダウンのメニュー&lt;/a&gt;&lt;/li&gt;<br>
-&lt;li&gt;&lt;a href=&quot;list.html&quot;&gt;ドロップダウンのメニュー&lt;/a&gt;&lt;/li&gt;<br>
-&lt;/ul&gt;<br>
-<span class="color-check">&lt;/li&gt;</span>
-</span>
-</p>
-<p>※NGな例<br>
-<span class="look">
-<span class="color-check">&lt;li&gt;&lt;a href=&quot;&quot;&gt;親となるメニュー&lt;/a&gt;&lt;/li&gt;</span><br>
-&lt;ul&gt;<br>
-&lt;li&gt;&lt;a href=&quot;list.html&quot;&gt;ドロップダウンのメニュー&lt;/a&gt;&lt;/li&gt;<br>
-&lt;li&gt;&lt;a href=&quot;list.html&quot;&gt;ドロップダウンのメニュー&lt;/a&gt;&lt;/li&gt;<br>
-&lt;/ul&gt;
-</span>
-</p>
-<p>親の&lt;a&gt;のリンク先は上記のように空っぽ（&quot;&quot;）にしておいて下さい。</p>
-<p>ドロップダウンの親メニューについているアイコンもFont Awesomeです。<br>
-cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます。</p>
-
-<h3>現在ページ表示中のメニューについて</h3>
-<p>現在表示中のページのメニューには色がつきますが、その説明です。</p>
-<p>通常は、<br>
-<span class="look">&lt;li&gt;&lt;a href=&quot;&quot;&gt;メニュー名&lt;/a&gt;&lt;/li&gt;</span><br>
-のようになっていますがこれを、<br>
-<span class="look">&lt;li <span class="color-check">class=&quot;current&quot;</span>&gt;&lt;a href=&quot;&quot;&gt;メニュー名&lt;/a&gt;&lt;/li&gt;</span><br>
-とする事で色がつきます。<br>
-自動で色がつくわけではないのでご注意下さい。</p>
-
+	<script>
+		$(document).on('click', '.confirm', function() {
+			console.log('レシピ検索ボタンがクリックされました。');
+			// サーバーにAjaxリクエストを送信
+			$.ajax({
+				url: '/get-recipes', // サーバーのレシピを取得するルート
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({ 'ingredient_id': ingredient_id }), // リクエストボディにingredient_idを含める
+				dataType: 'json',
+				success: function(recipes) {
+				// 成功した場合の処理
+				console.log(recipes);
+				recipes.forEach(function(recipe) {
+					const recipeCardHtml = `
+					<a href="/recipe-details/${recipe.RecipeID}" class="recipe-link">
+						<div class="recipe-card">
+							<img src="static/images/recipe/${recipe.ImageURL}" alt="${recipe.RecipeName}" class="recipe-image">
+									<div class="recipe-content">
+								<h2 class="recipe-title">${recipe.RecipeName}</h2>
+								<p class="recipe-description">${recipe.Description}</p>
+							</div>
+						</div>
+					</a>
+					`;
+					// 新しいレシピカードをrecipe_sectionに追加します。
+					$('.recipe_section').append(recipeCardHtml);
+					});					
+				},
+				error: function(error) {
+				// エラーが発生した場合の処理
+				console.error('Error fetching recipes:', error);
+				}
+			});
+		});
+	</script>
+	-->
 </section>
 
-<section>
-
-<h2><span class="uline">トップページの「お知らせ」ブロックのアイコンについて</span></h2>
-<p>アイコン内のテキストはhtml側で直接入力されていますので必要に応じて編集して下さい。</p>
-<p>背景色は、cssフォルダのstyle.cssの、<br>
-<span class="look">.new dt span</span><br>
-や、<br>
-<span class="look">.new dt span.icon-bg1</span><br>
-や、<br>
-<span class="look">.new dt span.icon-bg2</span><br>
-のbackgroundでそれぞれ変更できます。</p>
-<p>新しいアイコンを追加したい場合、上記の「.new dt span.icon-bg2」ブロックをコピペし、<span class="color-check">.icon-bg2</span>部分を<span class="color-check">.icon-bg3</span>などに変更し、backgroundに好きな色を設定します。<br>
-後はhtml側で、<br>
-<span class="look">&lt;span class=&quot;<span class="color-check">icon-bg3</span>&quot;&gt;〜〜〜&lt;/span&gt;</span><br>
-などとすればOKです。</p>
-<p>尚、あまり文字数が増えるとレイアウトが崩れるので注意して下さい。</p>
-
-</section>
-
-<section>
-
-<h2><span class="uline">テーブル</span></h2>
-<p>テーブルのサンプルです。必要があればコピペして使って下さい。</p>
-
-<table class="ta1">
-<caption>必要があれば大見出しを使って下さい</caption>
-<tr>
-<th>見出し</th>
-<td>ここに本文を入れます。サンプルテキスト。</td>
-</tr>
-<tr>
-<th>見出し</th>
-<td>ここに本文を入れます。サンプルテキスト。</td>
-</tr>
-<tr>
-<th>見出し</th>
-<td>ここに本文を入れます。サンプルテキスト。</td>
-</tr>
-<tr>
-<th>見出し</th>
-<td>ここに本文を入れます。サンプルテキスト。</td>
-</tr>
-<tr>
-<th>見出し</th>
-<td>ここに本文を入れます。サンプルテキスト。</td>
-</tr>
-<tr>
-<th>見出し</th>
-<td>ここに本文を入れます。サンプルテキスト。</td>
-</tr>
-</table>
-
-</section>
-
-<section>
-
-<h2><span class="uline">汎用開閉ブロックのサンプル</span></h2>
-<p>以下は「よく頂く質問」を仮定してサンプルを用意していますが汎用的な開閉ブロックなので、基本的にはどこにでも使えます。<br>
-クリック対象としたいブロックに<span class="look"><span class="color-check">class=&quot;openclose&quot;</span></span>とつければ、続く要素が自動的に開閉ブロックになります。<br>
-もしすでにclass指定がある場合は、半角スペースで区切って追加すればOKです。<br>
-<span class="look">例：class=&quot;sample <span class="color-check">openclose</span>&quot;</span></p>
-
-<dl class="faq">
-
-<dt class="openclose">ここに質問を書きます。クリックで回答が開きます。</dt>
-<dd>ここに回答を書きます。サンプルテキスト。ここに回答を書きます。サンプルテキスト。ここに回答を書きます。サンプルテキスト。</dd>
-
-<dt class="openclose">ここに質問を書きます。クリックで回答が開きます。ここに質問を書きます。クリックで回答が開きます。ここに質問を書きます。クリックで回答が開きます。ここに質問を書きます。クリックで回答が開きます。</dt>
-<dd>ここに回答を書きます。サンプルテキスト。ここに回答を書きます。サンプルテキスト。ここに回答を書きます。サンプルテキスト。ここに回答を書きます。サンプルテキスト。ここに回答を書きます。サンプルテキスト。ここに回答を書きます。サンプルテキスト。ここに回答を書きます。サンプルテキスト。<br>
-ここに回答を書きます。サンプルテキスト。ここに回答を書きます。サンプルテキスト。ここに回答を書きます。サンプルテキスト。</dd>
-
-</dl>
-
-</section>
-
-</main>
-
-<main class="column">
-
-<div class="main">
-
-	<section>
-
-	<h2><span class="uline">2カラムで使う場合</span></h2>
-	
-	<p>&lt;main&gt;を、&lt;main <span class="color-check">class=&quot;column&quot;</span>&gt;<br>
-	に変更。</p>
-	<p>その中に、左右のブロック（<span class="color-check">mainとsub</span>）を追加します。<br>
-	mainが２つありますが、それぞれ異なる要素になるので間違えないようにして下さい。</p>
-	<p>全体としては、以下のような形になります。</p>
-
-	<p><span class="look">&lt;main <span class="color-check">class=&quot;column</span>&quot;&gt;<br><br>
-	&lt;div <span class="color-check">class=&quot;main</span>&quot;&gt;<br>
-	※ここにメインコンテンツの内容を入れます。<br>
-	&lt;/div&gt;<br><br>
-	&lt;div <span class="color-check">class=&quot;sub</span>&quot;&gt;<br>
-	※ここにサブコンテンツの内容を入れます。<br>
-	&lt;/div&gt;<br><br>
-	&lt;/main&gt;</span></p>
-
-	</section>
-
-</div>
-<!--/.main-->
-
-<div class="sub">
-
-	<div class="box1">
-
-	<h3>見出し</h3>
-
-	<nav>
-	<ul class="submenu">
-	<li><a href="">サブメニュー</a></li>
-	<li><a href="">サブメニュー</a></li>
-	<li><a href="">サブメニュー</a></li>
-	<li><a href="">サブメニュー</a></li>
-	<li><a href="">サブメニュー</a></li>
-	</ul>
-	</nav>
-
-	</div>
-	<!--/.box1-->
-
-</div>
-<!--/.sub-->
-
-</main>
-
-</div>
-<!--/#contents-->
-
-<ul id="footermenu">
-<li><a href="index.html">ホーム</a></li>
-<li><a href="company.html">会社概要</a></li>
-<li><a href="works.html">業務内容</a></li>
-<li><a href="contact.html">コンタクト</a></li>
-</ul>
 
 <footer>
 <small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
