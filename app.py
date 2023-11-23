@@ -4,6 +4,7 @@ import os
 from werkzeug.utils import secure_filename
 from food_judge import process_image
 from datetime import datetime
+from meat_judge import analyze_food_categories
 
 
 
@@ -140,9 +141,12 @@ def upload_file():
         class_name, confidence_score = process_image(file_path)
         class_name = class_name.split(' ', 1)[1] if ' ' in class_name else class_name
         print(class_name)
-
+        #OCRチェック
         if(class_name=="肉"):
-            print("OCR Check")
+            class_name, date = analyze_food_categories(file_path)
+            if(class_name == ""):
+                class_name = "判定できませんでした。もう一度撮影し直してください"
+        
         # データベースから食材IDを検索
         ingredient = Ingredients.query.filter_by(name=class_name).first()
         if ingredient:
