@@ -632,6 +632,44 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
 	});
  </script>
  <script>
+	document.addEventListener('DOMContentLoaded', function() {
+		var linkSection10 = document.getElementById('fixed-button2');
+		var linkSection20 = document.getElementById('move2');//戻るボタンに適用する
+
+		var section10 = document.getElementById('display1_2');
+		var section11 = document.getElementById('display0');
+		var section12 = document.getElementById('category_block1');
+		var section13 = document.getElementById('vegitable_container');
+		var section20 = document.getElementById('display2');
+		var section21 = document.getElementById('category_block2');
+		var section22 = document.getElementById('meat_container');
+
+		if(linkSection10 && section10 && section20) {
+			linkSection10.addEventListener('click', function(event) {
+				event.preventDefault(); 
+				section10.style.display = 'none'; // 表示スタイルに応じて変更
+				section11.style.display = 'none';
+				section12.style.display = 'none';
+				section13.style.display = 'none';
+				section20.style.display = '';
+				section21.style.display = '';
+				section22.style.display = '';
+			});
+		}
+
+		if(linkSection20 && section10 && section20) {
+			linkSection20.addEventListener('click', function(event) {
+			event.preventDefault();
+			section10.style.display = '';
+			section11.style.display = '';
+			section12.style.display = '';
+			section20.style.display = 'none';
+			section21.style.display = 'none';
+			});
+		}
+	});
+ </script>
+ <script>
 	//カテゴリー選択
 	document.addEventListener('DOMContentLoaded', function() {
 		var linkSection10 = document.getElementById('category1');
