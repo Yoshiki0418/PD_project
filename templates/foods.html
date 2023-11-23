@@ -112,13 +112,13 @@
 		<div class="category_block">
 			<div class="category_icon">
 				<div class="image_container">
-					<img src="{{ url_for('static', filename='images/vegetable.png') }}" class="vegitable_pic">
+					<a id="category1_2"><img src="{{ url_for('static', filename='images/vegetable.png') }}" class="vegitable_pic"></a>
 				</div>
 				<p class="link_txt">野菜</p>
 			</div>
 			<div class="category_icon">
 				<div class="image_container">
-					<img src="{{ url_for('static', filename='images/meat.png') }}" class="meat_pic">
+					<a id="category2_2"><img src="{{ url_for('static', filename='images/meat.png') }}" class="meat_pic"></a>
 				</div>
 				<p class="link_txt">肉</p>
 			</div>
@@ -163,6 +163,7 @@
 			</form>
 		</div>
 	</div>
+	<!--野菜カテゴリーの表示-->
 	<div class="foods_container" id="display1">
 		{% for item in items %}
 			{% if item.category == 1 %}
@@ -182,6 +183,7 @@
 		<a><div id="edit-button" style="display: none;" class="button1"><div>編集</div></div></a>
 		<a><div id="fixed-button" style="display: none;" class="button1"><div>レシピ</div></div></a>
 	</div>
+	<!--肉カテゴリーの表示-->
 	<div class="foods_container" id="display1_2" style="display: none;">
 		{% for item in items %}
 			{% if item.category == 2 %}
@@ -202,19 +204,41 @@
 		<a><div id="fixed-button2" style="display: none;" class="button1"><div>レシピ</div></div></a>
 	</div>
 	<div class="select_food" id="display2" style="display: none;">
-		<div class="foods_container2">
+		<!--野菜選択画面-->
+		<div class="foods_container2" id="vegitable_container">
 			{% for item in items %}
-				{% if item.is_present %}
-					<div class="item" id="food_{{ item.id }}" data-expiry="{{ item.expiry }}" data-days-left="{{ item.days_left }}">
-						<div class="item_set">
-							<div class="circle-container">
-								<div class="circle"></div>
-								<img src="{{ url_for('static', filename='images/ingredients/' + item.image_file) }}" alt="{{ item.name }}" class="image">
+				{% if item.category == 1 %}
+					{% if item.is_present %}
+						<div class="item" id="food_{{ item.id }}" data-expiry="{{ item.expiry }}" data-days-left="{{ item.days_left }}">
+							<div class="item_set">
+								<div class="circle-container">
+									<div class="circle"></div>
+									<img src="{{ url_for('static', filename='images/ingredients/' + item.image_file) }}" alt="{{ item.name }}" class="image">
+								</div>
+								<span class="item_name">{{ item.name }}</span>
+								<span class="item_IngredientID" style="display: none;">{{ item.IngredientID }}</span> 
 							</div>
-							<span class="item_name">{{ item.name }}</span>
-							<span class="item_IngredientID" style="display: none;">{{ item.IngredientID }}</span> 
 						</div>
-					</div>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+		</div>
+		<!--肉選択画面-->
+		<div class="foods_container2" id="meat_container" style="display: none;">
+			{% for item in items %}
+				{% if item.category == 2 %}
+					{% if item.is_present %}
+						<div class="item" id="food_{{ item.id }}" data-expiry="{{ item.expiry }}" data-days-left="{{ item.days_left }}">
+							<div class="item_set">
+								<div class="circle-container">
+									<div class="circle"></div>
+									<img src="{{ url_for('static', filename='images/ingredients/' + item.image_file) }}" alt="{{ item.name }}" class="image">
+								</div>
+								<span class="item_name">{{ item.name }}</span>
+								<span class="item_IngredientID" style="display: none;">{{ item.IngredientID }}</span> 
+							</div>
+						</div>
+					{% endif %}
 				{% endif %}
 			{% endfor %}
 		</div>
@@ -615,6 +639,32 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
 
 		var section10 = document.getElementById('display1_2');
 		var section20 = document.getElementById('display1');
+
+		if(linkSection10 && section10 && section20) {
+			linkSection10.addEventListener('click', function(event) {
+				event.preventDefault(); 
+				section10.style.display = 'none'; // 表示スタイルに応じて変更
+				section20.style.display = '';
+			});
+		}
+
+		if(linkSection20 && section10 && section20) {
+			linkSection20.addEventListener('click', function(event) {
+			event.preventDefault();
+			section10.style.display = '';
+			section20.style.display = 'none'; // 表示スタイルに応じて変更
+			});
+		}
+	});
+ </script>
+ <script>
+	//カテゴリー選択
+	document.addEventListener('DOMContentLoaded', function() {
+		var linkSection10 = document.getElementById('category1_2');
+		var linkSection20 = document.getElementById('category2_2');
+
+		var section10 = document.getElementById('meat_container');
+		var section20 = document.getElementById('vegitable_container');
 
 		if(linkSection10 && section10 && section20) {
 			linkSection10.addEventListener('click', function(event) {
