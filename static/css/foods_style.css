@@ -250,3 +250,13 @@
 .select_botton{
     font-size: 20px;
 }
+#fixed-button2 {
+    position: fixed;
+    right: 20px;   /* 右からの距離 */
+    bottom: 20px;  /* 下からの距離 */
+}
+#edit-button2 {
+    position: fixed;
+    right: 20px;   /* 右からの距離 */
+    bottom: 90px;  /* 下からの距離 */
+}

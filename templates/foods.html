@@ -58,7 +58,56 @@
 			</div>
 		</div>
 	</div>
-	<div class="category">
+	<div class="category" id="category_block1">
+		<h2><span class="uline">カテゴリー</span></h2>
+		<div class="category_block">
+			<div class="category_icon">
+				<div class="image_container">
+					<a id="category1"><img src="{{ url_for('static', filename='images/vegetable.png') }}" class="vegitable_pic"></a>
+				</div>
+				<p class="link_txt">野菜</p>
+			</div>
+			<div class="category_icon">
+				<div class="image_container">
+					<a id="category2"><img src="{{ url_for('static', filename='images/meat.png') }}" class="meat_pic"></a>
+				</div>
+				<p class="link_txt">肉</p>
+			</div>
+			<div class="category_icon">
+				<div class="image_container">
+					<img src="{{ url_for('static', filename='images/fish.png') }}" class="fish_pic">
+				</div>
+				<p class="link_txt">魚</p>
+			</div>
+			<div class="category_icon">
+				<div class="image_container">
+					<img src="{{ url_for('static', filename='images/seasoning.png') }}" class="seasoning_pic">
+				</div>
+				<p class="link_txt">調味料</p>
+			</div>
+			<div class="category_icon">
+				<div class="image_container">
+					<img src="{{ url_for('static', filename='images/cheese.png') }}" class="cheese_pic">
+				</div>
+				<p class="link_txt">乳製品</p>
+			</div>
+			<div class="category_icon">
+				<div class="image_container">
+					<img src="{{ url_for('static', filename='images/freeze.png') }}" class="freeze_pic">
+				</div>
+				<p class="link_txt">冷凍食品</p>
+			</div>
+			<div class="category_icon">
+				<div class="image_container">
+					<img src="{{ url_for('static', filename='images/list.png') }}" class="list_pic">
+				</div>
+				<p class="link_txt">一覧</p>
+			</div>
+		</div>
+		<h2><span></span></h2>
+	</div>
+	<!--選択画面ようのカテゴリー選択タグ-->
+	<div class="category" id="category_block2" style="display: none;">
 		<h2><span class="uline">カテゴリー</span></h2>
 		<div class="category_block">
 			<div class="category_icon">
@@ -132,6 +181,25 @@
 		{% endfor %}
 		<a><div id="edit-button" style="display: none;" class="button1"><div>編集</div></div></a>
 		<a><div id="fixed-button" style="display: none;" class="button1"><div>レシピ</div></div></a>
+	</div>
+	<div class="foods_container" id="display1_2" style="display: none;">
+		{% for item in items %}
+			{% if item.category == 2 %}
+				<div class="item1" data-expiry="{{ item.expiry }}" data-days-left="{{ item.days_left }}" data-is-present="{{ item.is_present }}">
+					<div class="item_set">
+						<div class="circle-container">
+							<div class="circle"></div>
+							<img src="{{ url_for('static', filename='images/ingredients/' + item.image_file) }}" alt="{{ item.name }}" class="image">
+							<div class="date-circle">{{ item.days_left }}</div> 
+						</div>
+						<span class="item_name">{{ item.name }}</span>
+						<!--<span>{{ item.expiry if item.expiry}}</span>-->
+					</div>
+				</div>
+			{% endif %}
+		{% endfor %}
+		<a><div id="edit-button2" style="display: none;" class="button1"><div>編集</div></div></a>
+		<a><div id="fixed-button2" style="display: none;" class="button1"><div>レシピ</div></div></a>
 	</div>
 	<div class="select_food" id="display2" style="display: none;">
 		<div class="foods_container2">
@@ -392,6 +460,30 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
   }
 });
 </script>
+<script>
+	window.addEventListener('scroll', function() {
+  var fixedButton = document.getElementById('fixed-button2');
+  var desiredHeight = 500; // この高さに達したら表示
+
+  if (window.scrollY > desiredHeight) {
+    fixedButton.style.display = 'block';
+  } else {
+    fixedButton.style.display = 'none';
+  }
+});
+</script>
+<script>
+	window.addEventListener('scroll', function() {
+  var fixedButton = document.getElementById('edit-button2');
+  var desiredHeight = 500; // この高さに達したら表示
+
+  if (window.scrollY > desiredHeight) {
+    fixedButton.style.display = 'block';
+  } else {
+    fixedButton.style.display = 'none';
+  }
+});
+</script>
 
 
 
@@ -484,18 +576,22 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
 <script>
 	document.addEventListener('DOMContentLoaded', function() {
 		var linkSection10 = document.getElementById('fixed-button');
-		var linkSection20 = document.getElementById('move2');
+		var linkSection20 = document.getElementById('move2');//戻るボタンに適用する
 
 		var section10 = document.getElementById('display1');
 		var section11 = document.getElementById('display0');
+		var section12 = document.getElementById('category_block1');
 		var section20 = document.getElementById('display2');
+		var section21 = document.getElementById('category_block2');
 
 		if(linkSection10 && section10 && section20) {
 			linkSection10.addEventListener('click', function(event) {
 				event.preventDefault(); 
 				section10.style.display = 'none'; // 表示スタイルに応じて変更
 				section11.style.display = 'none';
+				section12.style.display = 'none';
 				section20.style.display = '';
+				section21.style.display = '';
 			});
 		}
 
@@ -504,6 +600,34 @@ cssフォルダのstyle.cssの「a.ddmenu::before」で読み込んでいます�
 			event.preventDefault();
 			section10.style.display = '';
 			section11.style.display = '';
+			section12.style.display = '';
+			section20.style.display = 'none';
+			section21.style.display = 'none';
+			});
+		}
+	});
+ </script>
+ <script>
+	//カテゴリー選択
+	document.addEventListener('DOMContentLoaded', function() {
+		var linkSection10 = document.getElementById('category1');
+		var linkSection20 = document.getElementById('category2');
+
+		var section10 = document.getElementById('display1_2');
+		var section20 = document.getElementById('display1');
+
+		if(linkSection10 && section10 && section20) {
+			linkSection10.addEventListener('click', function(event) {
+				event.preventDefault(); 
+				section10.style.display = 'none'; // 表示スタイルに応じて変更
+				section20.style.display = '';
+			});
+		}
+
+		if(linkSection20 && section10 && section20) {
+			linkSection20.addEventListener('click', function(event) {
+			event.preventDefault();
+			section10.style.display = '';
 			section20.style.display = 'none'; // 表示スタイルに応じて変更
 			});
 		}
