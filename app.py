@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 from food_judge import process_image
 from datetime import datetime
 from meat_judge import analyze_food_categories
+from sqlalchemy import func
 
 
 
@@ -43,6 +44,15 @@ class IngredientsRecipes(db.Model):
     ID = db.Column(db.Integer, primary_key=True)
     IngredientID = db.Column(db.Integer, db.ForeignKey('Ingredients.IngredientID'))
     RecipeID = db.Column(db.Integer, db.ForeignKey('Recipes.RecipeID'))
+    Must = db.Column(db.Boolean)
+
+class IngredientSubstitutes(db.Model):
+    __tablename__ = 'IngredientSubstitutes'
+
+    SubstituteID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    RecipeID = db.Column(db.Integer, db.ForeignKey('レシピテーブル名.RecipeID'), nullable=True)
+    PrimaryIngredientID = db.Column(db.Integer, db.ForeignKey('材料テーブル名.IngredientID'), nullable=True)
+    SubstituteIngredientID = db.Column(db.Integer, db.ForeignKey('材料テーブル名.IngredientID'), nullable=True)
 
 @app.route('/')
 def index():
@@ -102,12 +112,56 @@ def handle_data():
     # ここで selected_items に対する処理を行う
     print(selected_items)
     # SQLクエリの構築と実行
-    query = db.session.query(IngredientsRecipes.RecipeID)\
-        .filter(IngredientsRecipes.IngredientID.in_(selected_items))\
-        .group_by(IngredientsRecipes.RecipeID)\
-        .having(db.func.count(db.distinct(IngredientsRecipes.IngredientID)) == len(selected_items))
+   # MUST属性が1の食材を含むレシピの検索
+    must_recipes = db.session.query(IngredientsRecipes.RecipeID)\
+        .filter(IngredientsRecipes.Must == True)\
+        .filter(db.or_(
+            IngredientsRecipes.IngredientID.in_(selected_items),
+            db.and_(
+                IngredientSubstitutes.RecipeID == IngredientsRecipes.RecipeID,
+                IngredientsRecipes.IngredientID == IngredientSubstitutes.PrimaryIngredientID,
+                IngredientSubstitutes.SubstituteIngredientID.in_(selected_items)
+            )
+        ))\
+        .subquery()
 
-    recipe_ids = [recipe.RecipeID for recipe in query.all()]
+   # 各レシピにおけるMUST以外の食材の総数を計算するサブクエリ
+    non_must_ingredient_count = db.session.query(
+        IngredientsRecipes.RecipeID,
+        func.count(IngredientsRecipes.IngredientID).label('total_non_must')
+    ).filter(IngredientsRecipes.Must.isnot(True))\
+    .group_by(IngredientsRecipes.RecipeID)\
+    .subquery()
+
+    # MUST以外の食材を含むレシピの検索
+    non_must_recipes = db.session.query(
+        IngredientsRecipes.RecipeID,
+        func.count(db.distinct(IngredientsRecipes.IngredientID)).label('selected_non_must_count'),
+        non_must_ingredient_count.c.total_non_must
+    ).join(
+        non_must_ingredient_count,
+        IngredientsRecipes.RecipeID == non_must_ingredient_count.c.RecipeID
+    ).filter(
+        IngredientsRecipes.IngredientID.in_(selected_items),
+        IngredientsRecipes.Must.isnot(True)
+    ).group_by(
+        IngredientsRecipes.RecipeID,
+        non_must_ingredient_count.c.total_non_must
+    ).having(
+        func.count(db.distinct(IngredientsRecipes.IngredientID)) >= func.ceil(2/3 * non_must_ingredient_count.c.total_non_must)
+    ).subquery()
+
+
+
+
+
+    # 最終的に作成可能なレシピの特定
+    possible_recipes = db.session.query(must_recipes.c.RecipeID)\
+        .join(non_must_recipes, non_must_recipes.c.RecipeID == must_recipes.c.RecipeID)
+
+    # この部分を修正
+    recipe_ids = [recipe.RecipeID for recipe in possible_recipes.all()]
+
     print(recipe_ids)
 
     #作成できるレシピIDを用いてレシピIDを参照する
