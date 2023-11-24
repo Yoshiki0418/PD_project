@@ -100,7 +100,7 @@ def analyze_food_categories(image_path):
 
     if(most_common_basic == "豚"):
         if(most_common_detailed == "バラ"):
-            name = "豚バラ肉"
+            name = "豚バラ"
         elif(most_common_detailed == "ヒレ"):
             name = "豚ヒレ"
         elif(most_common_detailed == "ロース"):
