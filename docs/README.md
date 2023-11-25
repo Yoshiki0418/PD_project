@@ -34,7 +34,7 @@
 ### 複数の食材検知をどう実現するか
 -  [AutoML Vision(GCP)](https://cloud.google.com/vision/automl/docs/label-images?hl=ja)
 -  Amazon Rekognition(AWS)
--  YoLo
+-  [YoLo](https://farml1.com/yolov8/)
 
 ## 評価指標
 ### 　技術指標
