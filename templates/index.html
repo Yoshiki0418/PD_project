@@ -91,6 +91,7 @@
 				  // イベント委譲を使用して、動的に追加されたボタンにイベントハンドラを設定
 				  $(document).on('click', '.recipe_button', function() {
 					console.log('レシピ検索ボタンがクリックされました。');
+					$('.recipe_section').empty();
 					// サーバーにAjaxリクエストを送信
 					$.ajax({
 					  url: '/get-recipes', // サーバーのレシピを取得するルート
