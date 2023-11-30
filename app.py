@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-class Ingredients(db.Model):
+class Ingredients(db.Model): 
     IngredientID = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     expiration_date = db.Column(db.Date)
@@ -311,6 +311,5 @@ def recipe_details(recipe_id):
  
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+if __name__ == '__main__': 
     app.run(debug=True)

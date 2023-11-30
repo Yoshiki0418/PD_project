@@ -251,27 +251,27 @@
 		</div>
 	</div>
 	<!--食材編集画面-->
-	<div class="edit_food" id="display3" >
-		<div class="foods_container" id="display1">
-			{% for item in items %}
-				{% if item.category == 1 %}
-					<div class="item2" data-expiry="{{ item.expiry }}" data-days-left="{{ item.days_left }}" data-is-present="{{ item.is_present }}">
-						<div class="item_set">
-							<div class="circle-container">
-								<div class="circle"></div>
-								<img src="{{ url_for('static', filename='images/ingredients/' + item.image_file) }}" alt="{{ item.name }}" class="image">
-								<div class="edit-circle"><div class="in_circle"></div></div> 
-								<div class="date-circle">{{ item.days_left }}</div> 
-							</div>
-							<span class="item_name">{{ item.name }}</span>
-							<!--<span>{{ item.expiry if item.expiry}}</span>-->
+	<div class="foods_container" id="display1">
+		{% for item in items %}
+			{% if item.category == 1 %}
+				<div class="item1" data-expiry="{{ item.expiry }}" data-days-left="{{ item.days_left }}" data-is-present="{{ item.is_present }}">
+					<div class="item_set">
+						<div class="circle-container">
+							<div class="circle"></div>
+							<img src="{{ url_for('static', filename='images/ingredients/' + item.image_file) }}" alt="{{ item.name }}" class="image">
+							<div class="date-circle">{{ item.days_left }}</div> 
 						</div>
+						<span class="item_name">{{ item.name }}</span>
+						<!--<span>{{ item.expiry if item.expiry}}</span>-->
 					</div>
-				{% endif %}
-			{% endfor %}
-			<a><div id="edit-button" style="display: none;" class="button1"><div>完了</div></div></a>
-		</div>
+				</div>
+			{% endif %}
+		{% endfor %}
+		<a><div id="edit-button" style="display: none;" class="button1"><div>編集</div></div></a>
+		<a><div id="fixed-button" style="display: none;" class="button1"><div>レシピ</div></div></a>
 	</div>
+
+	
 </section>
 
 <section>
