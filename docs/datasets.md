@@ -22,6 +22,12 @@
 パフォーマンス評価: 異なる条件下でのモデルのパフォーマンスを評価する。
 ## 参考データセット
 COCOデータセット: 80クラス中73クラスで10,000インスタンス以上を確保。実験の参考になる。
+
+![プロジェクトイメージ](Document_img/sample.png)
+[引用](https://github.com/ultralytics/yolov5/wiki/Tips-for-Best-Training-Results)
 ## 総合的な検討
 環境要因: 実際の使用環境や目的に合わせたデータ収集を行う。
 フレームワークの要件: 物体検出AIのフレームワークによる要件を考慮する。
+
+#### 参考資料
+ [【Object Detection】物体検出AIを学習させるコツ](https://qiita.com/ground0state/items/01ba52ccc299d9d1e6a0)
