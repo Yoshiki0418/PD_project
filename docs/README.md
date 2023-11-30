@@ -63,6 +63,7 @@
 ## 学習
 - [なぜ、前処理方法を変更して画像処理の精度が上がったのか](Improved_accuracy.md)
 - [アノテーションとは](annotation.md)
+- [理想的な物体検出データセットの構築](datasets.md)
 
   
 
