@@ -9,7 +9,7 @@ from sqlalchemy import func
 
 
 
-app = Flask(__name__)
+app = Flask(__name__) 
 UPLOAD_FOLDER = 'static/UPLOAD_FOLDER'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # MySQLの設定
