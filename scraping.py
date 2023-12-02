@@ -27,7 +27,6 @@ hrefs = [div.find('a').get('href') for div in recipe_image_divs if div.find('a')
 
 for href in hrefs:
     print(href)
-    count = 0
 
     if href:
         # hrefがNoneでない場合のみ処理を実行
@@ -46,12 +45,26 @@ for href in hrefs:
             explanation = explanation.get_text(strip=True)
             print(explanation)
 
+            # Find the image tag
+            img_tag = soup.find('img', class_="photo large_photo_clickable")
+
+            # Extract the image path from the src attribute of the img tag
+            image_path = img_tag.get('src')
+            print(image_path)
+
         ingredient_names = soup.find_all('span', class_='name')
         extracted_names = [name.text for name in ingredient_names]
+        count = 0
         print("[材料]")
         for name in extracted_names:
             count += 1
             print(f"{count}:{name}")
         count = 0
         
+        procedures = soup.find_all("p", class_="step_text")
+        procedures = [procedure.text for procedure in procedures]
+        print("[作り方]")
+        for procedure in procedures:
+            count += 1
+            print(f"{count}:{procedure}")
         print("")
