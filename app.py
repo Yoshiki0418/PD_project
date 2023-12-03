@@ -6,6 +6,7 @@ from food_judge import process_image
 from datetime import datetime
 from meat_judge import analyze_food_categories
 from sqlalchemy import func
+from scraping import scraping
 
 
 
@@ -158,8 +159,6 @@ def handle_data():
     # 最終的に作成可能なレシピの特定
     possible_recipes = db.session.query(must_recipes.c.RecipeID)\
         .join(non_must_recipes, non_must_recipes.c.RecipeID == must_recipes.c.RecipeID)
-
-    # この部分を修正
     recipe_ids = [recipe.RecipeID for recipe in possible_recipes.all()]
 
     print(recipe_ids)
@@ -184,6 +183,14 @@ def handle_data():
     } for recipe in recipes]
 
     print(recipes_data)
+
+    print(len(recipes)) #作成可能なレシピがいくつあったか
+    #初期表示レシピ数を８に設定する
+    recipes_num = 8
+    recipe_add = recipes_num - len(recipes)
+
+    #クックパッドからレシピをスクレイピング
+    scraping()
     
     # JSONとしてレシピデータを返す
     return jsonify(recipes_data)
