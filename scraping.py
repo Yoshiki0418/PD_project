@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def scraping(input_ingredients):
+def scraping(input_ingredients , recipe_add):
     # 入力された食材名を「、」で区切るようにする
     ingredients = input_ingredients.replace(",", "、")
 
@@ -23,7 +23,9 @@ def scraping(input_ingredients):
     # hrefのリストを取得
     hrefs = [div.find('a').get('href') for div in recipe_image_divs if div.find('a')]
 
+    cnt = 0
     for href in hrefs:
+        cnt += 1
         print(href)
 
         if href:
@@ -67,5 +69,8 @@ def scraping(input_ingredients):
                 print(f"{count}:{procedure}")
             print("")
 
+            if(recipe_add == cnt):
+                break
 
-scraping("にんじん,大根")
+
+scraping("にんじん,大根",5)
