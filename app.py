@@ -189,8 +189,16 @@ def handle_data():
     recipes_num = 8
     recipe_add = recipes_num - len(recipes)
 
+    ingredients = Ingredients.query.filter(Ingredients.IngredientID.in_(selected_items)).all()
+    ingredient_names = [ingredient.name for ingredient in ingredients]
+    ingredient_names_str = ", ".join(ingredient_names)
+
+    print(ingredient_names_str)
+    scraping(ingredient_names_str,recipe_add)
+        
+
     #クックパッドからレシピをスクレイピング
-    scraping()
+    #scraping()
     
     # JSONとしてレシピデータを返す
     return jsonify(recipes_data)

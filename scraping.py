@@ -73,4 +73,4 @@ def scraping(input_ingredients , recipe_add):
                 break
 
 
-scraping("にんじん,大根",5)
+scraping("にんじん,大根",4)
