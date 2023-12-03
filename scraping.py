@@ -31,20 +31,22 @@ def scraping(input_ingredients, recipe_add):
             recipe_info['image_path'] = img_tag.get('src')
 
         ingredient_names = soup.find_all('span', class_='name')
-        recipe_info['ingredients'] = [name.text for name in ingredient_names]
+        # 材料名をコンマで連結して格納
+        recipe_info['ingredients'] = ','.join([name.text for name in ingredient_names])
 
         procedures = soup.find_all("p", class_="step_text")
-        recipe_info['procedures'] = [procedure.text for procedure in procedures]
+        recipe_info['procedures'] = ','.join(procedure.text.strip() for procedure in procedures)
 
         recipes.append(recipe_info)
 
     return recipes
 
+"""
 # 使用例
 input_ingredients = "にんじん,大根"
-recipe_add = 2
+recipe_add = 1
 result = scraping(input_ingredients, recipe_add)
 for recipe in result:
     print(recipe)
-
+"""
 

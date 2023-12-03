@@ -31,7 +31,7 @@ class Ingredients(db.Model):
 class Recipe(db.Model):
     __tablename__ = 'Recipes'
 
-    RecipeID = db.Column(db.Integer, primary_key=True)
+    RecipeID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     RecipeName = db.Column(db.String(255), nullable=False)
     Description = db.Column(db.Text, nullable=True)
     CookingTime = db.Column(db.Integer, nullable=True)
@@ -152,10 +152,6 @@ def handle_data():
         func.count(db.distinct(IngredientsRecipes.IngredientID)) >= func.ceil(2/3 * non_must_ingredient_count.c.total_non_must)
     ).subquery()
 
-
-
-
-
     # 最終的に作成可能なレシピの特定
     possible_recipes = db.session.query(must_recipes.c.RecipeID)\
         .join(non_must_recipes, non_must_recipes.c.RecipeID == must_recipes.c.RecipeID)
@@ -171,6 +167,61 @@ def handle_data():
         # 指定されたIDのレシピが見つからない場合はエラーを返します。
         return jsonify({'error': 'No Recipes found for provided IDs'}), 404
     
+    print(len(recipes)) #作成可能なレシピがいくつあったか
+    #初期表示レシピ数を８に設定する
+    recipes_num = 8
+    recipe_add = recipes_num - len(recipes)
+
+    ingredients = Ingredients.query.filter(Ingredients.IngredientID.in_(selected_items)).all()
+    ingredient_names = [ingredient.name for ingredient in ingredients]
+    ingredient_names_str = ", ".join(ingredient_names)
+
+    print(ingredient_names_str)
+    scraped_data_list = scraping(ingredient_names_str, recipe_add)
+
+    # スクレイピングされた各レシピに対してループを行い、データベースに追加
+    for scraped_data in scraped_data_list:
+        new_recipe = Recipe(
+            RecipeName=scraped_data['title'],
+            Description=scraped_data['explanation'],
+            ImageURL=scraped_data['image_path'],
+            Ingredients=scraped_data['ingredients'],
+            Instructions=scraped_data['procedures']
+        )
+        db.session.add(new_recipe)
+        #db.session.flush()  # レシピIDを取得するためにflushを使用
+
+        # スクレイピングされた材料名のリストを分割
+        ingredient_names = scraped_data['ingredients'].split(',')
+        print(ingredient_names)
+        for ingredient_name in ingredient_names:
+            print(ingredient_name)
+            ingredient = Ingredients.query.filter_by(name=ingredient_name).first()
+            if ingredient:
+                print(ingredient)
+                IngredientID=ingredient.IngredientID
+                print(IngredientID)
+                RecipeID=new_recipe.RecipeID
+                print(RecipeID)
+        """
+        for ingredient_name in ingredient_names:
+            # 食材テーブルで材料名に一致する食材を検索
+            ingredient = Ingredients.query.filter_by(name=ingredient_name).first()
+            if ingredient:
+                # タイトルに食材名が含まれているかチェック
+                is_must = 1 if ingredient_name in new_recipe.RecipeName else None
+                # 中間テーブルにレコードを追加
+                new_ingredient_recipe = IngredientsRecipes(
+                    IngredientID=ingredient.IngredientID,
+                    RecipeID=new_recipe.RecipeID,
+                    Must= is_must # 必要に応じて設定
+                )
+                db.session.add(new_ingredient_recipe)
+
+    # 全ての変更をコミット
+    db.session.commit()
+    """
+    
     # 取得したレシピオブジェクトを辞書リストに変換
     recipes_data = [{
         'RecipeID': recipe.RecipeID,
@@ -184,18 +235,6 @@ def handle_data():
 
     print(recipes_data)
 
-    print(len(recipes)) #作成可能なレシピがいくつあったか
-    #初期表示レシピ数を８に設定する
-    recipes_num = 8
-    recipe_add = recipes_num - len(recipes)
-
-    ingredients = Ingredients.query.filter(Ingredients.IngredientID.in_(selected_items)).all()
-    ingredient_names = [ingredient.name for ingredient in ingredients]
-    ingredient_names_str = ", ".join(ingredient_names)
-
-    print(ingredient_names_str)
-    scraping(ingredient_names_str,recipe_add)
-        
 
     #クックパッドからレシピをスクレイピング
     #scraping()
