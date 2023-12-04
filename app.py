@@ -7,6 +7,7 @@ from datetime import datetime
 from meat_judge import analyze_food_categories
 from sqlalchemy import func
 from scraping import scraping
+from flask_migrate import Migrate
 
 
 
@@ -19,6 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class Ingredients(db.Model): 
     IngredientID = db.Column(db.Integer, primary_key=True)
@@ -43,17 +45,27 @@ class IngredientsRecipes(db.Model):
     __tablename__ = 'IngredientsRecipes'  # テーブル名を指定
 
     ID = db.Column(db.Integer, primary_key=True)
-    IngredientID = db.Column(db.Integer, db.ForeignKey('Ingredients.IngredientID'))
-    RecipeID = db.Column(db.Integer, db.ForeignKey('Recipes.RecipeID'))
+    IngredientID = db.Column(db.Integer)
+    RecipeID = db.Column(db.Integer)
     Must = db.Column(db.Boolean)
 
 class IngredientSubstitutes(db.Model):
     __tablename__ = 'IngredientSubstitutes'
 
     SubstituteID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    RecipeID = db.Column(db.Integer, db.ForeignKey('レシピテーブル名.RecipeID'), nullable=True)
-    PrimaryIngredientID = db.Column(db.Integer, db.ForeignKey('材料テーブル名.IngredientID'), nullable=True)
-    SubstituteIngredientID = db.Column(db.Integer, db.ForeignKey('材料テーブル名.IngredientID'), nullable=True)
+    RecipeID = db.Column(db.Integer, db.ForeignKey('Recipes.RecipeID'), nullable=True)
+    PrimaryIngredientID = db.Column(db.Integer, db.ForeignKey('Ingredients.IngredientID'), nullable=True)
+    SubstituteIngredientID = db.Column(db.Integer, db.ForeignKey('Ingredients.IngredientID'), nullable=True)
+
+class AddIngredientsRecipes(db.Model):
+    __tablename__ = 'AddIngredientsRecipes'
+
+    ID = db.Column(db.Integer, primary_key=True)
+    IngredientID = db.Column(db.Integer)
+    RecipeID = db.Column(db.Integer)
+    Must = db.Column(db.Boolean)
+
+
 
 @app.route('/')
 def index():
@@ -181,79 +193,82 @@ def handle_data():
 
     # スクレイピングされた各レシピに対してループを行い、データベースに追加
     for scraped_data in scraped_data_list:
-        new_recipe = Recipe(
-            RecipeName=scraped_data['title'],
-            Description=scraped_data['explanation'],
-            ImageURL=scraped_data['image_path'],
-            Ingredients=scraped_data['ingredients'],
-            Instructions=scraped_data['procedures']
-        )
-        db.session.add(new_recipe)
-        #db.session.flush()  # レシピIDを取得するためにflushを使用
+        # 既にデータベースに存在するレシピ名をチェック
+        existing_recipe = Recipe.query.filter_by(RecipeName=scraped_data['title']).first()
+        new_recipe = None  # new_recipe の初期化
+        
+        # レシピ名がデータベースに存在しない場合のみ、新しいレシピを追加
+        if not existing_recipe:
+            new_recipe = Recipe(
+                RecipeName=scraped_data['title'],
+                Description=scraped_data['explanation'],
+                ImageURL=scraped_data['image_path'],
+                Ingredients=scraped_data['ingredients'],
+                Instructions=scraped_data['procedures']
+            )
+            db.session.add(new_recipe)
+            db.session.flush()  # レシピIDを取得するためにflushを使用
+            db.session.commit()
+        if new_recipe:  # new_recipe が None でない場合のみ実行
+            # 以下のコードは、new_recipe が実際に作成された場合のみ実行されます
+            db.session.commit()
 
-        mapping_dict = {
-            "にんじん": ["にんじん", "人参", "ニンジン"],
-            "玉ねぎ" : ["玉ねぎ", "タマネギ","たまねぎ"],
-            "じゃがいも" : ["じゃがいも","ジャガイモ"],
-            "なす" : ["茄子", "なす","ナス"],
-            "ねぎ" : ["ねぎ","ネギ"],
-            "大根" : ["大根","だいこん", "ダイコン"],
-            "レンコン" : ["蓮根","レンコン","れんこん"],
-            "さつまいも" : ["さつまいも","サツマイモ"],
-            "ほうれん草" : ["ほうれん草","ホウレンソウ"],
-            "青梗菜" : ["青梗菜","チンゲンサイ"],
-            "ともろこし" : ["とうもろこし","トウモロコシ"],
-            "鶏むね肉" : ["鶏むね肉","鶏胸肉","鶏肉","鶏肉(むね)","鶏肉(胸)","鶏肉(ムネ)"],
-            "鶏もも肉" : ["鶏もも肉","鶏モモ肉","鶏肉","鶏肉(もも)","鶏肉(モモ)"],
-            "ひき肉" : ["ひき肉","挽き肉"],
-            "牛小間切れ" : ["牛小間切れ","牛肉"],
-            "牛バラ" : ["牛バラ","牛肉"],
-            "豚小間切れ" : ["豚小間切れ","豚肉"],
-            "豚ヒレ" : ["豚肉","豚ひれ肉","豚ヒレ肉"],
-            "豚バラ" : ["豚肉","豚バラ","豚バラ肉"],
-            "牛もも肉" : ["牛もも肉","牛もも","牛肉"],
-        }
+            mapping_dict = {
+                "にんじん": ["にんじん", "人参", "ニンジン"],
+                "玉ねぎ" : ["玉ねぎ", "タマネギ","たまねぎ"],
+                "じゃがいも" : ["じゃがいも","ジャガイモ"],
+                "なす" : ["茄子", "なす","ナス"],
+                "ねぎ" : ["ねぎ","ネギ"],
+                "大根" : ["大根","だいこん", "ダイコン"],
+                "レンコン" : ["蓮根","レンコン","れんこん"],
+                "さつまいも" : ["さつまいも","サツマイモ"],
+                "ほうれん草" : ["ほうれん草","ホウレンソウ"],
+                "青梗菜" : ["青梗菜","チンゲンサイ"],
+                "ともろこし" : ["とうもろこし","トウモロコシ"],
+                "鶏むね肉" : ["鶏むね肉","鶏胸肉","鶏肉","鶏肉(むね)","鶏肉(胸)","鶏肉(ムネ)"],
+                "鶏もも肉" : ["鶏もも肉","鶏モモ肉","鶏肉","鶏肉(もも)","鶏肉(モモ)"],
+                "ひき肉" : ["ひき肉","挽き肉"],
+                "牛小間切れ" : ["牛小間切れ","牛肉"],
+                "牛バラ" : ["牛バラ","牛肉"],
+                "豚小間切れ" : ["豚小間切れ","豚肉"],
+                "豚ヒレ" : ["豚肉","豚ひれ肉","豚ヒレ肉"],
+                "豚バラ" : ["豚肉","豚バラ","豚バラ肉"],
+                "牛もも肉" : ["牛もも肉","牛もも","牛肉"],
+            }
 
-        ingredient_names = scraped_data['ingredients'].split(',')
+            ingredient_names = scraped_data['ingredients'].split(',')
 
-        for ingredient_name in ingredient_names:
-            ingredient_name = ingredient_name.strip()  # 余分な空白を削除
+            for ingredient_name in ingredient_names:
+                ingredient_name = ingredient_name.strip()  # 余分な空白を削除
 
-            # マッピング辞書を使用して名前の変換
-            for db_name, scraped_names in mapping_dict.items():
-                if ingredient_name in scraped_names:
-                    ingredient_name = db_name
-                    break
+                # マッピング辞書を使用して名前の変換
+                for db_name, scraped_names in mapping_dict.items():
+                    if ingredient_name in scraped_names:
+                        ingredient_name = db_name
+                        break
 
-            # データベースで材料を検索
-            ingredient = Ingredients.query.filter_by(name=ingredient_name).first()
-            if ingredient:
-                IngredientID = ingredient.IngredientID
-                print(ingredient_name)
-                print(IngredientID)
-                RecipeID = new_recipe.RecipeID
-                print(RecipeID)
+                # データベースで材料を検索
+                ingredient = Ingredients.query.filter_by(name=ingredient_name).first()
+                if ingredient:
+                    IngredientID = ingredient.IngredientID
+                    print(ingredient_name)
+                    print(IngredientID)
+                    RecipeID = new_recipe.RecipeID
+                    print(RecipeID)
 
-        """
-        for ingredient_name in ingredient_names:
-            # 食材テーブルで材料名に一致する食材を検索
-            ingredient = Ingredients.query.filter_by(name=ingredient_name).first()
-            if ingredient:
-                # タイトルに食材名が含まれているかチェック
-                is_must = 1 if ingredient_name in new_recipe.RecipeName else None
-                # 中間テーブルにレコードを追加
-                new_ingredient_recipe = IngredientsRecipes(
-                    IngredientID=ingredient.IngredientID,
-                    RecipeID=new_recipe.RecipeID,
-                    Must= is_must # 必要に応じて設定
-                )
-                db.session.add(new_ingredient_recipe)
+                    # タイトルに食材名が含まれているかチェック
+                    is_must = 1 if ingredient_name in new_recipe.RecipeName else None
+                    print(is_must)
+                    
+                    if IngredientID is not None and RecipeID is not None:
+                        new_ingredient_recipe = IngredientsRecipes(
+                            IngredientID=IngredientID,
+                            RecipeID=RecipeID,
+                            Must=is_must # True、False、または None を設定
+                        )
+                        db.session.add(new_ingredient_recipe)
+                        db.session.commit()
 
-    # 全ての変更をコミット
-    db.session.commit()
-    """
-    db.session.commit()
-    
     # 取得したレシピオブジェクトを辞書リストに変換
     recipes_data = [{
         'RecipeID': recipe.RecipeID,
