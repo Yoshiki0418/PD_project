@@ -191,18 +191,49 @@ def handle_data():
         db.session.add(new_recipe)
         #db.session.flush()  # レシピIDを取得するためにflushを使用
 
-        # スクレイピングされた材料名のリストを分割
+        mapping_dict = {
+            "にんじん": ["にんじん", "人参", "ニンジン"],
+            "玉ねぎ" : ["玉ねぎ", "タマネギ","たまねぎ"],
+            "じゃがいも" : ["じゃがいも","ジャガイモ"],
+            "なす" : ["茄子", "なす","ナス"],
+            "ねぎ" : ["ねぎ","ネギ"],
+            "大根" : ["大根","だいこん", "ダイコン"],
+            "レンコン" : ["蓮根","レンコン","れんこん"],
+            "さつまいも" : ["さつまいも","サツマイモ"],
+            "ほうれん草" : ["ほうれん草","ホウレンソウ"],
+            "青梗菜" : ["青梗菜","チンゲンサイ"],
+            "ともろこし" : ["とうもろこし","トウモロコシ"],
+            "鶏むね肉" : ["鶏むね肉","鶏胸肉","鶏肉","鶏肉(むね)","鶏肉(胸)","鶏肉(ムネ)"],
+            "鶏もも肉" : ["鶏もも肉","鶏モモ肉","鶏肉","鶏肉(もも)","鶏肉(モモ)"],
+            "ひき肉" : ["ひき肉","挽き肉"],
+            "牛小間切れ" : ["牛小間切れ","牛肉"],
+            "牛バラ" : ["牛バラ","牛肉"],
+            "豚小間切れ" : ["豚小間切れ","豚肉"],
+            "豚ヒレ" : ["豚肉","豚ひれ肉","豚ヒレ肉"],
+            "豚バラ" : ["豚肉","豚バラ","豚バラ肉"],
+            "牛もも肉" : ["牛もも肉","牛もも","牛肉"],
+        }
+
         ingredient_names = scraped_data['ingredients'].split(',')
-        print(ingredient_names)
+
         for ingredient_name in ingredient_names:
-            print(ingredient_name)
+            ingredient_name = ingredient_name.strip()  # 余分な空白を削除
+
+            # マッピング辞書を使用して名前の変換
+            for db_name, scraped_names in mapping_dict.items():
+                if ingredient_name in scraped_names:
+                    ingredient_name = db_name
+                    break
+
+            # データベースで材料を検索
             ingredient = Ingredients.query.filter_by(name=ingredient_name).first()
             if ingredient:
-                print(ingredient)
-                IngredientID=ingredient.IngredientID
+                IngredientID = ingredient.IngredientID
+                print(ingredient_name)
                 print(IngredientID)
-                RecipeID=new_recipe.RecipeID
+                RecipeID = new_recipe.RecipeID
                 print(RecipeID)
+
         """
         for ingredient_name in ingredient_names:
             # 食材テーブルで材料名に一致する食材を検索
@@ -221,6 +252,7 @@ def handle_data():
     # 全ての変更をコミット
     db.session.commit()
     """
+    db.session.commit()
     
     # 取得したレシピオブジェクトを辞書リストに変換
     recipes_data = [{
