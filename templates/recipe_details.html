@@ -50,7 +50,11 @@
 				</div>
 			</div>
 			<div class="pic_block">
-				<img src="{{ url_for('static', filename='images/recipe/' + recipe.ImageURL) }}" alt="" class="">
+				{% if recipe.ImageURL.startswith('https') %}
+					<img src="{{ recipe.ImageURL }}" alt="{{ recipe.RecipeName }}" class="">
+				{% else %}
+					<img src="{{ url_for('static', filename='images/recipe/' + recipe.ImageURL) }}" alt="{{ recipe.RecipeName }}" class="">
+				{% endif %}
 			</div>
 		</div>
 		<div class="Cook_item">
