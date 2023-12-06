@@ -103,16 +103,10 @@
 						// 成功した場合の処理
 						console.log(recipes);
 						recipes.forEach(function(recipe) {
-							// 'https'で始まるURLかどうかをチェックし、画像パスを適切に設定
-							if (recipe.ImageURL.startsWith('https')) {
-								imageUrl = recipe.ImageURL;
-							} else {
-								imageUrl = `static/images/recipe/${recipe.ImageURL}`;
-							}
 							const recipeCardHtml = `
 							<a href="/recipe-details/${recipe.RecipeID}" class="recipe-link">
 								<div class="recipe-card">
-									<img src="${imageUrl}" alt="${recipe.RecipeName}" class="recipe-image">
+									<img src="static/images/recipe/${recipe.ImageURL}" alt="${recipe.RecipeName}" class="recipe-image">
 									<div class="recipe-content">
 										<h2 class="recipe-title">${recipe.RecipeName}</h2>
 										<p class="recipe-description">${recipe.Description}</p>

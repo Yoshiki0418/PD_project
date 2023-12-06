@@ -48,7 +48,7 @@ class IngredientsRecipes(db.Model):
     IngredientID = db.Column(db.Integer)
     RecipeID = db.Column(db.Integer)
     Must = db.Column(db.Boolean)
- 
+
 class IngredientSubstitutes(db.Model):
     __tablename__ = 'IngredientSubstitutes'
 
