@@ -1,0 +1,7 @@
+
+train: /Users/yamamoto116/Desktop/PD_project/ultralytics/datasets/refrigerator/images/train
+val:  /Users/yamamoto116/Desktop/PD_project/ultralytics/datasets/refrigerator/images/val # val images (relative to 'path') 
+
+# Classes
+nc: 24  # number of classes
+names: ['tomato',"ninnzinn","jyagaimo","tamanegi","piimann","kabocha","nasu","negi","daikon","asuparagasu","rennkonn","reatsu","satumaimo","hourennsou","kyuuri","burokkorii","chinngennsai","toumorokoshi","niku","youguruto","nattou","tamago","kyabetu","hakusai"]

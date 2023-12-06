@@ -1,0 +1,7 @@
+path: ultralytics/datasets  # dataset root dir
+train: refrigerator/images/train  # train images (relative to 'path') 
+val: refrigerator/images/val  # val images (relative to 'path') 
+
+# Classes
+nc: 24  # number of classes
+names: ['tomato',"ninnzinn","jyagaimo","tamanegi","piimann","kabocha","nasu","negi","daikon","asuparagasu","rennkonn","reatsu","satumaimo","hourennsou","kyuuri","burokkorii","chinngennsai","toumorokoshi","niku","youguruto","nattou","tamago","kyabetu","hakusai"]
