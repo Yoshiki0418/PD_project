@@ -6,7 +6,7 @@ import numpy as np
 
 translation_dict = {
     'tomato': 'トマト',
-    'ninnzinn': '人参',
+    'ninnzinn': 'にんじん',
     'jyagaimo': 'じゃがいも',
     'tamanegi': '玉ねぎ',
     'piimann': 'ピーマン',

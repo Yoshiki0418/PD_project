@@ -30,6 +30,7 @@ class Ingredients(db.Model):
     image_path = db.Column(db.String(255))
     is_present = db.Column(db.Integer)
     category = db.Column(db.Integer)
+    average_shelf_life = db.Column(db.Integer)
 
 class Recipe(db.Model):
     __tablename__ = 'Recipes'
@@ -420,8 +421,22 @@ def save_image():
         image.save(save_path)
         detected_foods = detect_food_items(save_path)
         print(detected_foods)
-        
-        return jsonify({'message': 'Image saved successfully', 'path': save_path})
+        detected_foods = [ingredient.strip() for ingredient in detected_foods.split(',')]
+        response_data = []
+
+        for ingredient_name in detected_foods:
+            print(ingredient_name)
+            # 指定された食材名に基づいて平均賞味期限を取得
+            ingredient = Ingredients.query.filter_by(name=ingredient_name).first()
+            if ingredient:
+                print(f"{ingredient_name}の平均賞味期限: {ingredient.average_shelf_life}日")
+                response_data.append ({
+                'name': ingredient_name,
+                'ImageURL': ingredient.image_path,
+                'average_shelf_life': ingredient.average_shelf_life,
+            })
+
+        return jsonify(response_data)
     return jsonify({'message': 'No image received'}), 400
  
 
