@@ -366,3 +366,41 @@
   .button-style:active {
     background: none;
   }
+
+  /* モーダルウィンドウのスタイル */
+.modal {
+    display: none; /* デフォルトでは非表示 */
+    position: fixed; /* 画面の固定位置に配置 */
+    z-index: 100; /* 他の要素より前面に表示 */
+    left: 0;
+    top: 0;
+    width: 100%; /* 全幅 */
+    height: 100%; /* 全高 */
+    overflow: auto; /* スクロールバーが必要な場合に表示 */
+    background-color: rgb(0,0,0); /* 背景色 */
+    background-color: rgba(0,0,0,0.4); /* 黒色の背景に透明度を設定 */
+}
+
+/* モーダルコンテンツ */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 上下左右で自動的に中央配置 */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* 幅は80% */
+}
+
+/* 閉じるボタン */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}

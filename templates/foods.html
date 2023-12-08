@@ -46,19 +46,28 @@
 		<h2><span class="uline">食材追加</span></h2>
 		<div class="add_block">
 			<div class="pic_block">
-				<button type="button" class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
+				<button type="button" class="button-style" onclick="showModal();">
 					<img src="{{ url_for('static', filename='images/some_pic.png') }}" alt="一括撮影" class="circle_pic"/>
-				  </button>
+				</button>
+				<input type="file" id="cameraInput" accept="image/*" capture="camera" style="display: none;" onchange="handleFiles(this.files)">				
 				<p class="link_txt">一括撮影</p>
+				<!-- モーダルウィンドウのHTML構造 -->
+				<div id="myModal" class="modal">
+					<!-- モーダルの内容 -->
+					<div class="modal-content">
+						<span class="close">&times;</span>
+						<p>ここにカメラのUIや他の要素を入れる</p>
+					</div>
+				</div>
 			</div>
 			<div class="pic_block">
-				<button type="button"  class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
+				<button type="button2"  class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
 				<img src="{{ url_for('static', filename='images/personal_pic.png') }}" class="circle_pic">
 				</button>
 				<p class="link_txt">単体撮影</p>
 			</div>
 			<div class="pic_block">
-				<button type="button" class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
+				<button type="button3" class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
 				<img src="{{ url_for('static', filename='images/memo_pic.png') }}" class="circle_pic">
 				</button>
 				<p class="link_txt">手入力</p>
@@ -309,6 +318,30 @@
 
 <!--このテンプレート専用のスクリプト-->
 <script src="{{url_for('static' , filename='js/main.js') }}"></script>
+
+<script>
+	// モーダル表示関数
+	function showModal() {
+		var modal = document.getElementById("myModal");
+		modal.style.display = "block";
+	}
+
+	// モーダル非表示関数（閉じるボタン用）
+	var span = document.getElementsByClassName("close")[0];
+	span.onclick = function() {
+		var modal = document.getElementById("myModal");
+		modal.style.display = "none";
+	}
+
+	// ウィンドウ外をクリックした時にモーダルを閉じる
+	window.onclick = function(event) {
+		var modal = document.getElementById("myModal");
+		if (event.target == modal) {
+			modal.style.display = "none";
+		}
+	}
+
+</script>
 
 <script>
 	window.addEventListener('scroll', function() {
