@@ -384,10 +384,11 @@
 /* モーダルコンテンツ */
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto; /* 上下左右で自動的に中央配置 */
+    margin: 2.5% auto; /* 上下左右で自動的に中央配置 */
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* 幅は80% */
+    height: 90%;
 }
 
 /* 閉じるボタン */
