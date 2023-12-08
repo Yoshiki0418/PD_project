@@ -460,10 +460,21 @@
 }
 
 .ingredient-item {
+    position: relative;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     padding: 10px;
     border-radius: 5px;
+    width: 200px;
+    height: 250px;
 }
 
-
+.fixed-position-image {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    top: 190px;  /* 親要素の上端からの距離 */
+    left: 160px; /* 親要素の左端からの距離 */
+    width: 17px; 
+    height: 17px;
+}

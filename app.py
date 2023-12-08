@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from werkzeug.utils import secure_filename
 from food_judge import process_image
-from datetime import datetime
+from datetime import datetime, timedelta
 from meat_judge import analyze_food_categories
 from sqlalchemy import func
 from scraping import scraping
@@ -423,18 +423,24 @@ def save_image():
         print(detected_foods)
         detected_foods = [ingredient.strip() for ingredient in detected_foods.split(',')]
         response_data = []
+        current_date = datetime.now().date()
+        print(current_date)
 
         for ingredient_name in detected_foods:
             print(ingredient_name)
             # 指定された食材名に基づいて平均賞味期限を取得
             ingredient = Ingredients.query.filter_by(name=ingredient_name).first()
+            
             if ingredient:
                 print(f"{ingredient_name}の平均賞味期限: {ingredient.average_shelf_life}日")
-                response_data.append ({
-                'name': ingredient_name,
-                'ImageURL': ingredient.image_path,
-                'average_shelf_life': ingredient.average_shelf_life,
-            })
+                expiration_date = current_date + timedelta(days=ingredient.average_shelf_life)
+                formatted_date = expiration_date.strftime("%Y/%m/%d")  # 修正された行
+                response_data.append({
+                    'name': ingredient_name,
+                    'ImageURL': ingredient.image_path,
+                    'average_shelf_life': ingredient.average_shelf_life,
+                    'expiration_date': formatted_date  # 修正された行
+                })
 
         return jsonify(response_data)
     return jsonify({'message': 'No image received'}), 400

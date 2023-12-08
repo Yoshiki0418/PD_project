@@ -520,7 +520,8 @@ function displayIngredients(ingredients) {
         item.innerHTML = `
             <h3>${ingredient.name}</h3>
 			<img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
-            <p>平均賞味期限: ${ingredient.average_shelf_life}日</p>
+			<img src="/static/images/change.jpg" class="fixed-position-image">
+            <p>賞味期限 <br> ${ingredient.expiration_date}</p>
         `;
         showBlock.appendChild(item);
     });
