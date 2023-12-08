@@ -70,6 +70,8 @@
 							</div>
 							<!-- ファイルアップロード用の入力フィールド -->
 							<input type="file" id="fileInput" accept="image/*" style="display:none;">
+							<canvas id="canvasElement" width="640" height="480" style="display:none;"></canvas>
+							<button id="saveButton2" style="display:none;">食材を読み取る</button>
 						</div>
 						<span class="close">&times;</span>
 					</div>
@@ -466,32 +468,69 @@ document.getElementById('saveButton').addEventListener('click', function() {
     });
 });
 
-document.getElementById('fileInput').addEventListener('change', function(event) {
-    // ファイルが選択されたら実行される
-    var file = event.target.files[0];
-    var reader = new FileReader();
-    
-    reader.onload = function(e) {
-        var img = new Image();
-        img.onload = function() {
-            // canvasに画像を描画
-            var canvas = document.getElementById('canvasElement');
-            var ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            
-            // ここで画像処理や食材の読み取りなどの処理を行う
-        };
-        img.src = e.target.result;
-    };
-    
-    reader.readAsDataURL(file);
+document.getElementById('saveButton2').addEventListener('click', function() {
+    var canvas = document.getElementById('canvasElement');
+    canvas.toBlob(function(blob) {
+        var formData = new FormData();
+        formData.append('image', blob, 'image.png');
+
+        fetch('/save_image', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // ここでサーバーからの応答に基づいて何かをする
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
 });
+
+document.getElementById('fileInput').addEventListener('change', function(event) {
+    if (event.target.files && event.target.files[0]) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            var img = new Image();
+            img.onload = function() {
+                // canvasに画像を描画
+                var canvas = document.getElementById('canvasElement');
+                var ctx = canvas.getContext('2d');
+                canvas.style.display = 'block'; // canvasを表示
+				document.getElementById('saveButton2').style.display = 'block';
+
+                // 描画前にキャンバスをクリア
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 画像をキャンバスに合わせて調整
+                var hRatio = canvas.width / img.width;
+                var vRatio = canvas.height / img.height;
+                var ratio = Math.min(hRatio, vRatio);
+                var centerShift_x = (canvas.width - img.width * ratio) / 2;
+                var centerShift_y = (canvas.height - img.height * ratio) / 2;
+
+                ctx.drawImage(img, 0, 0, img.width, img.height,
+                                  centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+            };
+            img.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('switchToCameraButton').addEventListener('click', function() {
         document.getElementById('videoElement').style.display = 'block';
         document.getElementById('captureButton').style.display = 'block';
         document.getElementById('fileInput').style.display = 'none';
+		document.getElementById('saveButton2').style.display = 'none';
+		document.getElementById('canvasElement').style.display = 'none';
     });
 
     document.getElementById('switchToFileUploadButton').addEventListener('click', function() {
