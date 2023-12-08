@@ -56,8 +56,8 @@
 					<div class="modal-content">
 						<!-- 切り替えボタンを追加 -->
 						<div class="mode_change">
-							<button id="switchToCameraButton" class="camera_mode">カメラモード</button>
-							<button id="switchToFileUploadButton" class="upload_mode">アップロードモード</button>
+							<button id="switchToCameraButton" class="button1">カメラモード</button>
+							<button id="switchToFileUploadButton" class="button1">アップロードモード</button>
 						</div>
 
 						<div class="video_space">
@@ -72,6 +72,9 @@
 							<input type="file" id="fileInput" accept="image/*" style="display:none;">
 							<canvas id="canvasElement" width="640" height="480" style="display:none;"></canvas>
 							<button id="saveButton2" style="display:none;">食材を読み取る</button>
+						</div>
+						<div class="item_show_block">
+
 						</div>
 						<span class="close">&times;</span>
 					</div>
@@ -460,13 +463,30 @@ document.getElementById('saveButton').addEventListener('click', function() {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            // ここでサーバーからの応答に基づいて何かをする
+            // サーバーからの応答に基づいて食材の情報を表示
+            displayIngredients(data);
         })
         .catch(error => {
             console.error('Error:', error);
         });
     });
 });
+
+function displayIngredients(ingredients) {
+    const showBlock = document.querySelector('.item_show_block');
+    showBlock.innerHTML = ''; // 既存の内容をクリア
+
+    ingredients.forEach(ingredient => {
+        const item = document.createElement('div');
+        item.className = 'ingredient-item';
+        item.innerHTML = `
+            <h3>${ingredient.name}</h3>
+            <img src="${ingredient.ImageURL}" alt="${ingredient.name}" style="max-width: 100px; max-height: 100px;">
+            <p>平均賞味期限: ${ingredient.average_shelf_life}日</p>
+        `;
+        showBlock.appendChild(item);
+    });
+}
 
 document.getElementById('saveButton2').addEventListener('click', function() {
     var canvas = document.getElementById('canvasElement');
@@ -481,13 +501,30 @@ document.getElementById('saveButton2').addEventListener('click', function() {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            // ここでサーバーからの応答に基づいて何かをする
+            // サーバーからの応答に基づいて食材の情報を表示
+            displayIngredients(data);
         })
         .catch(error => {
             console.error('Error:', error);
         });
     });
 });
+
+function displayIngredients(ingredients) {
+    const showBlock = document.querySelector('.item_show_block');
+    showBlock.innerHTML = ''; // 既存の内容をクリア
+
+    ingredients.forEach(ingredient => {
+        const item = document.createElement('div');
+        item.className = 'ingredient-item';
+        item.innerHTML = `
+            <h3>${ingredient.name}</h3>
+			<img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
+            <p>平均賞味期限: ${ingredient.average_shelf_life}日</p>
+        `;
+        showBlock.appendChild(item);
+    });
+}
 
 document.getElementById('fileInput').addEventListener('change', function(event) {
     if (event.target.files && event.target.files[0]) {
