@@ -50,9 +50,11 @@ def detect_food_items(image_path):
 
     return japanese_words
 
+"""
 # 使用例
 image_path = 'ultralytics/predict/2.jpeg'
 detected_foods = detect_food_items(image_path)
 print(detected_foods)
+"""
 
 

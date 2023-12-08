@@ -53,16 +53,17 @@
 				<p class="link_txt">一括撮影</p>
 				<!-- モーダルウィンドウのHTML構造 -->
 				<div id="myModal" class="modal">
-					<!-- モーダルの内容 -->
 					<div class="modal-content">
-						<span class="close">&times;</span>
-						<video id="videoElement" autoplay></video>
-						<button id="captureButton">撮影</button>
-						<canvas id="canvasElement" width="640" height="480" style="display:none;"></canvas>
-						<button id="saveButton">保存</button>
-						<button id="startAgainButton" style="display:none;">もう一度撮影する</button>
+					  <span class="close">&times;</span>
+					  <video id="videoElement" autoplay></video>
+					  <button id="captureButton">撮影</button>
+					  <canvas id="canvasElement" width="640" height="480" style="display:none;"></canvas>
+					  <div class="button_block">
+						<button id="saveButton" style="display:none;">食材を読み取る</button>
+					  	<button id="startAgainButton" style="display:none;">もう一度撮影する</button>
+					  </div>
 					</div>
-				</div>
+				  </div>
 			</div>
 			<div class="pic_block">
 				<button type="button2"  class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
@@ -376,9 +377,11 @@
 		// 映像を停止
 		videoStream.getTracks().forEach(track => track.stop());
 		video.style.display = 'none'; // ビデオ要素を非表示にする
+		document.getElementById('captureButton').style.display = 'none';
 		canvas.style.display = 'block'; // キャンバスを表示する
 
 		// 「もう一度撮影する」ボタンを表示
+		document.getElementById('saveButton').style.display = 'block';
 		document.getElementById('startAgainButton').style.display = 'block';
 	});
 
@@ -391,6 +394,8 @@
 		document.getElementById('videoElement').style.display = 'block'; // ビデオを表示する
 		document.getElementById('canvasElement').style.display = 'none'; // キャンバスを非表示にする
 		document.getElementById('startAgainButton').style.display = 'none'; // ボタンを非表示にする
+		document.getElementById('saveButton').style.display = 'none';
+		document.getElementById('captureButton').style.display = 'block';
 		})
 		.catch(function(error) {
 		console.log("Something went wrong!");

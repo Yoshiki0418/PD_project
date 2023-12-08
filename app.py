@@ -8,6 +8,7 @@ from meat_judge import analyze_food_categories
 from sqlalchemy import func
 from scraping import scraping
 from flask_migrate import Migrate
+from object_detection import detect_food_items
   
 
 
@@ -417,6 +418,9 @@ def save_image():
         filename = secure_filename(image.filename)
         save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         image.save(save_path)
+        detected_foods = detect_food_items(save_path)
+        print(detected_foods)
+        
         return jsonify({'message': 'Image saved successfully', 'path': save_path})
     return jsonify({'message': 'No image received'}), 400
  

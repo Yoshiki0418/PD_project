@@ -405,3 +405,26 @@
     text-decoration: none;
     cursor: pointer;
 }
+.modal-content {
+    text-align: center; /* テキストを中央揃えにする */
+  }
+  
+  video, canvas {
+    margin: 0 auto; /* 自動的に左右のマージンを計算して中央揃えにする */
+    display: block; /* ブロック要素として表示 */
+  }
+  
+  button {
+    display: block; /* ブロック要素として表示 */
+    margin: 20px auto; /* 上下のマージンを指定し、左右のマージンは自動的に計算して中央揃えにする */
+  }
+
+  .button_block{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .button_block button {
+    display: block; /* ブロック要素として表示 */
+    margin: 20px; 
+  }
