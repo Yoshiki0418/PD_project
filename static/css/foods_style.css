@@ -397,6 +397,10 @@
     float: right;
     font-size: 28px;
     font-weight: bold;
+    position: absolute;
+    top: 5%;    /* 上端からの距離 */
+    right: 12%;  /* 右端からの距離 */
+    cursor: pointer; /* クリック可能な要素であることを示す */
 }
 
 .close:hover,
@@ -428,3 +432,20 @@
     display: block; /* ブロック要素として表示 */
     margin: 20px; 
   }
+
+.mode_change button{
+    display: block; /* ブロック要素として表示 */
+    margin: 5px; 
+}
+
+.modal-content{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.mode_change{
+    width: 20%;
+    height: auto;
+}
+
+

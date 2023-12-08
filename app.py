@@ -105,7 +105,7 @@ def foods():
             # expiration_dateが設定されていない場合の処理
             expiry_date = None
             days_left = '不明'  # または適切なデフォルト値
-
+ 
         veg_data = {
             "IngredientID": vegetable.IngredientID,
             'name': vegetable.name,
@@ -165,7 +165,7 @@ def handle_data():
         func.count(db.distinct(IngredientsRecipes.IngredientID)) >= func.ceil(2/3 * non_must_ingredient_count.c.total_non_must)
     ).subquery()
 
-    # 最終的に作成可能なレシピの特定
+    # 最終的に作成可能なレシピの特定　
     possible_recipes = db.session.query(must_recipes.c.RecipeID)\
         .join(non_must_recipes, non_must_recipes.c.RecipeID == must_recipes.c.RecipeID)
     recipe_ids = [recipe.RecipeID for recipe in possible_recipes.all()]

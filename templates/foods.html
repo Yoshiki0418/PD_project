@@ -54,16 +54,26 @@
 				<!-- モーダルウィンドウのHTML構造 -->
 				<div id="myModal" class="modal">
 					<div class="modal-content">
-					  <span class="close">&times;</span>
-					  <video id="videoElement" autoplay></video>
-					  <button id="captureButton">撮影</button>
-					  <canvas id="canvasElement" width="640" height="480" style="display:none;"></canvas>
-					  <div class="button_block">
-						<button id="saveButton" style="display:none;">食材を読み取る</button>
-					  	<button id="startAgainButton" style="display:none;">もう一度撮影する</button>
-					  </div>
+						<!-- 切り替えボタンを追加 -->
+						<div class="mode_change">
+							<button id="switchToCameraButton" class="camera_mode">カメラモード</button>
+							<button id="switchToFileUploadButton" class="upload_mode">アップロードモード</button>
+						</div>
+
+						<div class="video_space">
+							<video id="videoElement" autoplay></video>
+							<button id="captureButton">撮影</button>
+							<canvas id="canvasElement" width="640" height="480" style="display:none;"></canvas>
+							<div class="button_block">
+								<button id="saveButton" style="display:none;">食材を読み取る</button>
+								<button id="startAgainButton" style="display:none;">もう一度撮影する</button>
+							</div>
+							<!-- ファイルアップロード用の入力フィールド -->
+							<input type="file" id="fileInput" accept="image/*" style="display:none;">
+						</div>
+						<span class="close">&times;</span>
 					</div>
-				  </div>
+				</div>
 			</div>
 			<div class="pic_block">
 				<button type="button2"  class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
@@ -453,6 +463,41 @@ document.getElementById('saveButton').addEventListener('click', function() {
         .catch(error => {
             console.error('Error:', error);
         });
+    });
+});
+
+document.getElementById('fileInput').addEventListener('change', function(event) {
+    // ファイルが選択されたら実行される
+    var file = event.target.files[0];
+    var reader = new FileReader();
+    
+    reader.onload = function(e) {
+        var img = new Image();
+        img.onload = function() {
+            // canvasに画像を描画
+            var canvas = document.getElementById('canvasElement');
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            
+            // ここで画像処理や食材の読み取りなどの処理を行う
+        };
+        img.src = e.target.result;
+    };
+    
+    reader.readAsDataURL(file);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('switchToCameraButton').addEventListener('click', function() {
+        document.getElementById('videoElement').style.display = 'block';
+        document.getElementById('captureButton').style.display = 'block';
+        document.getElementById('fileInput').style.display = 'none';
+    });
+
+    document.getElementById('switchToFileUploadButton').addEventListener('click', function() {
+        document.getElementById('videoElement').style.display = 'none';
+        document.getElementById('captureButton').style.display = 'none';
+        document.getElementById('fileInput').style.display = 'block';
     });
 });
 
