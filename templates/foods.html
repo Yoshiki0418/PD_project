@@ -46,15 +46,21 @@
 		<h2><span class="uline">食材追加</span></h2>
 		<div class="add_block">
 			<div class="pic_block">
-				<img src="{{ url_for('static', filename='images/some_pic.png') }}" class="circle_pic">
+				<button type="button" class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
+					<img src="{{ url_for('static', filename='images/some_pic.png') }}" alt="一括撮影" class="circle_pic"/>
+				  </button>
 				<p class="link_txt">一括撮影</p>
 			</div>
 			<div class="pic_block">
+				<button type="button"  class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
 				<img src="{{ url_for('static', filename='images/personal_pic.png') }}" class="circle_pic">
+				</button>
 				<p class="link_txt">単体撮影</p>
 			</div>
 			<div class="pic_block">
+				<button type="button" class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
 				<img src="{{ url_for('static', filename='images/memo_pic.png') }}" class="circle_pic">
+				</button>
 				<p class="link_txt">手入力</p>
 			</div>
 		</div>

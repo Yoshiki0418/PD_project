@@ -8,7 +8,7 @@ from meat_judge import analyze_food_categories
 from sqlalchemy import func
 from scraping import scraping
 from flask_migrate import Migrate
-
+  
 
 
 app = Flask(__name__) 

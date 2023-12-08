@@ -348,7 +348,21 @@
     }
 }
 
-.recipe-image{
+.recipe-image{ 
 	width: 298px;
 	height: 199px;
 }
+
+.button-style {
+    border: none;
+    background: none;
+    outline: none;
+  }
+  
+  .button-style:focus {
+    outline: none;
+  }
+
+  .button-style:active {
+    background: none;
+  }
