@@ -409,6 +409,16 @@ def recipe_details(recipe_id):
     }
 
     return render_template('recipe_details.html', recipe=recipe_data)
+
+@app.route('/save_image', methods=['POST'])
+def save_image():
+    image = request.files['image']
+    if image:
+        filename = secure_filename(image.filename)
+        save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        image.save(save_path)
+        return jsonify({'message': 'Image saved successfully', 'path': save_path})
+    return jsonify({'message': 'No image received'}), 400
  
 
 

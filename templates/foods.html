@@ -56,7 +56,11 @@
 					<!-- モーダルの内容 -->
 					<div class="modal-content">
 						<span class="close">&times;</span>
-						<p>ここにカメラのUIや他の要素を入れる</p>
+						<video id="videoElement" autoplay></video>
+						<button id="captureButton">撮影</button>
+						<canvas id="canvasElement" width="640" height="480" style="display:none;"></canvas>
+						<button id="saveButton">保存</button>
+						<button id="startAgainButton" style="display:none;">もう一度撮影する</button>
 					</div>
 				</div>
 			</div>
@@ -324,6 +328,23 @@
 	function showModal() {
 		var modal = document.getElementById("myModal");
 		modal.style.display = "block";
+		startCamera();
+	}
+
+	// カメラ起動関数
+	function startCamera() {
+		var video = document.getElementById('videoElement');
+
+		// メディアデバイスを取得する
+		if (navigator.mediaDevices.getUserMedia) {
+			navigator.mediaDevices.getUserMedia({ video: true })
+				.then(function (stream) {
+					video.srcObject = stream;
+				})
+				.catch(function (error) {
+					console.log("カメラのアクセスに失敗しました: ", error);
+				});
+		}
 	}
 
 	// モーダル非表示関数（閉じるボタン用）
@@ -331,6 +352,63 @@
 	span.onclick = function() {
 		var modal = document.getElementById("myModal");
 		modal.style.display = "none";
+		stopCamera();
+	}
+	let videoStream;
+
+	// ビデオのセットアップ
+	navigator.mediaDevices.getUserMedia({ video: true })
+	.then(function(stream) {
+		videoStream = stream;
+		document.getElementById('videoElement').srcObject = stream;
+	})
+	.catch(function(error) {
+		console.log("Something went wrong!");
+	});
+
+	// 撮影ボタンのイベント
+	document.getElementById('captureButton').addEventListener('click', function() {
+		var video = document.getElementById('videoElement');
+		var canvas = document.getElementById('canvasElement');
+		var context = canvas.getContext('2d');
+		context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+		// 映像を停止
+		videoStream.getTracks().forEach(track => track.stop());
+		video.style.display = 'none'; // ビデオ要素を非表示にする
+		canvas.style.display = 'block'; // キャンバスを表示する
+
+		// 「もう一度撮影する」ボタンを表示
+		document.getElementById('startAgainButton').style.display = 'block';
+	});
+
+	// 「もう一度撮影する」ボタンのイベント
+	document.getElementById('startAgainButton').addEventListener('click', function() {
+		navigator.mediaDevices.getUserMedia({ video: true })
+		.then(function(stream) {
+		videoStream = stream;
+		document.getElementById('videoElement').srcObject = stream;
+		document.getElementById('videoElement').style.display = 'block'; // ビデオを表示する
+		document.getElementById('canvasElement').style.display = 'none'; // キャンバスを非表示にする
+		document.getElementById('startAgainButton').style.display = 'none'; // ボタンを非表示にする
+		})
+		.catch(function(error) {
+		console.log("Something went wrong!");
+		});
+	});
+
+
+	// カメラ停止関数
+	function stopCamera() {
+		var video = document.getElementById('videoElement');
+		var stream = video.srcObject;
+		var tracks = stream.getTracks();
+
+		tracks.forEach(function(track) {
+			track.stop();
+		});
+
+		video.srcObject = null;
 	}
 
 	// ウィンドウ外をクリックした時にモーダルを閉じる
@@ -338,8 +416,40 @@
 		var modal = document.getElementById("myModal");
 		if (event.target == modal) {
 			modal.style.display = "none";
+			stopCamera();
 		}
 	}
+
+	document.getElementById('captureButton').addEventListener('click', function() {
+    var video = document.getElementById('videoElement');
+    var canvas = document.getElementById('canvasElement');
+    var context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // キャンバスを表示して確認する
+    canvas.style.display = 'block';
+});
+
+document.getElementById('saveButton').addEventListener('click', function() {
+    var canvas = document.getElementById('canvasElement');
+    canvas.toBlob(function(blob) {
+        var formData = new FormData();
+        formData.append('image', blob, 'image.png');
+
+        fetch('/save_image', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // ここでサーバーからの応答に基づいて何かをする
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
 
 </script>
 
