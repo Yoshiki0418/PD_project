@@ -480,7 +480,35 @@ def add_ingredient():
 
     else:
         return jsonify({'error': '食材名は必須です'}), 400
- 
+    
+@app.route('/process_card_data', methods=['POST'])
+def process_card_data():
+    # JSONデータを取得
+    card_data = request.json
+
+    for item in card_data:
+        name = item.get('name')
+        expiration_date_str = item.get('expirationDate').replace('賞味期限', '').strip()
+
+        # 名前と賞味期限が両方とも存在する場合のみ処理
+        if name and expiration_date_str:
+            # 日付文字列をdatetimeオブジェクトに変換（YYYY/MM/DD 形式）
+            expiration_date = datetime.strptime(expiration_date_str, '%Y/%m/%d').date()
+
+            # データベースで対応する食材を検索
+            ingredient = Ingredients.query.filter_by(name=name).first()
+
+            # 該当する食材が見つかった場合、情報を更新
+            if ingredient:
+                ingredient.expiration_date = expiration_date
+                ingredient.is_present = 1
+                db.session.add(ingredient)
+
+    # データベースの変更をコミット
+    db.session.commit()
+
+    # 応答を返す
+    return jsonify({"status": "success", "message": "Data processed successfully"})
 
 
 if __name__ == '__main__': 

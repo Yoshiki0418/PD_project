@@ -1144,8 +1144,43 @@ function sendDataToServer(data) {
 	});
  </script>
 
+<script>
+    // ボタンの要素を取得
+    const finalCheckButton = document.getElementById('final_check');
 
+    // イベントリスナーを追加
+    finalCheckButton.addEventListener('click', function() {
+        // すべての食材カードから情報を取得
+        const cardElements = document.querySelectorAll('.ingredient-item');
+        const cardData = Array.from(cardElements).map(card => {
+            const name = card.querySelector('h3') ? card.querySelector('h3').textContent : '';
+            const expiration = card.querySelector('p') ? card.querySelector('p').textContent.replace('賞味期限 \n', '') : '';
 
+            return {
+                name: name,
+                expirationDate: expiration
+            };
+        });
+
+        // Fetch APIを使用してFlaskに非同期リクエストを送信
+        fetch('/process_card_data', {
+            method: 'POST',
+            body: JSON.stringify(cardData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // ここでバックエンドからのレスポンスを処理
+            console.log(data);
+			myModal.style.display = 'none';
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+</script>
 
 
 </body>
