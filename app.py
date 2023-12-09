@@ -445,6 +445,20 @@ def save_image():
 
         return jsonify(response_data)
     return jsonify({'message': 'No image received'}), 400
+
+@app.route('/add-ingredient', methods=['POST'])
+def add_ingredient():
+    data = request.json
+    name = data.get('name')
+    expiration_date = data.get('expiration_date')
+
+    if name:
+        new_ingredient = Ingredients(name=name, expiration_date=expiration_date)
+        
+
+        return jsonify({'message': '新しい食材が追加されました'}), 200
+    else:
+        return jsonify({'error': '食材名は必須です'}), 400
  
 
 

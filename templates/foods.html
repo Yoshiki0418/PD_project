@@ -544,6 +544,93 @@ function displayIngredients(ingredients) {
         showBlock.appendChild(item);
     });
 
+	// 利用可能な食材名のリスト
+	const availableIngredients = [
+    "トマト", "にんじん", "じゃがいも", "玉ねぎ", "ピーマン", "かぼちゃ", "なす", "ねぎ", "大根", 
+    "アスパラガス", "れんこん", "レタス", "さつまいも", "ほうれん草", "きゅうり", "ブロッコリー", 
+    "青梗菜", "ともろこし", "鶏むね肉", "鶏もも肉", "鶏皮", "鶏手羽肉", "鶏ささみ", "ひき肉", 
+    "牛タン", "牛スジ", "牛ロース肉", "牛もも肉", "牛小間切れ", "牛ヒレ", "牛バラ肉", "豚ロース", 
+    "豚小間切れ", "豚ヒレ", "豚バラ", "キャベツ", "白菜", "ヨーグルト", "卵", "納豆"
+];
+
+	// 手入力用のカードを追加
+	const inputCard = document.createElement('div');
+	inputCard.className = 'ingredient-item';
+
+	// ドロップダウン（セレクトボックス）を生成
+	const selectElement = document.createElement('select');
+	selectElement.id = 'newIngredientName';
+	availableIngredients.forEach(ingredient => {
+		const optionElement = document.createElement('option');
+		optionElement.value = ingredient;
+		optionElement.textContent = ingredient;
+		selectElement.appendChild(optionElement);
+	});
+
+	// ドロップダウンとその他の要素をカードに追加
+	inputCard.appendChild(selectElement);
+	inputCard.innerHTML += `
+		<input type="date" id="newIngredientExpirationDate">
+		<button id="addIngredientButton">追加</button>
+	`;
+
+	// カードを表示エリアに追加
+	showBlock.appendChild(inputCard);
+
+	// 追加ボタンのイベントリスナーを追加
+	const addButton = document.getElementById('addIngredientButton');
+	if (addButton) {
+		addButton.addEventListener('click', function() {
+			const newIngredientName = document.getElementById('newIngredientName').value;
+			const newIngredientExpirationDate = document.getElementById('newIngredientExpirationDate').value;
+
+			if (newIngredientName) {
+				// 既存の食材リストと新しい食材名を比較
+				const existingIngredients = document.querySelectorAll('.ingredient-item h3');
+				let isExisting = false;
+
+				existingIngredients.forEach(ingredientElement => {
+					if (ingredientElement.textContent === newIngredientName) {
+						isExisting = true;
+					}
+				});
+
+				if (isExisting) {
+					alert('この食材はすでに追加されています');
+				} else {
+					addNewIngredient(newIngredientName, newIngredientExpirationDate);
+				}
+			} else {
+				alert('食材名は必須です。');
+			}
+		});
+	}
+
+	function addNewIngredient(name, expirationDate) {
+		const data = {
+			name: name,
+			expiration_date: expirationDate || null // 賞味期限が空の場合はnullを設定
+		};
+
+		fetch('/add-ingredient', { // Flaskサーバーのエンドポイント
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			// 追加に成功した後の処理（例：ページを更新する、メッセージを表示する等）
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+
+
+
     // 編集ボタンのイベントリスナーを追加
     showBlock.addEventListener('click', function(event) {
         const editButton = event.target.closest('.edit_start');
