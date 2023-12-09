@@ -446,6 +446,8 @@ def save_image():
         return jsonify(response_data)
     return jsonify({'message': 'No image received'}), 400
 
+from datetime import datetime
+
 @app.route('/add-ingredient', methods=['POST'])
 def add_ingredient():
     data = request.json
@@ -453,10 +455,29 @@ def add_ingredient():
     expiration_date = data.get('expiration_date')
 
     if name:
-        new_ingredient = Ingredients(name=name, expiration_date=expiration_date)
-        
+        ingredient = Ingredients.query.filter_by(name=name).first()
 
-        return jsonify({'message': '新しい食材が追加されました'}), 200
+        if not ingredient:
+            return jsonify({'error': f'食材 {name} はデータベースに存在しません'}), 404
+
+        # 賞味期限が指定されていない場合、データベースから平均賞味期限を使用
+        if expiration_date is None:
+            current_date = datetime.now().date()
+            expiration_date = current_date + timedelta(days=ingredient.average_shelf_life)
+        else:
+            # 賞味期限が指定されている場合、日付形式を変換
+            expiration_date = datetime.strptime(expiration_date, "%Y-%m-%d").date()
+
+        # 日付を指定のフォーマットで返す
+        formatted_date = expiration_date.strftime("%Y/%m/%d")
+
+        return jsonify({
+            'IngredientID': ingredient.IngredientID,
+            'name': ingredient.name,
+            'ImageURL': ingredient.image_path,
+            'expiration_date': formatted_date
+        }), 200
+
     else:
         return jsonify({'error': '食材名は必須です'}), 400
  
