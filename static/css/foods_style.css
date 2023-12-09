@@ -409,6 +409,25 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+.close1{
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    margin-top: -5px;    /* 上端からの距離 */
+    left: 2%;  /* 右端からの距離 */
+    cursor: pointer; /* クリック可能な要素であることを示す */
+}
+
+.close1:hover,
+.close1:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .modal-content {
     text-align: center; /* テキストを中央揃えにする */
   }
@@ -484,10 +503,31 @@
     padding: 0; /* パディングを削除 */
     cursor: pointer; /* マウスカーソルをポインターに変更 */
     overflow: hidden; /* 画像がボタンの外にはみ出さないように */
-    z-index: 1000;
 }
 
 .fixed-position-image {
     width: 100%; /* ボタンのサイズに合わせて調整 */
     height: 100%; /* ボタンのサイズに合わせて調整 */
 }
+
+.date_check{
+    position: absolute;
+    right: 5px;
+    top: 1%;
+}
+
+.date_block{
+    position: absolute;
+    right: 7px;
+    top: 48%;
+    background-color: #F0E9E5;
+    width: 240px;
+    height: 360px;
+}
+
+#saveButton3{
+    position: absolute;
+    margin-top: 320px;
+    margin-left: 110px;
+}
+
