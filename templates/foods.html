@@ -218,7 +218,7 @@
 	<div class="foods_container" id="display1">
 		{% for item in items %}
 			{% if item.category == 1 %}
-				<div class="item1" data-expiry="{{ item.expiry }}" data-days-left="{{ item.days_left }}" data-is-present="{{ item.is_present }}">
+				<div class="item1" data-name="{{ item.name }}" data-expiry="{{ item.expiry }}" data-days-left="{{ item.days_left }}" data-is-present="{{ item.is_present }}">
 					<div class="item_set">
 						<div class="circle-container">
 							<div class="circle"></div>
@@ -226,7 +226,7 @@
 							<div class="date-circle">{{ item.days_left }}</div> 
 						</div>
 						<span class="item_name">{{ item.name }}</span>
-						<!--<span>{{ item.expiry if item.expiry}}</span>-->
+						<!-- ここに必要に応じてその他の情報を追加 -->
 					</div>
 				</div>
 			{% endif %}
@@ -1145,6 +1145,23 @@ function sendDataToServer(data) {
  </script>
 
 <script>
+	function updateItemData(name, newExpiry, newDaysLeft) {
+		// 対象のアイテムを選択
+		const itemElement = document.querySelector(`.item1[data-name="${name}"]`);
+
+		if (itemElement) {
+			// 賞味期限と残り日数を更新
+			itemElement.setAttribute('data-expiry', newExpiry);
+			itemElement.setAttribute('data-days-left', newDaysLeft);
+
+			// 必要に応じて他のDOM要素（例えば、表示されている日数）を更新
+			const daysLeftElement = itemElement.querySelector('.date-circle');
+			if (daysLeftElement) {
+				daysLeftElement.textContent = newDaysLeft;
+			}
+		}
+	}
+
     // ボタンの要素を取得
     const finalCheckButton = document.getElementById('final_check');
 
@@ -1154,7 +1171,7 @@ function sendDataToServer(data) {
         const cardElements = document.querySelectorAll('.ingredient-item');
         const cardData = Array.from(cardElements).map(card => {
             const name = card.querySelector('h3') ? card.querySelector('h3').textContent : '';
-            const expiration = card.querySelector('p') ? card.querySelector('p').textContent.replace('賞味期限 \n', '') : '';
+            const expiration = card.querySelector('p') ? card.querySelector('p').textContent.replace('賞味期限 ', '') : '';
 
             return {
                 name: name,
@@ -1170,11 +1187,13 @@ function sendDataToServer(data) {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            // ここでバックエンドからのレスポンスを処理
-            console.log(data);
-			myModal.style.display = 'none';
+        .then(response => {
+            if (response.ok) {
+                // ページをリロードする
+                location.reload();
+            } else {
+                console.error('Server responded with non-OK status');
+            }
         })
         .catch((error) => {
             console.error('Error:', error);

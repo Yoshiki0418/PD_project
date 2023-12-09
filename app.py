@@ -506,9 +506,10 @@ def process_card_data():
 
     # データベースの変更をコミット
     db.session.commit()
+    print(1)
 
     # 応答を返す
-    return jsonify({"status": "success", "message": "Data processed successfully"})
+    return render_template('foods.html')
 
 
 if __name__ == '__main__': 
