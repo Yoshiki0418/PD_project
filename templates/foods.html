@@ -527,6 +527,29 @@ document.getElementById('saveButton2').addEventListener('click', function() {
     });
 });
 
+document.getElementById('saveButton').addEventListener('click', function() {
+    var canvas = document.getElementById('canvasElement');
+    canvas.toBlob(function(blob) {
+        var formData = new FormData();
+        formData.append('image', blob, 'image.png');
+
+        fetch('/save_image', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // サーバーからの応答に基づいて食材の情報を表示
+            displayIngredients(data);
+			final_check.style.display = "block";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
 function createAddIngredientCard() {
     const inputCard = document.createElement('div');
     inputCard.className = 'ingredient-item';
@@ -567,13 +590,19 @@ function displayIngredients(ingredients) {
 
     ingredients.forEach(ingredient => {
         const item = document.createElement('div');
-        item.className = 'ingredient-item';
-        item.innerHTML = `
-            <h3>${ingredient.name}</h3>
-            <img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
-            <button class="edit_start" data-ingredient-id="${ingredient.IngredientID}" data-expiration-date="${ingredient.expiration_date}"><img src="/static/images/change.jpg" class="fixed-position-image"></button>
-            <p>賞味期限 <br> ${ingredient.expiration_date}</p>
-        `;
+		item.className = 'ingredient-item';
+		item.id = `ingredient-${ingredient.IngredientID}`; // ユニークなIDを割り当てる
+		item.innerHTML = `
+			<button class="gomibako_start" data-ingredient-id="${ingredient.IngredientID}">
+				<img src="/static/images/gomibako.png" class="gomibako-position-image">
+			</button>
+			<h3>${ingredient.name}</h3>
+			<img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
+			<button class="edit_start" data-ingredient-id="${ingredient.IngredientID}" data-expiration-date="${ingredient.expiration_date}">
+				<img src="/static/images/change.jpg" class="fixed-position-image">
+			</button>
+			<p>賞味期限 <br> ${ingredient.expiration_date}</p>
+		`;
         showBlock.appendChild(item);
     });
 
@@ -671,21 +700,41 @@ function addNewIngredient(name, expirationDate) {
     });
 }
 
+document.querySelector('.item_show_block').addEventListener('click', function(event) {
+    const gomibakoButton = event.target.closest('.gomibako_start');
+    console.log('Gomibako Button Clicked:', gomibakoButton); // デバッグログ
 
-// 新しい食材カードを追加する関数
+    if (gomibakoButton) {
+        const ingredientId = gomibakoButton.getAttribute('data-ingredient-id');
+        console.log('Ingredient ID:', ingredientId); // デバッグログ
+
+        const ingredientCard = document.getElementById(`ingredient-${ingredientId}`);
+        console.log('Ingredient Card:', ingredientCard); // デバッグログ
+
+        if (ingredientCard) {
+            ingredientCard.remove();
+        }
+    }
+});
+
 function addIngredientCard(ingredient) {
     const container = document.querySelector('.item_show_block');
     if (container) {
         const cardHtml = `
-            <div class="ingredient-item">
+            <div class="ingredient-item" id="ingredient-${ingredient.IngredientID}">
+				<button class="gomibako_start" data-ingredient-id="${ingredient.IngredientID}">
+					<img src="/static/images/gomibako.png" class="gomibako-position-image">
+				</button>
                 <h3>${ingredient.name}</h3>
                 <img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
-                <button class="edit_start" data-ingredient-id="${ingredient.IngredientID}" data-expiration-date="${ingredient.expiration_date}"><img src="/static/images/change.jpg" class="fixed-position-image"></button>
+                <button class="edit_start" data-ingredient-id="${ingredient.IngredientID}" data-expiration-date="${ingredient.expiration_date}">
+                    <img src="/static/images/change.jpg" class="fixed-position-image">
+                </button>
                 <p>賞味期限 <br> ${ingredient.expiration_date}</p>
             </div>
         `;
 
-        container.innerHTML += cardHtml;
+        container.insertAdjacentHTML('beforeend', cardHtml);
     } else {
         console.error('Element .item_show_block not found');
     }

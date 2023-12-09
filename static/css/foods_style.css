@@ -510,7 +510,25 @@
     overflow: hidden; /* 画像がボタンの外にはみ出さないように */
 }
 
+.gomibako_start{
+    position: absolute;
+    top: -10px;  /* 親要素の上端からの距離 */
+    left: 5px; /* 親要素の左端からの距離 */
+    width: 25px; 
+    height: 25px;
+    border: none; /* ボタンの境界線を削除 */
+    background: none; /* ボタンの背景を透明に */
+    padding: 0; /* パディングを削除 */
+    cursor: pointer; /* マウスカーソルをポインターに変更 */
+    overflow: hidden; /* 画像がボタンの外にはみ出さないように */
+}
+
 .fixed-position-image {
+    width: 100%; /* ボタンのサイズに合わせて調整 */
+    height: 100%; /* ボタンのサイズに合わせて調整 */
+}
+
+.gomibako-position-image{
     width: 100%; /* ボタンのサイズに合わせて調整 */
     height: 100%; /* ボタンのサイズに合わせて調整 */
 }
