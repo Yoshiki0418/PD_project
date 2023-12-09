@@ -523,6 +523,7 @@ document.getElementById('saveButton2').addEventListener('click', function() {
     });
 });
 
+// 食材表示関数
 function displayIngredients(ingredients) {
     const showBlock = document.querySelector('.item_show_block');
     showBlock.innerHTML = '';
@@ -539,13 +540,14 @@ function displayIngredients(ingredients) {
         showBlock.appendChild(item);
     });
 
+    // 編集ボタンのイベントリスナーを追加
     showBlock.addEventListener('click', function(event) {
         const editButton = event.target.closest('.edit_start');
         if (editButton) {
             let expirationDate = editButton.getAttribute('data-expiration-date');
             let ingredientId = editButton.getAttribute('data-ingredient-id');
 
-            if (expirationDate) {
+            if (expirationDate && ingredientId) {
                 // 日付形式を YYYY-MM-DD に変換
                 expirationDate = expirationDate.replace(/\//g, '-');
                 
@@ -559,14 +561,15 @@ function displayIngredients(ingredients) {
                     saveButton.style.display = 'block';
                     dateInput.value = expirationDate;
 
-                    // 現在編集中の食材IDを保存ボタンに設定
+                    // 編集中の食材IDを保存ボタンに設定
                     saveButton.setAttribute('data-ingredient-id', ingredientId);
                 }
             }
         }
+    });
 
-		// 決定ボタンのイベントリスナーを追加
-		const saveButton = document.getElementById('saveButton3');
+    // 決定ボタンのイベントリスナーを追加
+    const saveButton = document.getElementById('saveButton3');
     if (saveButton) {
         saveButton.addEventListener('click', function() {
             const dateInput = document.getElementById('expirationDateInput');
@@ -580,8 +583,8 @@ function displayIngredients(ingredients) {
             }
         });
     }
-    });
 
+    // 閉じるボタンのイベントリスナーを追加
     var span = document.getElementsByClassName("close1")[0];
     span.onclick = function() {
         var modal = document.getElementById("date_block");
@@ -589,15 +592,22 @@ function displayIngredients(ingredients) {
     }
 }
 
-
+// 食材の賞味期限を更新する関数
 function updateIngredientExpirationDate(ingredientId, newExpirationDate) {
-    // 食材の賞味期限を更新する関数
     const ingredientItems = document.querySelectorAll('.ingredient-item');
     ingredientItems.forEach(item => {
         const editButton = item.querySelector('.edit_start');
-        if (editButton && editButton.getAttribute('data-ingredient-id') === ingredientId) {
+        const itemId = editButton ? editButton.getAttribute('data-ingredient-id') : null;
+
+        // クリックされた特定の食材のIDと一致するか確認
+        if (itemId === ingredientId) {
+            // 賞味期限を表示している要素を取得
             const expirationDateParagraph = item.querySelector('p');
+            
+            // 賞味期限のテキストを更新
             expirationDateParagraph.innerHTML = `賞味期限 <br> ${newExpirationDate}`;
+            
+            // 編集ボタンのdata属性を更新
             editButton.setAttribute('data-expiration-date', newExpirationDate);
         }
     });

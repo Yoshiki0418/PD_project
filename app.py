@@ -436,6 +436,7 @@ def save_image():
                 expiration_date = current_date + timedelta(days=ingredient.average_shelf_life)
                 formatted_date = expiration_date.strftime("%Y/%m/%d")  # 修正された行
                 response_data.append({
+                    'IngredientID': ingredient.IngredientID,
                     'name': ingredient_name,
                     'ImageURL': ingredient.image_path,
                     'average_shelf_life': ingredient.average_shelf_life,
