@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 circle.style.backgroundColor = 'gray';
                 circle2.style.backgroundColor = 'gray';
             }
-        } else if (parseInt(daysLeft) <= 7) {
+        } else if (parseInt(daysLeft) <= 4) {
             circle.style.backgroundColor = 'red';
             circle2.style.backgroundColor = 'red';
         } else {
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 circle2.style.backgroundColor = 'gray';
                 circle3.style.backgroundColor = 'gray';
             }
-        } else if (parseInt(daysLeft) <= 7) {
+        } else if (parseInt(daysLeft) <= 2) {
             circle.style.backgroundColor = 'red';
             circle2.style.backgroundColor = 'red';
             circle3.style.backgroundColor = 'red';
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 circle.style.backgroundColor = 'gray';
             }
-        } else if (parseInt(daysLeft) <= 7) {
+        } else if (parseInt(daysLeft) <= 2) {
             circle.style.backgroundColor = 'red';
         } else {
             circle.style.backgroundColor = 'green';
