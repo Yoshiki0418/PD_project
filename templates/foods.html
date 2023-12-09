@@ -80,8 +80,11 @@
 							<canvas id="canvasElement" width="640" height="480" style="display:none;"></canvas>
 							<button id="saveButton2" style="display:none;">食材を読み取る</button>
 						</div>
-						<div class="item_show_block">
+						<div class="right_block_position">
+							<div class="item_show_block">
 
+							</div>
+							<button id="final_check" class="button1" style="display:none;">決定</button>
 						</div>
 						<div class="date_block" id = "date_block" style="display: none;">
 							<span class="close1">&times;</span>
@@ -516,6 +519,7 @@ document.getElementById('saveButton2').addEventListener('click', function() {
             console.log(data);
             // サーバーからの応答に基づいて食材の情報を表示
             displayIngredients(data);
+			final_check.style.display = "block";
         })
         .catch(error => {
             console.error('Error:', error);
