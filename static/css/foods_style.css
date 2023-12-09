@@ -531,3 +531,11 @@
     margin-left: 110px;
 }
 
+.mode_change{
+    margin-left: -20px;
+    margin-top: -20px;
+    margin-bottom: -20px;
+    background-color: #888;
+    padding: 10px;
+}
+
