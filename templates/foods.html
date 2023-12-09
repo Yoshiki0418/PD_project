@@ -840,11 +840,15 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('fileInput').style.display = 'none';
 		document.getElementById('saveButton2').style.display = 'none';
 		document.getElementById('canvasElement').style.display = 'none';
+		document.getElementById('fileInput').style.display = 'none';
     });
 
     document.getElementById('switchToFileUploadButton').addEventListener('click', function() {
         document.getElementById('videoElement').style.display = 'none';
         document.getElementById('captureButton').style.display = 'none';
+		document.getElementById('canvasElement').style.display = 'none';
+		document.getElementById('saveButton').style.display = 'none';
+		document.getElementById('startAgainButton').style.display = 'none';
         document.getElementById('fileInput').style.display = 'block';
     });
 });
