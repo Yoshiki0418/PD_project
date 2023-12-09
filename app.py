@@ -405,7 +405,7 @@ def recipe_details(recipe_id):
         'RecipeName': recipe.RecipeName,
         'Description': recipe.Description,
         'CookingTime': recipe.CookingTime,
-        'ImageURL': recipe.ImageURL,
+        'ImageURL': recipe.ImageURL, 
         'Ingredients': recipe.Ingredients,
         'Instructions': recipe.Instructions
     }

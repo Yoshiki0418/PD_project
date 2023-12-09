@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>企業・ビジネス向け シンプル無料ホームページテンプレート tp_biz61</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="ここにサイト説明を入れます">
-<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
-<link rel="stylesheet" href="{{url_for('static', filename='css/foods_style.css')}}">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="{{url_for('static', filename='js/script.js')}}" defer></script>
+	<meta charset="UTF-8">
+	<title>企業・ビジネス向け シンプル無料ホームページテンプレート tp_biz61</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="ここにサイト説明を入れます">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+	<link rel="stylesheet" href="{{url_for('static', filename='css/foods_style.css')}}">
+	<script src="{{url_for('static', filename='js/script.js')}}" defer></script>
+	<!-- 最初にjQueryを読み込む -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+	<!-- jQueryの後にjQuery UIを読み込む -->
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 </head>
 
 <body>
@@ -76,6 +83,7 @@
 						<div class="item_show_block">
 
 						</div>
+						<input type="date" id="expirationDateInput" style="display:none;">
 						<span class="close">&times;</span>
 					</div>
 				</div>
@@ -512,20 +520,67 @@ document.getElementById('saveButton2').addEventListener('click', function() {
 
 function displayIngredients(ingredients) {
     const showBlock = document.querySelector('.item_show_block');
-    showBlock.innerHTML = ''; // 既存の内容をクリア
+    showBlock.innerHTML = '';
 
     ingredients.forEach(ingredient => {
         const item = document.createElement('div');
         item.className = 'ingredient-item';
         item.innerHTML = `
             <h3>${ingredient.name}</h3>
-			<img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
-			<img src="/static/images/change.jpg" class="fixed-position-image">
+            <img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
+            <button class="edit_start" data-expiration-date="${ingredient.expiration_date}"><img src="/static/images/change.jpg" class="fixed-position-image"></button>
             <p>賞味期限 <br> ${ingredient.expiration_date}</p>
         `;
         showBlock.appendChild(item);
     });
+
+    showBlock.addEventListener('click', function(event) {
+		const editButton = event.target.closest('.edit_start');
+		if (editButton) {
+			let expirationDate = editButton.getAttribute('data-expiration-date');
+
+			if (expirationDate) {
+				// 日付形式を YYYY-MM-DD に変換
+				expirationDate = expirationDate.replace(/\//g, '-');
+				
+				const dateInput = document.getElementById('expirationDateInput');
+				if (dateInput) {
+					dateInput.style.display = 'block';
+					dateInput.value = expirationDate;
+				}
+			}
+		}
+	});
 }
+
+
+// function displayIngredients(ingredients) {
+//     const showBlock = document.querySelector('.item_show_block');
+//     showBlock.innerHTML = '';
+
+//     ingredients.forEach(ingredient => {
+//         const item = document.createElement('div');
+//         item.className = 'ingredient-item';
+//         item.innerHTML = `
+//             <h3>${ingredient.name}</h3>
+//             <img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
+//             <button class="edit_start" data-expiration-date="${ingredient.expiration_date}"><img src="/static/images/change.jpg" class="fixed-position-image"></button>
+//             <p>賞味期限 <br> ${ingredient.expiration_date}</p>
+//         `;
+//         showBlock.appendChild(item);
+//     });
+
+//     showBlock.addEventListener('click', function(event) {
+//         if (event.target.classList.contains('edit_start')) {
+//             const expirationDate = event.target.getAttribute('data-expiration-date');
+//             const dateInput = document.getElementById('expirationDateInput');
+//             dateInput.style.display = 'block';
+//             dateInput.value = expirationDate; // 賞味期限を初期値として設定
+//         }
+//     });
+
+// }
+
 
 document.getElementById('fileInput').addEventListener('change', function(event) {
     if (event.target.files && event.target.files[0]) {
@@ -870,6 +925,10 @@ function sendDataToServer(data) {
 		}
 	});
  </script>
+
+
+
+
 
 </body>
 </html>
