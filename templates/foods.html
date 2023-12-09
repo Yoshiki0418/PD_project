@@ -533,38 +533,76 @@ function displayIngredients(ingredients) {
         item.innerHTML = `
             <h3>${ingredient.name}</h3>
             <img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
-            <button class="edit_start" data-expiration-date="${ingredient.expiration_date}"><img src="/static/images/change.jpg" class="fixed-position-image"></button>
+            <button class="edit_start" data-ingredient-id="${ingredient.IngredientID}" data-expiration-date="${ingredient.expiration_date}"><img src="/static/images/change.jpg" class="fixed-position-image"></button>
             <p>賞味期限 <br> ${ingredient.expiration_date}</p>
         `;
         showBlock.appendChild(item);
     });
 
     showBlock.addEventListener('click', function(event) {
-		const editButton = event.target.closest('.edit_start');
-		if (editButton) {
-			let expirationDate = editButton.getAttribute('data-expiration-date');
+        const editButton = event.target.closest('.edit_start');
+        if (editButton) {
+            let expirationDate = editButton.getAttribute('data-expiration-date');
+            let ingredientId = editButton.getAttribute('data-ingredient-id');
 
-			if (expirationDate) {
-				// 日付形式を YYYY-MM-DD に変換
-				expirationDate = expirationDate.replace(/\//g, '-');
-				
-				const dateInput = document.getElementById('expirationDateInput');
-				if (dateInput) {
-					dateInput.style.display = 'block';
-					date_block.style.display = "block";
-					saveButton3.style.display = "block";
-					dateInput.value = expirationDate;
-				}
-			}
-		}
-	});
+            if (expirationDate) {
+                // 日付形式を YYYY-MM-DD に変換
+                expirationDate = expirationDate.replace(/\//g, '-');
+                
+                const dateInput = document.getElementById('expirationDateInput');
+                const dateBlock = document.getElementById('date_block');
+                const saveButton = document.getElementById('saveButton3');
 
-	var span = document.getElementsByClassName("close1")[0];
-	span.onclick = function() {
-		var modal = document.getElementById("date_block");
-		date_block.style.display = "none";
-	}
+                if (dateInput && dateBlock && saveButton) {
+                    dateBlock.style.display = 'block';
+                    dateInput.style.display = 'block';
+                    saveButton.style.display = 'block';
+                    dateInput.value = expirationDate;
+
+                    // 現在編集中の食材IDを保存ボタンに設定
+                    saveButton.setAttribute('data-ingredient-id', ingredientId);
+                }
+            }
+        }
+
+		// 決定ボタンのイベントリスナーを追加
+		const saveButton = document.getElementById('saveButton3');
+    if (saveButton) {
+        saveButton.addEventListener('click', function() {
+            const dateInput = document.getElementById('expirationDateInput');
+            const dateBlock = document.getElementById('date_block');
+            const ingredientId = saveButton.getAttribute('data-ingredient-id');
+
+            if (dateInput && ingredientId) {
+                const newExpirationDate = dateInput.value;
+                updateIngredientExpirationDate(ingredientId, newExpirationDate);
+                dateBlock.style.display = 'none';
+            }
+        });
+    }
+    });
+
+    var span = document.getElementsByClassName("close1")[0];
+    span.onclick = function() {
+        var modal = document.getElementById("date_block");
+        modal.style.display = "none";
+    }
 }
+
+
+function updateIngredientExpirationDate(ingredientId, newExpirationDate) {
+    // 食材の賞味期限を更新する関数
+    const ingredientItems = document.querySelectorAll('.ingredient-item');
+    ingredientItems.forEach(item => {
+        const editButton = item.querySelector('.edit_start');
+        if (editButton && editButton.getAttribute('data-ingredient-id') === ingredientId) {
+            const expirationDateParagraph = item.querySelector('p');
+            expirationDateParagraph.innerHTML = `賞味期限 <br> ${newExpirationDate}`;
+            editButton.setAttribute('data-expiration-date', newExpirationDate);
+        }
+    });
+}
+
 
 document.getElementById('fileInput').addEventListener('change', function(event) {
     if (event.target.files && event.target.files[0]) {
