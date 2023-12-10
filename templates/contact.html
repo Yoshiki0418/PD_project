@@ -5,7 +5,7 @@
 <title>PD_project</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="ここにサイト説明を入れます">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
 </head>
 
 <body>
@@ -13,21 +13,21 @@
 <div id="container">
 
 <header>
-<h1 id="logo"><a href="index.html"><img src="images/logo.png" alt="SAMPLE COMPANY"></a></h1>
+	<h1 id="logo"><a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/top.png') }}" class ="top_pic" alt="SAMPLE COMPANY"></a></h1>
 	<!--開閉ブロック-->
 	<div id="menubar">
 	<nav>
 	<ul>
-	<li><a href="index.html">HOME</a></li>
-	<li><a href="company.html">COMPANY</a></li>
-	<li><a href="">WORKS</a>
+	<li><a href="index.html">HOME</a></li> 
+	<li><a href="{{ url_for('foods') }}">FOODS</a></li>
+	<li><a href="">HELTH</a>
 		<ul>
-		<li><a href="works.html">WORKS.WORKS.</a></li>
+		<li><a href="works.html">HELTH.HELTH.</a></li>
 		<li><a href="works.html">WORKS</a></li>
 		<li><a href="works.html">WORKS</a></li>
 		</ul>
 	</li>
-	<li class="current"><a href="contact.html">CONTACT</a></li>
+	<li class="current"><a href="{{ url_for('contact') }}">CONTACT</a></li>
 	</ul>
 	</nav>
 	</div>
@@ -105,7 +105,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <!--このテンプレート専用のスクリプト-->
-<script src="js/main.js"></script>
+<script src="{{url_for('static' , filename='js/main.js') }}"></script>
 
 </body>
 </html>
