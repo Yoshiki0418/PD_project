@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>PD_project</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ここにサイト説明を入れます">
+<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+	<h1 id="logo"><a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/top.png') }}" class ="top_pic" alt="SAMPLE COMPANY"></a></h1>
+	<!--開閉ブロック-->
+	<div id="menubar">
+	<nav>
+	<ul>
+	<li><a href="index.html">HOME</a></li> 
+	<li><a href="{{ url_for('foods') }}">FOODS</a></li>
+	<li><a href="">HELTH</a>
+		<ul>
+		<li><a href="works.html">HELTH.HELTH.</a></li>
+		<li><a href="works.html">WORKS</a></li>
+		<li><a href="works.html">WORKS</a></li>
+		</ul>
+	</li>
+	<li class="current"><a href="{{ url_for('contact') }}">CONTACT</a></li>
+	</ul>
+	</nav>
+	</div>
+	<!--/#menubar-->
+</header>
+<div id="contents">
+<main>
+	<div class="privacy">
+		<div class="title_block">
+			<h2><span class="uline">プライバシーポリシー</span></h2>
+		</div>
+		<p>ウェブサイトは、株式会社クックナビ（以下「当社」）の事業内容等を紹介するサイトです。個人情報保護方針当社は、
+			以下のとおり個人情報保護方針を定め、個人情報保護の仕組みを構築し、全従業員に個人情報保護の重要性の認識と取
+			組みを徹底させることにより、個人情報の保護を推進致します。個人情報の管理当社は、お客さまの個人情報を正確か
+			つ最新の状態に保ち、個人情報への不正アクセス・紛失・破損・改ざん・漏洩などを防止するため、セキュリティシス
+			テムの維持・管理体制の整備・社員教育の徹底等の必要な措置を講じ、安全対策を実施し個人情報の厳重な管理を行な
+			います。個人情報の利用目的本ウェブサイトでは、お客様からのお問い合わせ時に、お名前、e-mailアドレス、電話番
+			号等の個人情報をご登録いただく場合がございますが、これらの個人情報はご提供いただく際の目的以外では利用いたし
+			ません。お客さまからお預かりした個人情報は、当社からのご連絡や業務のご案内やご質問に対する回答として、電子メ
+			ールや資料のご送付に利用いたします。個人情報の第三者への開示・提供の禁止当社は、お客さまよりお預かりした個人
+			情報を適切に管理し、次のいずれかに該当する場合を除き、個人情報を第三者に開示いたしません。・お客さまの同意が
+			ある場合・お客さまが希望されるサービスを行なうために当社が業務を委託する業者に対して開示する場合・法令に基づ
+			き開示することが必要である場合個人情報の安全対策当社は、個人情報の正確性及び安全性確保のために、セキュリティ
+			に万全の対策を講じています。ご本人の照会お客さまがご本人の個人情報の照会・修正・削除などをご希望される場合に
+			は、ご本人であることを確認の上、対応させていただきます。法令、規範の遵守と見直し当社は、保有する個人情報に関
+			して適用される日本の法令、その他規範を遵守するとともに、本ポリシーの内容を適宜見直し、その改善に努めます。お
+			問い合せ当社の個人情報の取扱に関するお問い合せは下記までご連絡ください。
+		</p>
+		<p class="campany_name"> 株式会社クックナビ</p>
+
+	</div>
+</main>
+</div>
+<!--/#contents-->
+
+<ul id="footermenu">
+<li><a href="index.html">ホーム</a></li>
+<li><a href="company.html">会社概要</a></li>
+<li><a href="works.html">業務内容</a></li>
+<li><a href="contact.html">コンタクト</a></li>
+</ul>
+
+<footer>
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</footer>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</div>
+<!--/#container-->
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="{{url_for('static' , filename='js/main.js') }}"></script>
+
+</body>
+</html>

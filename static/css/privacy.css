@@ -1,0 +1,10 @@
+.privacy{
+    width: 90%;
+    height: auto;
+    position: relative;
+}
+
+.campany_name{
+    position: fixed;
+    left: 50%;
+}

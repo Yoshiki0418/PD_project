@@ -297,6 +297,10 @@ def handle_data():
 def contact():
     return render_template('contact.html')
 
+@app.route('/privacy')
+def privacy(): 
+    return render_template('privacy.html')
+
 @app.route('/search', methods=['GET', 'POST'])
 def search_foods():
     query = ''
@@ -513,5 +517,5 @@ def process_card_data():
 
 
 if __name__ == '__main__': 
-    #app.run(debug=True)
-    app.run(host='0.0.0.0', port=5005)
+    app.run(debug=True)
+  
