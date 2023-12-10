@@ -41,6 +41,7 @@
 ## 評価指標
 ### 　技術指標
 - [画像処理精度について](Image_processing_evaluation.md)
+- [物体検出の評価指標](camera.md)
 
 ## 技術スタック
 
