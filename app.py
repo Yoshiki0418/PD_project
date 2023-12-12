@@ -184,11 +184,12 @@ def handle_data():
 
     ingredients = Ingredients.query.filter(Ingredients.IngredientID.in_(selected_items)).all()
     ingredient_names = [ingredient.name for ingredient in ingredients]
-    ingredient_names_str = ", ".join(ingredient_names)
+    ingredient_names_str = ",".join(ingredient_names)
 
     print(ingredient_names_str)
     scraped_data_list = scraping(ingredient_names_str, recipe_add)
 
+    print(scraped_data_list)
     # スクレイピングされた各レシピに対してループを行い、データベースに追加
     for scraped_data in scraped_data_list:
         # 既にデータベースに存在するレシピ名をチェック
@@ -222,7 +223,7 @@ def handle_data():
                 "さつまいも" : ["さつまいも","サツマイモ"],
                 "ほうれん草" : ["ほうれん草","ホウレンソウ"],
                 "青梗菜" : ["青梗菜","チンゲンサイ"],
-                "ともろこし" : ["とうもろこし","トウモロコシ"],
+                "とうもろこし" : ["とうもろこし","トウモロコシ"],
                 "鶏むね肉" : ["鶏むね肉","鶏胸肉","鶏肉","鶏肉(むね)","鶏肉(胸)","鶏肉(ムネ)"],
                 "鶏もも肉" : ["鶏もも肉","鶏モモ肉","鶏肉","鶏肉(もも)","鶏肉(モモ)"],
                 "ひき肉" : ["ひき肉","挽き肉"],
