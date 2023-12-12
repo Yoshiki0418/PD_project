@@ -177,10 +177,6 @@ def handle_data():
     # 指定されたRecipeIDのレシピを取得
     recipes = Recipe.query.filter(Recipe.RecipeID.in_(recipe_ids)).all()
     
-    if not recipes:
-        # 指定されたIDのレシピが見つからない場合はエラーを返します。
-        return jsonify({'error': 'No Recipes found for provided IDs'}), 404
-    
     print(len(recipes)) #作成可能なレシピがいくつあったか
     #初期表示レシピ数を８に設定する
     recipes_num = 8
