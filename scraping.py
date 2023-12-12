@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import re
 
 def scraping(input_ingredients, recipe_add):
     ingredients = input_ingredients.replace(",", "、")
@@ -37,16 +38,24 @@ def scraping(input_ingredients, recipe_add):
         procedures = soup.find_all("p", class_="step_text")
         recipe_info['procedures'] = ','.join(procedure.text.strip() for procedure in procedures)
 
+        people_num = soup.find("span", class_="servings_for yield")
+        if people_num:
+            people_num_text = people_num.text # テキストを取得
+            num_str = re.search(r'\d+', people_num_text).group() 
+            num = int(num_str)
+            print(num)
+            recipe_info['num'] = num
+            
         recipes.append(recipe_info)
 
     return recipes
 
-"""
+
 # 使用例
-input_ingredients = "にんじん,大根"
+input_ingredients = "にんじん,大根,豚小間切れ肉,なす"
 recipe_add = 1
 result = scraping(input_ingredients, recipe_add)
 for recipe in result:
     print(recipe)
-"""
+
 
