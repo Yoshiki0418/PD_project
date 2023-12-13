@@ -35,6 +35,10 @@ def scraping(input_ingredients, recipe_add):
         # 材料名をコンマで連結して格納
         recipe_info['ingredients'] = ','.join([name.text for name in ingredient_names])
 
+        ingredient_amount = soup.find_all('div', class_='ingredient_quantity amount')
+        # 材料量をコンマで連結して格納
+        recipe_info['ingredients_amount'] = ','.join([amount.text for amount in ingredient_amount])
+
         procedures = soup.find_all("p", class_="step_text")
         recipe_info['procedures'] = ','.join(procedure.text.strip() for procedure in procedures)
 
@@ -45,15 +49,29 @@ def scraping(input_ingredients, recipe_add):
             num = int(num_str)
             print(num)
             recipe_info['num'] = num
-            
+        
+
+
+
         recipes.append(recipe_info)
+
+        # 食材名と量を抽出
+        ingredients = [span.get_text() for span in soup.find_all('span', class_='name')]
+        amounts = [div.get_text() for div in soup.find_all('div', class_='ingredient_quantity amount')]
+
+        # 辞書で食材名と量を結び付ける
+        ingredient_dict = dict(zip(ingredients, amounts))
+
+        # 結果の出力
+        for ingredient, amount in ingredient_dict.items():
+            print(f'{ingredient}: {amount}')
 
     return recipes
 
 
 # 使用例
-input_ingredients = "にんじん,大根,豚小間切れ肉,なす"
-recipe_add = 1
+input_ingredients = "えのき、カニカマ"
+recipe_add = 8
 result = scraping(input_ingredients, recipe_add)
 for recipe in result:
     print(recipe)
