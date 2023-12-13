@@ -2,6 +2,11 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
+# 日本語以外を除去するための関数
+def remove_non_japanese(text):
+    # 日本語（ひらがな、カタカナ、漢字）以外を除去
+    return re.sub(r'[^\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF]', '', text)
+
 def scraping(input_ingredients, recipe_add):
     ingredients = input_ingredients.replace(",", "、")
     url = f'https://cookpad.com/search/材料：{ingredients}'
@@ -56,13 +61,13 @@ def scraping(input_ingredients, recipe_add):
         recipes.append(recipe_info)
 
         # 食材名と量を抽出
-        ingredients = [span.get_text() for span in soup.find_all('span', class_='name')]
+        ingredients = [remove_non_japanese(span.get_text()) for span in soup.find_all('span', class_='name')]
         amounts = [div.get_text() for div in soup.find_all('div', class_='ingredient_quantity amount')]
 
         # 辞書で食材名と量を結び付ける
         ingredient_dict = dict(zip(ingredients, amounts))
 
-        # 結果の出力(この関数の受け取り側の方で定義した方が良いかも)
+        # 結果の出力
         for ingredient, amount in ingredient_dict.items():
             print(f'{ingredient}: {amount}')
 
