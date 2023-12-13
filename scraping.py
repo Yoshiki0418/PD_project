@@ -62,7 +62,7 @@ def scraping(input_ingredients, recipe_add):
         # 辞書で食材名と量を結び付ける
         ingredient_dict = dict(zip(ingredients, amounts))
 
-        # 結果の出力
+        # 結果の出力(この関数の受け取り側の方で定義した方が良いかも)
         for ingredient, amount in ingredient_dict.items():
             print(f'{ingredient}: {amount}')
 
