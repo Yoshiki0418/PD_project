@@ -7,6 +7,12 @@ def remove_non_japanese(text):
     # 日本語（ひらがな、カタカナ、漢字）以外を除去
     return re.sub(r'[^\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF]', '', text)
 
+# 各栄養素の値を数値に変換して格納する関数
+def extract_numeric_value(text):
+    # 正規表現を使用して数値を抽出
+    matches = re.findall(r"(\d+\.?\d*)", text)
+    return float(matches[0]) if matches else 0
+
 #クックパッドからのスクレイピング
 def scraping(input_ingredients, recipe_add):
     ingredients = input_ingredients.replace(",", "、")
@@ -202,14 +208,14 @@ def scraping2(input_ingredients, recipe_add):
                                 nutrient_value = spans[1].get_text().strip()
                                 nutrients[nutrient_name] = nutrient_value
 
-        #カロリーを取得
-        recipe_info['calorie'] = nutrients["・エネルギー"]
-        #塩分を取得
-        recipe_info['salt'] = nutrients["・塩分"]
-        #タンパク質を取得
-        recipe_info['protein'] = nutrients["・たんぱく質"]
-        #野菜摂取量を取得
-        recipe_info['vegetable_intake'] = nutrients["・野菜摂取量※"]
+        # カロリーを取得して変換
+        recipe_info['calorie'] = extract_numeric_value(nutrients.get("・エネルギー", ""))
+        # 塩分を取得して変換
+        recipe_info['salt'] = extract_numeric_value(nutrients.get("・塩分", ""))
+        # タンパク質を取得して変換
+        recipe_info['protein'] = extract_numeric_value(nutrients.get("・たんぱく質", ""))
+        # 野菜摂取量を取得して変換
+        recipe_info['vegetable_intake'] = extract_numeric_value(nutrients.get("・野菜摂取量※", ""))
 
         recipes.append(recipe_info)
 
