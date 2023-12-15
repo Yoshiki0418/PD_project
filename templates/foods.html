@@ -1209,7 +1209,7 @@ function sendDataToServer(data) {
     // イベントリスナーを追加
     finalCheckButton.addEventListener('click', function() {
         // すべての食材カードから情報を取得
-        const cardElements = document.querySelectorAll('.ingredient-item2');
+        const cardElements = document.querySelectorAll('.ingredient-item');
         const cardData = Array.from(cardElements).map(card => {
             const name = card.querySelector('h3') ? card.querySelector('h3').textContent : '';
             const expiration = card.querySelector('p') ? card.querySelector('p').textContent.replace('賞味期限 ', '') : '';
@@ -1573,7 +1573,7 @@ function displayIngredients2(ingredients) {
 
             if (dateInput && ingredientId) {
                 const newExpirationDate = dateInput.value;
-                updateIngredientExpirationDate(ingredientId, newExpirationDate);
+                updateIngredientExpirationDate2(ingredientId, newExpirationDate);
                 dateBlock.style.display = 'none';
             }
         });
@@ -1761,7 +1761,7 @@ function addNewIngredient2(name, expirationDate) {
 // その他の関数は変更なし...
 
 
-function updateIngredientExpirationDate(ingredientId, newExpirationDate) {
+function updateIngredientExpirationDate2(ingredientId, newExpirationDate) {
     const ingredientItems = document.querySelectorAll('.ingredient-item2');
     ingredientItems.forEach(item => {
         const editButton = item.querySelector('.edit_start');
@@ -1805,5 +1805,45 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
+<script>
+// ボタンの要素を取得
+    const finalCheckButton2 = document.getElementById('final_check2');
+
+    // イベントリスナーを追加
+    finalCheckButton2.addEventListener('click', function() {
+        // すべての食材カードから情報を取得
+        const cardElements = document.querySelectorAll('.ingredient-item2');
+        const cardData = Array.from(cardElements).map(card => {
+            const name = card.querySelector('h3') ? card.querySelector('h3').textContent : '';
+            const expiration = card.querySelector('p') ? card.querySelector('p').textContent.replace('賞味期限 ', '') : '';
+
+            return {
+                name: name,
+                expirationDate: expiration
+            };
+        });
+
+        // Fetch APIを使用してFlaskに非同期リクエストを送信
+        fetch('/process_card_data', {
+            method: 'POST',
+            body: JSON.stringify(cardData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // ページをリロードする
+                location.reload();
+            } else {
+                console.error('Server responded with non-OK status');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+
 </body>
 </html>

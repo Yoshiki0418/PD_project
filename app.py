@@ -527,6 +527,7 @@ def add_ingredient():
 def process_card_data():
     # JSONデータを取得
     card_data = request.json
+    print(card_data)
 
     for item in card_data:
         name = item.get('name')
