@@ -95,12 +95,53 @@
 					</div>
 				</div>
 			</div>
+
+			<!--単体撮影用のボタンと画面の作成-->
 			<div class="pic_block">
-				<button type="button2"  class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
-				<img src="{{ url_for('static', filename='images/personal_pic.png') }}" class="circle_pic">
+				<button type="button2" class="button-style" onclick="showModal2();">
+					<img src="{{ url_for('static', filename='images/personal_pic.png') }}" class="circle_pic">
 				</button>
+				<input type="file" id="cameraInput" accept="image/*" capture="camera" style="display: none;" onchange="handleFiles(this.files)">	
 				<p class="link_txt">単体撮影</p>
+				<!-- モーダルウィンドウのHTML構造 -->
+				<div id="myModal2" class="modal">
+					<div class="modal-content">
+						<!-- 切り替えボタンを追加 -->
+						<div class="mode_change">
+							<button id="switchToCameraButton2" class="button1">カメラモード</button>
+							<button id="switchToFileUploadButton2" class="button1">アップロードモード</button>
+						</div>
+
+						<div class="video_space">
+							<video id="videoElement2" autoplay></video>
+							<button id="captureButton2">撮影</button>
+							<canvas id="canvasElement2" width="640" height="480" style="display:none;"></canvas>
+							<div class="button_block">
+								<button id="saveButton2_1" style="display:none;">食材を読み取る</button>
+								<button id="startAgainButton2" style="display:none;">もう一度撮影する</button>
+							</div>
+							<!-- ファイルアップロード用の入力フィールド -->
+							<input type="file" id="fileInput2" accept="image/*" style="display:none;">
+							<canvas id="canvasElement2" width="640" height="480" style="display:none;"></canvas>
+							<button id="saveButton2_2" style="display:none;">食材を読み取る</button>
+						</div>
+						<div class="right_block_position">
+							<div class="item_show_block2">
+
+							</div>
+							<button id="final_check" class="button1" style="display:none;">決定</button>
+						</div>
+						<div class="date_block" id = "date_block2" style="display: none;">
+							<span class="close3">&times;</span>
+							<input type="date" id="expirationDateInput2" style="display:none;" class="date_check">
+							<button id="saveButton2_3" style="display:none;" >決定</button>
+						</div>
+						<span class="close2">&times;</span>
+					</div>
+				</div>
 			</div>
+
+			<!--手入力用のボタンと画面の作成-->
 			<div class="pic_block">
 				<button type="button3" class="button-style" onclick="location.href='URL_TO_GO_ON_CLICK'">
 				<img src="{{ url_for('static', filename='images/memo_pic.png') }}" class="circle_pic">
@@ -1201,6 +1242,504 @@ function sendDataToServer(data) {
     });
 </script>
 
+<script>
+	// モーダル表示関数
+	function showModal2() {
+		var modal = document.getElementById("myModal2");
+		modal.style.display = "block";
+		startCamera();
+	}
 
+	// カメラ起動関数
+	function startCamera() {
+		var video = document.getElementById('videoElement2');
+
+		// メディアデバイスを取得する
+		if (navigator.mediaDevices.getUserMedia) {
+			navigator.mediaDevices.getUserMedia({ video: true })
+				.then(function (stream) {
+					video.srcObject = stream;
+				})
+				.catch(function (error) {
+					console.log("カメラのアクセスに失敗しました: ", error);
+				});
+		}
+	}
+
+	// モーダル非表示関数（閉じるボタン用）
+	var span = document.getElementsByClassName("close2")[0];
+	span.onclick = function() {
+		var modal = document.getElementById("myModal2");
+		modal.style.display = "none";
+		stopCamera();
+	}
+	
+	// ビデオのセットアップ
+	navigator.mediaDevices.getUserMedia({ video: true })
+	.then(function(stream) {
+		videoStream = stream;
+		document.getElementById('videoElement2').srcObject = stream;
+	})
+	.catch(function(error) {
+		console.log("Something went wrong!");
+	});
+
+	// 撮影ボタンのイベント
+	document.getElementById('captureButton2').addEventListener('click', function() {
+		var video = document.getElementById('videoElement2');
+		var canvas = document.getElementById('canvasElement2');
+		var context = canvas.getContext('2d');
+		context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+		// 映像を停止
+		videoStream.getTracks().forEach(track => track.stop());
+		video.style.display = 'none'; // ビデオ要素を非表示にする
+		document.getElementById('captureButton2').style.display = 'none';
+		canvas.style.display = 'block'; // キャンバスを表示する
+
+		// 「もう一度撮影する」ボタンを表示
+		document.getElementById('saveButton2_1').style.display = 'block';
+		document.getElementById('startAgainButton2').style.display = 'block';
+	});
+
+	// 「もう一度撮影する」ボタンのイベント
+	document.getElementById('startAgainButton2').addEventListener('click', function() {
+		navigator.mediaDevices.getUserMedia({ video: true })
+		.then(function(stream) {
+		videoStream = stream;
+		document.getElementById('videoElement2').srcObject = stream;
+		document.getElementById('videoElement2').style.display = 'block'; // ビデオを表示する
+		document.getElementById('canvasElement2').style.display = 'none'; // キャンバスを非表示にする
+		document.getElementById('startAgainButton2').style.display = 'none'; // ボタンを非表示にする
+		document.getElementById('saveButton2_1').style.display = 'none';
+		document.getElementById('captureButton2').style.display = 'block';
+		})
+		.catch(function(error) {
+		console.log("Something went wrong!");
+		});
+	});
+
+
+	// カメラ停止関数
+	function stopCamera() {
+		var video = document.getElementById('videoElement2');
+		var stream = video.srcObject;
+		var tracks = stream.getTracks();
+
+		tracks.forEach(function(track) {
+			track.stop();
+		});
+
+		video.srcObject = null;
+	}
+	
+
+	// ウィンドウ外をクリックした時にモーダルを閉じる
+	window.onclick = function(event) {
+		var modal = document.getElementById("myModal2");
+		if (event.target == modal) {
+			modal.style.display = "none";
+			stopCamera();
+		}
+	}
+
+	document.getElementById('captureButton2').addEventListener('click', function() {
+    var video = document.getElementById('videoElement2');
+    var canvas = document.getElementById('canvasElement2');
+    var context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // キャンバスを表示して確認する
+    canvas.style.display = 'block';
+});
+
+document.getElementById('saveButton2_1').addEventListener('click', function() {
+    var canvas = document.getElementById('canvasElement2');
+    canvas.toBlob(function(blob) {
+        var formData = new FormData();
+        formData.append('image', blob, 'image.png');
+
+        fetch('/save_image2', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // サーバーからの応答に基づいて食材の情報を表示
+            displayIngredients(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
+function displayIngredients(ingredients) {
+    const showBlock = document.querySelector('.item_show_block2');
+    showBlock.innerHTML = ''; // 既存の内容をクリア
+
+    ingredients.forEach(ingredient => {
+        const item = document.createElement('div');
+        item.className = 'ingredient-item';
+        item.innerHTML = `
+            <h3>${ingredient.name}</h3>
+            <img src="${ingredient.ImageURL}" alt="${ingredient.name}" style="max-width: 100px; max-height: 100px;">
+            <p>平均賞味期限: ${ingredient.average_shelf_life}日</p>
+        `;
+        showBlock.appendChild(item);
+    });
+}
+
+document.getElementById('saveButton2_2').addEventListener('click', function() {
+    var canvas = document.getElementById('canvasElement2');
+    canvas.toBlob(function(blob) {
+        var formData = new FormData();
+        formData.append('image', blob, 'image.png');
+
+        fetch('/save_image2', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // サーバーからの応答に基づいて食材の情報を表示
+            displayIngredients(data);
+			final_check.style.display = "block";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
+document.getElementById('saveButton2_1').addEventListener('click', function() {
+    var canvas = document.getElementById('canvasElement2');
+    canvas.toBlob(function(blob) {
+        var formData = new FormData();
+        formData.append('image', blob, 'image.png');
+
+        fetch('/save_image2', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            // サーバーからの応答に基づいて食材の情報を表示
+            displayIngredients(data);
+			final_check.style.display = "block";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
+function createAddIngredientCard() {
+    const inputCard = document.createElement('div');
+    inputCard.className = 'ingredient-item';
+
+    // ドロップダウン（セレクトボックス）を生成
+    const selectElement = document.createElement('select');
+    selectElement.id = 'newIngredientName';
+    const availableIngredients = [
+    "トマト", "にんじん", "じゃがいも", "玉ねぎ", "ピーマン", "かぼちゃ", "なす", "ねぎ", "大根", 
+    "アスパラガス", "れんこん", "レタス", "さつまいも", "ほうれん草", "きゅうり", "ブロッコリー", 
+    "青梗菜", "ともろこし", "鶏むね肉", "鶏もも肉", "鶏皮", "鶏手羽肉", "鶏ささみ", "ひき肉", 
+    "牛タン", "牛スジ", "牛ロース肉", "牛もも肉", "牛小間切れ", "牛ヒレ", "牛バラ肉", "豚ロース", 
+    "豚小間切れ", "豚ヒレ", "豚バラ", "キャベツ", "白菜", "ヨーグルト", "卵", "納豆"
+];
+
+    availableIngredients.forEach(ingredient => {
+        const optionElement = document.createElement('option');
+        optionElement.value = ingredient;
+        optionElement.textContent = ingredient;
+        selectElement.appendChild(optionElement);
+    });
+
+    inputCard.appendChild(selectElement);
+    inputCard.innerHTML += `
+        <input type="date" id="newIngredientExpirationDate">
+        <button id="addIngredientButton">追加</button>
+    `;
+
+    return inputCard;
+}
+
+
+
+// 食材表示関数
+function displayIngredients(ingredients) {
+    const showBlock = document.querySelector('.item_show_block2');
+    showBlock.innerHTML = '';
+
+    ingredients.forEach(ingredient => {
+        const item = document.createElement('div');
+		item.className = 'ingredient-item';
+		item.id = `ingredient-${ingredient.IngredientID}`; // ユニークなIDを割り当てる
+		item.innerHTML = `
+			<button class="gomibako_start" data-ingredient-id="${ingredient.IngredientID}">
+				<img src="/static/images/gomibako.png" class="gomibako-position-image">
+			</button>
+			<h3>${ingredient.name}</h3>
+			<img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
+			<button class="edit_start" data-ingredient-id="${ingredient.IngredientID}" data-expiration-date="${ingredient.expiration_date}">
+				<img src="/static/images/change.jpg" class="fixed-position-image">
+			</button>
+			<p>賞味期限 <br> ${ingredient.expiration_date}</p>
+		`;
+        showBlock.appendChild(item);
+    });
+
+    // 追加用カードを表示エリアに追加
+    const addCard = createAddIngredientCard();
+    showBlock.appendChild(addCard);
+
+    // 追加ボタンのイベントリスナーを設定
+    setupAddButtonListener();
+
+	// 編集ボタンのイベントリスナーを追加
+	showBlock.addEventListener('click', function(event) {
+			const editButton = event.target.closest('.edit_start');
+			if (editButton) {
+				let expirationDate = editButton.getAttribute('data-expiration-date');
+				let ingredientId = editButton.getAttribute('data-ingredient-id');
+
+				if (expirationDate && ingredientId) {
+					// 日付形式を YYYY-MM-DD に変換
+					expirationDate = expirationDate.replace(/\//g, '-');
+					
+					const dateInput = document.getElementById('expirationDateInput2');
+					const dateBlock = document.getElementById('date_block2');
+					const saveButton = document.getElementById('saveButton2_3');
+
+					if (dateInput && dateBlock && saveButton) {
+						dateBlock.style.display = 'block';
+						dateInput.style.display = 'block';
+						saveButton.style.display = 'block';
+						dateInput.value = expirationDate;
+
+						// 編集中の食材IDを保存ボタンに設定
+						saveButton.setAttribute('data-ingredient-id', ingredientId);
+					}
+				}
+			}
+		});
+		// 決定ボタンのイベントリスナーを追加
+		const saveButton = document.getElementById('saveButton2_3');
+    if (saveButton) {
+        saveButton.addEventListener('click', function() {
+            const dateInput = document.getElementById('expirationDateInput2');
+            const dateBlock = document.getElementById('date_block2');
+            const ingredientId = saveButton.getAttribute('data-ingredient-id');
+
+            if (dateInput && ingredientId) {
+                const newExpirationDate = dateInput.value;
+                updateIngredientExpirationDate(ingredientId, newExpirationDate);
+                dateBlock.style.display = 'none';
+            }
+        });
+    }
+
+    // 閉じるボタンのイベントリスナーを追加
+    var span = document.getElementsByClassName("close3")[0];
+    span.onclick = function() {
+        var modal = document.getElementById("date_block2");
+        modal.style.display = "none";
+    }
+}
+
+
+
+function addNewIngredient(name, expirationDate) {
+    const data = {
+        name: name,
+        expiration_date: expirationDate || null
+    };
+
+    fetch('/add-ingredient', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        addIngredientCard(data);
+
+        // 再度、追加用カードを生成して配置
+        const showBlock = document.querySelector('.item_show_block2');
+		// 編集ボタンのイベントリスナーを追加
+		
+        const existingAddCard = document.getElementById('newIngredientName').parentNode;
+        showBlock.removeChild(existingAddCard);
+
+        const addCard = createAddIngredientCard();
+        showBlock.appendChild(addCard);
+        setupAddButtonListener();
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+document.querySelector('.item_show_block2').addEventListener('click', function(event) {
+    const gomibakoButton = event.target.closest('.gomibako_start');
+    console.log('Gomibako Button Clicked:', gomibakoButton); // デバッグログ
+
+    if (gomibakoButton) {
+        const ingredientId = gomibakoButton.getAttribute('data-ingredient-id');
+        console.log('Ingredient ID:', ingredientId); // デバッグログ
+
+        const ingredientCard = document.getElementById(`ingredient-${ingredientId}`);
+        console.log('Ingredient Card:', ingredientCard); // デバッグログ
+
+        if (ingredientCard) {
+            ingredientCard.remove();
+        }
+    }
+});
+
+function addIngredientCard(ingredient) {
+    const container = document.querySelector('.item_show_block2');
+    if (container) {
+        const cardHtml = `
+            <div class="ingredient-item" id="ingredient-${ingredient.IngredientID}">
+				<button class="gomibako_start" data-ingredient-id="${ingredient.IngredientID}">
+					<img src="/static/images/gomibako.png" class="gomibako-position-image">
+				</button>
+                <h3>${ingredient.name}</h3>
+                <img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
+                <button class="edit_start" data-ingredient-id="${ingredient.IngredientID}" data-expiration-date="${ingredient.expiration_date}">
+                    <img src="/static/images/change.jpg" class="fixed-position-image">
+                </button>
+                <p>賞味期限 <br> ${ingredient.expiration_date}</p>
+            </div>
+        `;
+
+        container.insertAdjacentHTML('beforeend', cardHtml);
+    } else {
+        console.error('Element .item_show_block2 not found');
+    }
+}
+
+// 追加ボタンのイベントリスナーを設定する関数
+function setupAddButtonListener() {
+    const addButton = document.getElementById('addIngredientButton');
+    if (addButton) {
+        addButton.removeEventListener('click', handleAddButtonClick); // 既存のリスナーを削除
+        addButton.addEventListener('click', handleAddButtonClick); // 新しいリスナーを設定
+    }
+}
+
+
+document.getElementById('fileInput2').addEventListener('change', function(event) {
+    if (event.target.files && event.target.files[0]) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+            var img = new Image();
+            img.onload = function() {
+                // canvasに画像を描画
+                var canvas = document.getElementById('canvasElement2');
+                var ctx = canvas.getContext('2d');
+                canvas.style.display = 'block'; // canvasを表示
+				document.getElementById('saveButton2_2').style.display = 'block';
+
+                // 描画前にキャンバスをクリア
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 画像をキャンバスに合わせて調整
+                var hRatio = canvas.width / img.width;
+                var vRatio = canvas.height / img.height;
+                var ratio = Math.min(hRatio, vRatio);
+                var centerShift_x = (canvas.width - img.width * ratio) / 2;
+                var centerShift_y = (canvas.height - img.height * ratio) / 2;
+
+                ctx.drawImage(img, 0, 0, img.width, img.height,
+                                  centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+            };
+            img.src = e.target.result;
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+
+
+function handleAddButtonClick() {
+    const newIngredientName = document.getElementById('newIngredientName').value;
+    const newIngredientExpirationDate = document.getElementById('newIngredientExpirationDate').value;
+
+    if (newIngredientName) {
+        // 既存の食材リストと新しい食材名を比較
+        const existingIngredients = document.querySelectorAll('.ingredient-item h3');
+        let isExisting = false;
+
+        existingIngredients.forEach(ingredientElement => {
+            if (ingredientElement.textContent === newIngredientName) {
+                isExisting = true;
+            }
+        });
+
+        if (isExisting) {
+            alert('この食材はすでに追加されています');
+        } else {
+            addNewIngredient(newIngredientName, newIngredientExpirationDate);
+        }
+    } else {
+        alert('食材名は必須です。');
+    }
+}
+
+function updateIngredientExpirationDate(ingredientId, newExpirationDate) {
+    const ingredientItems = document.querySelectorAll('.ingredient-item');
+    ingredientItems.forEach(item => {
+        const editButton = item.querySelector('.edit_start');
+        const itemId = editButton ? editButton.getAttribute('data-ingredient-id') : null;
+
+        // クリックされた特定の食材のIDと一致するか確認
+        if (itemId === ingredientId) {
+            // 賞味期限を表示している要素を取得
+            const expirationDateParagraph = item.querySelector('p');
+
+            // 新しい賞味期限を YYYY/MM/DD 形式に変換
+            const formattedDate = newExpirationDate.replace(/-/g, '/');
+
+            // 賞味期限のテキストを更新
+            expirationDateParagraph.innerHTML = `賞味期限 <br> ${formattedDate}`;
+
+            // 編集ボタンのdata属性を更新
+            editButton.setAttribute('data-expiration-date', newExpirationDate);
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('switchToCameraButton2').addEventListener('click', function() {
+        document.getElementById('videoElement2').style.display = 'block';
+        document.getElementById('captureButton2').style.display = 'block';
+        document.getElementById('fileInput2').style.display = 'none';
+		document.getElementById('saveButton2_2').style.display = 'none';
+		document.getElementById('canvasElement2').style.display = 'none';
+		document.getElementById('fileInput2').style.display = 'none';
+    });
+
+    document.getElementById('switchToFileUploadButton2').addEventListener('click', function() {
+        document.getElementById('videoElement2').style.display = 'none';
+        document.getElementById('captureButton2').style.display = 'none';
+		document.getElementById('canvasElement2').style.display = 'none';
+		document.getElementById('saveButton2_1').style.display = 'none';
+		document.getElementById('startAgainButton2').style.display = 'none';
+        document.getElementById('fileInput2').style.display = 'block';
+    });
+});
+
+</script>
 </body>
 </html>

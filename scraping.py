@@ -221,12 +221,13 @@ def scraping2(input_ingredients, recipe_add):
 
     return recipes  # 修正: 複数のレシピ情報をリストで返す
 
+"""
 # 使用例
 input_ingredients = "にんじん、カニカマ"
 recipe_add = 1 
 result = scraping2(input_ingredients, recipe_add)
 for recipe in result:
     print(recipe)
-
+"""
 
 
