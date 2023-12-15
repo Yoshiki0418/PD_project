@@ -57,6 +57,7 @@ def scraping(input_ingredients, recipe_add):
         procedures = soup.find_all("p", class_="step_text")
         recipe_info['procedures'] = ','.join(procedure.text.strip() for procedure in procedures)
 
+        """
         people_num = soup.find("span", class_="servings_for yield")
         if people_num:
             people_num_text = people_num.text # テキストを取得
@@ -64,6 +65,7 @@ def scraping(input_ingredients, recipe_add):
             num = int(num_str)
             print(num)
             recipe_info['num'] = num
+        """
         
 
 

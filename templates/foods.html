@@ -129,7 +129,7 @@
 							<div class="item_show_block2">
 
 							</div>
-							<button id="final_check" class="button1" style="display:none;">決定</button>
+							<button id="final_check2" class="button1" style="display:none;">決定</button>
 						</div>
 						<div class="date_block" id = "date_block2" style="display: none;">
 							<span class="close3">&times;</span>
@@ -1209,7 +1209,7 @@ function sendDataToServer(data) {
     // イベントリスナーを追加
     finalCheckButton.addEventListener('click', function() {
         // すべての食材カードから情報を取得
-        const cardElements = document.querySelectorAll('.ingredient-item');
+        const cardElements = document.querySelectorAll('.ingredient-item2');
         const cardData = Array.from(cardElements).map(card => {
             const name = card.querySelector('h3') ? card.querySelector('h3').textContent : '';
             const expiration = card.querySelector('p') ? card.querySelector('p').textContent.replace('賞味期限 ', '') : '';
@@ -1375,19 +1375,19 @@ document.getElementById('saveButton2_1').addEventListener('click', function() {
     });
 });
 
-function displayIngredients(ingredients) {
-    const showBlock = document.querySelector('.item_show_block2');
-    showBlock.innerHTML = ''; // 既存の内容をクリア
+function displayIngredients2(ingredients) {
+    const showBlock2 = document.querySelector('.item_show_block2');
+    showBlock2.innerHTML = ''; // 既存の内容をクリア
 
     ingredients.forEach(ingredient => {
         const item = document.createElement('div');
-        item.className = 'ingredient-item';
+        item.className = 'ingredient-item2';
         item.innerHTML = `
             <h3>${ingredient.name}</h3>
             <img src="${ingredient.ImageURL}" alt="${ingredient.name}" style="max-width: 100px; max-height: 100px;">
             <p>平均賞味期限: ${ingredient.average_shelf_life}日</p>
         `;
-        showBlock.appendChild(item);
+        showBlock2.appendChild(item);
     });
 }
 
@@ -1405,8 +1405,8 @@ document.getElementById('saveButton2_2').addEventListener('click', function() {
         .then(data => {
             console.log(data);
             // サーバーからの応答に基づいて食材の情報を表示
-            displayIngredients(data);
-			final_check.style.display = "block";
+            displayIngredients2(data);
+			final_check2.style.display = "block";
         })
         .catch(error => {
             console.error('Error:', error);
@@ -1428,8 +1428,8 @@ document.getElementById('saveButton2_1').addEventListener('click', function() {
         .then(data => {
             console.log(data);
             // サーバーからの応答に基づいて食材の情報を表示
-            displayIngredients(data);
-			final_check.style.display = "block";
+            displayIngredients2(data);
+			final_check2.style.display = "block";
         })
         .catch(error => {
             console.error('Error:', error);
@@ -1437,9 +1437,45 @@ document.getElementById('saveButton2_1').addEventListener('click', function() {
     });
 });
 
-function createAddIngredientCard() {
+let ingredientCardCounter2 = 0; // カウンターをグローバルに追加
+
+function createAddIngredientCard2() {
     const inputCard = document.createElement('div');
-    inputCard.className = 'ingredient-item';
+    inputCard.className = 'ingredient-item2 add-ingredient-card'; // この行でクラスを追加
+
+    // ドロップダウン（セレクトボックス）を生成
+    const selectElement = document.createElement('select');
+    selectElement.id = `newIngredientName2-${ingredientCardCounter2}`; // ユニークな ID を割り当てる
+
+    const availableIngredients = [
+    "トマト", "にんじん", "じゃがいも", "玉ねぎ", "ピーマン", "かぼちゃ", "なす", "ねぎ", "大根", 
+    "アスパラガス", "れんこん", "レタス", "さつまいも", "ほうれん草", "きゅうり", "ブロッコリー", 
+    "青梗菜", "ともろこし", "鶏むね肉", "鶏もも肉", "鶏皮", "鶏手羽肉", "鶏ささみ", "ひき肉", 
+    "牛タン", "牛スジ", "牛ロース肉", "牛もも肉", "牛小間切れ", "牛ヒレ", "牛バラ肉", "豚ロース", 
+    "豚小間切れ", "豚ヒレ", "豚バラ", "キャベツ", "白菜", "ヨーグルト", "卵", "納豆"
+];
+
+    availableIngredients.forEach(ingredient => {
+        const optionElement = document.createElement('option');
+        optionElement.value = ingredient;
+        optionElement.textContent = ingredient;
+        selectElement.appendChild(optionElement);
+    });
+
+    inputCard.appendChild(selectElement);
+    inputCard.innerHTML += `
+        <input type="date" id="newIngredientExpirationDate2-${ingredientCardCounter2}">
+        <button onclick="handleAddButtonClick2(${ingredientCardCounter2})">追加</button>
+    `;
+
+    ingredientCardCounter2++; // カウンターをインクリメント
+    return inputCard;
+}
+
+/*
+function createAddIngredientCard2() {
+    const inputCard = document.createElement('div');
+    inputCard.className = 'ingredient-item2';
 
     // ドロップダウン（セレクトボックス）を生成
     const selectElement = document.createElement('select');
@@ -1462,22 +1498,22 @@ function createAddIngredientCard() {
     inputCard.appendChild(selectElement);
     inputCard.innerHTML += `
         <input type="date" id="newIngredientExpirationDate">
-        <button id="addIngredientButton">追加</button>
+        <button id="addIngredientButton2">追加</button>
     `;
 
     return inputCard;
 }
-
+*/
 
 
 // 食材表示関数
-function displayIngredients(ingredients) {
-    const showBlock = document.querySelector('.item_show_block2');
-    showBlock.innerHTML = '';
+function displayIngredients2(ingredients) {
+    const showBlock2 = document.querySelector('.item_show_block2');
+    showBlock2.innerHTML = '';
 
     ingredients.forEach(ingredient => {
         const item = document.createElement('div');
-		item.className = 'ingredient-item';
+		item.className = 'ingredient-item2';
 		item.id = `ingredient-${ingredient.IngredientID}`; // ユニークなIDを割り当てる
 		item.innerHTML = `
 			<button class="gomibako_start" data-ingredient-id="${ingredient.IngredientID}">
@@ -1490,18 +1526,18 @@ function displayIngredients(ingredients) {
 			</button>
 			<p>賞味期限 <br> ${ingredient.expiration_date}</p>
 		`;
-        showBlock.appendChild(item);
+        showBlock2.appendChild(item);
     });
 
     // 追加用カードを表示エリアに追加
-    const addCard = createAddIngredientCard();
-    showBlock.appendChild(addCard);
+    const addCard = createAddIngredientCard2();
+    showBlock2.appendChild(addCard);
 
     // 追加ボタンのイベントリスナーを設定
-    setupAddButtonListener();
+    setupAddButtonListener2();
 
 	// 編集ボタンのイベントリスナーを追加
-	showBlock.addEventListener('click', function(event) {
+	showBlock2.addEventListener('click', function(event) {
 			const editButton = event.target.closest('.edit_start');
 			if (editButton) {
 				let expirationDate = editButton.getAttribute('data-expiration-date');
@@ -1553,7 +1589,7 @@ function displayIngredients(ingredients) {
 
 
 
-function addNewIngredient(name, expirationDate) {
+function addNewIngredient2(name, expirationDate) {
     const data = {
         name: name,
         expiration_date: expirationDate || null
@@ -1569,18 +1605,8 @@ function addNewIngredient(name, expirationDate) {
     .then(response => response.json())
     .then(data => {
         console.log('Success:', data);
-        addIngredientCard(data);
+        addIngredientCard2(data);
 
-        // 再度、追加用カードを生成して配置
-        const showBlock = document.querySelector('.item_show_block2');
-		// 編集ボタンのイベントリスナーを追加
-		
-        const existingAddCard = document.getElementById('newIngredientName').parentNode;
-        showBlock.removeChild(existingAddCard);
-
-        const addCard = createAddIngredientCard();
-        showBlock.appendChild(addCard);
-        setupAddButtonListener();
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -1604,35 +1630,50 @@ document.querySelector('.item_show_block2').addEventListener('click', function(e
     }
 });
 
-function addIngredientCard(ingredient) {
+// 新しい食材カードを追加する関数
+function addIngredientCard2(ingredient) {
     const container = document.querySelector('.item_show_block2');
-    if (container) {
-        const cardHtml = `
-            <div class="ingredient-item" id="ingredient-${ingredient.IngredientID}">
-				<button class="gomibako_start" data-ingredient-id="${ingredient.IngredientID}">
-					<img src="/static/images/gomibako.png" class="gomibako-position-image">
-				</button>
-                <h3>${ingredient.name}</h3>
-                <img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
-                <button class="edit_start" data-ingredient-id="${ingredient.IngredientID}" data-expiration-date="${ingredient.expiration_date}">
-                    <img src="/static/images/change.jpg" class="fixed-position-image">
-                </button>
-                <p>賞味期限 <br> ${ingredient.expiration_date}</p>
-            </div>
-        `;
 
-        container.insertAdjacentHTML('beforeend', cardHtml);
-    } else {
-        console.error('Element .item_show_block2 not found');
-    }
+    // 新しい食材カードのHTMLを生成
+    const cardHtml = `
+        <div class="ingredient-item2" id="ingredient-${ingredient.IngredientID}">
+            <button class="gomibako_start" data-ingredient-id="${ingredient.IngredientID}">
+                <img src="/static/images/gomibako.png" class="gomibako-position-image">
+            </button>
+            <h3>${ingredient.name}</h3>
+            <img src="/static/images/ingredients/${ingredient.ImageURL}" style="width: 100px; height: 100px;">
+            <button class="edit_start" data-ingredient-id="${ingredient.IngredientID}" data-expiration-date="${ingredient.expiration_date}">
+                <img src="/static/images/change.jpg" class="fixed-position-image">
+            </button>
+            <p>賞味期限 <br> ${ingredient.expiration_date}</p>
+        </div>
+    `;
+
+    // 新規追加用カードの直前にカードを挿入
+    const addCard = container.querySelector('.add-ingredient-card');
+    container.insertBefore(new DOMParser().parseFromString(cardHtml, 'text/html').body.firstChild, addCard);
 }
 
+
+function appendAddIngredientCard() {
+    const container = document.querySelector('.item_show_block2');
+    // 既存の新規追加用カードを削除
+    const existingAddCard = container.querySelector('.add-ingredient-card');
+    if (existingAddCard) {
+        existingAddCard.remove();
+    }
+    // 新しい追加用カードを生成して追加
+    const addCard = createAddIngredientCard2();
+    container.appendChild(addCard);
+}
+
+
 // 追加ボタンのイベントリスナーを設定する関数
-function setupAddButtonListener() {
-    const addButton = document.getElementById('addIngredientButton');
+function setupAddButtonListener2() {
+    const addButton = document.getElementById('addIngredientButton2');
     if (addButton) {
-        addButton.removeEventListener('click', handleAddButtonClick); // 既存のリスナーを削除
-        addButton.addEventListener('click', handleAddButtonClick); // 新しいリスナーを設定
+        addButton.removeEventListener('click', handleAddButtonClick2); // 既存のリスナーを削除
+        addButton.addEventListener('click', handleAddButtonClick2); // 新しいリスナーを設定
     }
 }
 
@@ -1672,33 +1713,56 @@ document.getElementById('fileInput2').addEventListener('change', function(event)
 });
 
 
-function handleAddButtonClick() {
-    const newIngredientName = document.getElementById('newIngredientName').value;
-    const newIngredientExpirationDate = document.getElementById('newIngredientExpirationDate').value;
+function handleAddButtonClick2(cardIndex) {
+    const newIngredientName = document.getElementById(`newIngredientName2-${cardIndex}`).value;
+    const newIngredientExpirationDate = document.getElementById(`newIngredientExpirationDate2-${cardIndex}`).value;
 
-    if (newIngredientName) {
-        // 既存の食材リストと新しい食材名を比較
-        const existingIngredients = document.querySelectorAll('.ingredient-item h3');
-        let isExisting = false;
+    // 既存の食材との重複チェック
+    const existingIngredients = document.querySelectorAll('.ingredient-item2 h3');
+    let isExisting = Array.from(existingIngredients).some(ingredientElement => ingredientElement.textContent === newIngredientName);
 
-        existingIngredients.forEach(ingredientElement => {
-            if (ingredientElement.textContent === newIngredientName) {
-                isExisting = true;
-            }
-        });
-
-        if (isExisting) {
-            alert('この食材はすでに追加されています');
-        } else {
-            addNewIngredient(newIngredientName, newIngredientExpirationDate);
-        }
-    } else {
+    if (!newIngredientName) {
         alert('食材名は必須です。');
+        return;
+    }
+
+    if (isExisting) {
+        alert('この食材はすでに追加されています');
+    } else {
+        addNewIngredient2(newIngredientName, newIngredientExpirationDate);
     }
 }
 
+function addNewIngredient2(name, expirationDate) {
+    const data = {
+        name: name,
+        expiration_date: expirationDate || null
+    };
+
+    fetch('/add-ingredient', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        addIngredientCard2(data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+
+
+// その他の関数は変更なし...
+
+
 function updateIngredientExpirationDate(ingredientId, newExpirationDate) {
-    const ingredientItems = document.querySelectorAll('.ingredient-item');
+    const ingredientItems = document.querySelectorAll('.ingredient-item2');
     ingredientItems.forEach(item => {
         const editButton = item.querySelector('.edit_start');
         const itemId = editButton ? editButton.getAttribute('data-ingredient-id') : null;

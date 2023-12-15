@@ -503,6 +503,16 @@
     height: 250px;
 }
 
+.ingredient-item2 {
+    position: relative;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px;
+    height: 250px;
+}
+
 #calendar {
     display: none;
 }

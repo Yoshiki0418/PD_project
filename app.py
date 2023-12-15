@@ -459,34 +459,31 @@ def save_image2():
         full_string = detected_foods[0]
 
         # 数字と空白を取り除く
-        food_name = ''.join([i for i in full_string if not i.isdigit()]).strip()
-        detected_foods = [ingredient.strip() for ingredient in food_name.split(',')]
+        class_name = ''.join([i for i in full_string if not i.isdigit()]).strip()
+        detected_foods = [ingredient.strip() for ingredient in class_name.split(',')]
         response_data = []
         current_date = datetime.now().date()
         print(current_date)
-        print(food_name)
+        print(class_name)
 
-        if food_name == "肉":
+        if class_name == "肉":
             class_name, date = analyze_food_categories(save_path)
 
-        detected_foods.append(class_name)
+
         
-        for ingredient_name in detected_foods:
-            print(ingredient_name)
-            # 指定された食材名に基づいて平均賞味期限を取得
-            ingredient = Ingredients.query.filter_by(name=ingredient_name).first()
+        ingredient = Ingredients.query.filter_by(name=class_name).first()
             
-            if ingredient:
-                print(f"{ingredient_name}の平均賞味期限: {ingredient.average_shelf_life}日")
-                expiration_date = current_date + timedelta(days=ingredient.average_shelf_life)
-                formatted_date = expiration_date.strftime("%Y/%m/%d")  # 修正された行
-                response_data.append({
-                    'IngredientID': ingredient.IngredientID,
-                    'name': ingredient_name,
-                    'ImageURL': ingredient.image_path,
-                    'average_shelf_life': ingredient.average_shelf_life,
-                    'expiration_date': formatted_date  # 修正された行
-                })
+        if ingredient:
+            print(f"{class_name}の平均賞味期限: {ingredient.average_shelf_life}日")
+            expiration_date = current_date + timedelta(days=ingredient.average_shelf_life)
+            formatted_date = expiration_date.strftime("%Y/%m/%d")  # 修正された行
+            response_data.append({
+                'IngredientID': ingredient.IngredientID,
+                'name': class_name,
+                'ImageURL': ingredient.image_path,
+                'average_shelf_life': ingredient.average_shelf_life,
+                'expiration_date': formatted_date  # 修正された行
+            })
 
         return jsonify(response_data)
     return jsonify({'message': 'No image received'}), 400
