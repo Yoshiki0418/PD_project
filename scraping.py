@@ -9,14 +9,19 @@ def remove_non_japanese(text):
     # 日本語（ひらがな、カタカナ、漢字）以外を除去
     return re.sub(r'[^\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF]', '', text)
 
-# 各栄養素の値を数値に変換して格納する関数
 def extract_numeric_value(text):
     # 正規表現を使用して数値を抽出
     matches = re.findall(r"(\d+\.?\d*)", text)
-    return float(matches[0]) if matches else 0
+    if matches:
+        # 小数第2位まで四捨五入
+        return round(float(matches[0]), 2)
+    else:
+        return 0
+
 
 def create_ingredients_dict(ingredient_names, ingredient_amount):
     if len(ingredient_names) != len(ingredient_amount):
+        print("食材の名前と量のリストの長さが一致しません。")
         raise ValueError("食材の名前と量のリストの長さが一致しません。")
 
     ingredients_dict = {}
@@ -195,7 +200,7 @@ def scraping2(input_ingredients, recipe_add):
                 ingredient = dt.get_text().strip()
                 if ingredient:  # Only add if the text is not empty
                     ingredient_names.append(ingredient)
-            recipe_info["ingredients"] = ingredient_names
+            recipe_info['ingredients'] = ','.join(ingredient_names)
 
         recipes.append(recipe_info)
 
@@ -223,7 +228,7 @@ def scraping2(input_ingredients, recipe_add):
                         # 先頭の番号とその後のピリオドまたは空白を取り除く
                         cleaned_step_text = step_text[1:].lstrip('. ')
                         cooking_steps.append(cleaned_step_text)
-            recipe_info['procedures'] = cooking_steps
+            recipe_info['procedures'] = ','.join(cooking_steps)
 
         # 栄養情報を取得
         out_container = soup.find("div", class_="nutrientListWrapper")
@@ -267,17 +272,19 @@ def scraping2(input_ingredients, recipe_add):
         """
 
         recipes.append(recipe_info)
-        recipes.append(ingredients_dict)
+
+        recipe_info["changed_unit"] = ingredients_dict
+        #recipes.append(ingredients_dict)
 
     return recipes  # 修正: 複数のレシピ情報をリストで返す
 
-
+"""
 # 使用例
 input_ingredients = "にんじん、白菜"
 recipe_add = 1 
 result = scraping2(input_ingredients, recipe_add)
 for recipe in result:
     print(recipe)
-
+"""
 
 

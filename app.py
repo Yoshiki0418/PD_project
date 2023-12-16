@@ -6,7 +6,7 @@ from food_judge import process_image
 from datetime import datetime, timedelta
 from meat_judge import analyze_food_categories
 from sqlalchemy import func
-from scraping import scraping
+from scraping import scraping, scraping2
 from flask_migrate import Migrate
 from object_detection import detect_food_items
 import re
@@ -77,6 +77,16 @@ class unit_conversion(db.Model):
     Unit = db.Column(db.String(50))
     Weight = db.Column(db.Integer)
 
+ingredient_mapping = {
+    'グリーンアスパラガス': 'アスパラ',
+    "アスパラガス" : "アスパラ",
+    "春キャベツ" : "キャベツ"
+    # その他の類似名もここに追加
+}
+
+def map_ingredient_name(name):
+    return ingredient_mapping.get(name, name)  # 辞書に名前があればそれを使用、なければ元の名前を返す
+
 # 数量を数値と単位に分割するヘルパー関数
 def split_quantity(quantity_str):
     match = re.match(r"(\d+)\s*(\S+)", quantity_str)
@@ -85,42 +95,45 @@ def split_quantity(quantity_str):
     else:
         return None, None
 
-# 単位変換用の関数
 def unit_conversion2(ingredients_dict, people_num):
     with current_app.app_context():
         converted_weights_per_person = {}
         for food_name, quantity_str in ingredients_dict.items():
-            # 数量と単位を分割
-            match = re.match(r"(\d+)\s*(\S+)", quantity_str)
+            # 食材名をマッピング辞書を使用して標準化
+            standardized_name = map_ingredient_name(food_name)
+
+            # 数量と単位を分割（整数または小数に対応）
+            match = re.match(r"(\d+(\.\d+)?)(\s*(g|gram|グラム|cm|本|個|片|切れ|束|杯|尾|パック|袋|丁|合|カップ|杯|房|節|片|株|枚|かけ|パック))?", quantity_str)
             if match:
-                quantity, unit = match.groups()
-                quantity = int(quantity)
+                quantity, _, unit = match.groups()[:3]  # 最初の3つのグループのみを取得
+                quantity = float(quantity)  # 小数も扱えるように変更
 
-                # データベースから食材の単位あたりの重量を検索
-                unit_data = unit_conversion.query.filter_by(FoodName=food_name, Unit=unit).first()
-
-                if unit_data and unit_data.Weight:
-                    # 重量を計算（数量 x 単位あたりの重量）
-                    total_weight = quantity * unit_data.Weight
-                    # 一人あたりの重量を計算
-                    weight_per_person = total_weight / people_num
-                    converted_weights_per_person[food_name] = weight_per_person
+                if unit and unit in ['g', 'gram', 'グラム']:
+                    # 既にg単位であればそのまま一人あたりの重量を計算
+                    weight_per_person = quantity / people_num
                 else:
-                    # データベースに食材が見つからない場合、重量をNoneとする
-                    converted_weights_per_person[food_name] = None
+                    # データベースから食材の単位あたりの重量を検索
+                    unit_data = unit_conversion.query.filter_by(FoodName=standardized_name, Unit=unit).first()
+
+                    if unit_data and unit_data.Weight:
+                        # 重量を計算（数量 x 単位あたりの重量）
+                        total_weight = quantity * unit_data.Weight
+                        # 一人あたりの重量を計算
+                        weight_per_person = total_weight / people_num
+                    else:
+                        # データベースに食材が見つからない場合、重量をNoneとする
+                        weight_per_person = None
+                converted_weights_per_person[standardized_name] = weight_per_person
             else:
-                converted_weights_per_person[food_name] = None
+                converted_weights_per_person[standardized_name] = None
 
         return converted_weights_per_person
 
 
 
+
 @app.route('/')
 def index():
-    ingredients = {'卵': "1/3本", 'にんじん': "1/2本"}
-    people_num = 4
-    weights = unit_conversion2(ingredients, people_num)
-    print(weights)
     return render_template('index.html')
 
 @app.route('/Login')
@@ -229,7 +242,7 @@ def handle_data():
     
     print(len(recipes)) #作成可能なレシピがいくつあったか
     #初期表示レシピ数を８に設定する
-    recipes_num = 8
+    recipes_num = 3
     recipe_add = recipes_num - len(recipes)
 
     ingredients = Ingredients.query.filter(Ingredients.IngredientID.in_(selected_items)).all()
@@ -237,11 +250,16 @@ def handle_data():
     ingredient_names_str = ",".join(ingredient_names)
 
     print(ingredient_names_str)
-    scraped_data_list = scraping(ingredient_names_str, recipe_add)
+    scraped_data_list = scraping2(ingredient_names_str, recipe_add)
 
     print(scraped_data_list)
+
     # スクレイピングされた各レシピに対してループを行い、データベースに追加
     for scraped_data in scraped_data_list:
+        #一人あたりの重さを算出する
+        changed_unit = unit_conversion2(scraped_data["changed_unit"], scraped_data["number_of_people"])
+        print(changed_unit)
+
         # 既にデータベースに存在するレシピ名をチェック
         existing_recipe = Recipe.query.filter_by(RecipeName=scraped_data['title']).first()
         new_recipe = None  # new_recipe の初期化
