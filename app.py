@@ -117,7 +117,7 @@ def unit_conversion2(ingredients_dict, people_num):
 
 @app.route('/')
 def index():
-    ingredients = {'卵': "3本", 'にんじん': "2本"}
+    ingredients = {'卵': "1/3本", 'にんじん': "1/2本"}
     people_num = 4
     weights = unit_conversion2(ingredients, people_num)
     print(weights)

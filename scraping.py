@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 import re
+from fractions import Fraction
+from flask import Flask, current_app
 
 # 日本語以外を除去するための関数
 def remove_non_japanese(text):
@@ -12,6 +14,39 @@ def extract_numeric_value(text):
     # 正規表現を使用して数値を抽出
     matches = re.findall(r"(\d+\.?\d*)", text)
     return float(matches[0]) if matches else 0
+
+def create_ingredients_dict(ingredient_names, ingredient_amount):
+    if len(ingredient_names) != len(ingredient_amount):
+        raise ValueError("食材の名前と量のリストの長さが一致しません。")
+
+    ingredients_dict = {}
+    for name, amount in zip(ingredient_names, ingredient_amount):
+        ingredients_dict[name] = amount
+
+    return ingredients_dict
+
+def process_ingredient_amount(ingredient_amount):
+    processed_amounts = []
+
+    for amount in ingredient_amount:
+        # 分数を含む場合、それを小数に変換し元の文字列に組み込む
+        fraction_match = re.search(r'(\d+/\d+)', amount)
+        if fraction_match:
+            fraction_str = fraction_match.group(1)
+            try:
+                decimal = str(float(Fraction(fraction_str)))
+                amount = amount.replace(fraction_str, decimal[:4])  # 小数点以下2桁までに制限
+            except ValueError:
+                pass  # 数値以外の場合は変換せずにスキップ
+
+        # 'g' 単位が含まれる場合はそれを優先
+        gram_match = re.search(r'(\d+(\.\d+)?\s*g)', amount)
+        if gram_match:
+            amount = gram_match.group(1)
+
+        processed_amounts.append(amount)
+
+    return processed_amounts
 
 #クックパッドからのスクレイピング
 def scraping(input_ingredients, recipe_add):
@@ -219,17 +254,30 @@ def scraping2(input_ingredients, recipe_add):
         # 野菜摂取量を取得して変換
         recipe_info['vegetable_intake'] = extract_numeric_value(nutrients.get("・野菜摂取量※", ""))
 
+        processed_amounts = process_ingredient_amount(ingredient_amount)
+        #print(processed_amounts)
+
+        ingredients_dict = create_ingredients_dict(ingredient_names, processed_amounts)
+        #print(ingredients_dict)
+
+        """
+        #app.pyの中で実行することに変更
+        unit_change = unit_conversion2(ingredients_dict , 4)
+        print(unit_change)
+        """
+
         recipes.append(recipe_info)
+        recipes.append(ingredients_dict)
 
     return recipes  # 修正: 複数のレシピ情報をリストで返す
 
-"""
+
 # 使用例
-input_ingredients = "にんじん、カニカマ"
+input_ingredients = "にんじん、白菜"
 recipe_add = 1 
 result = scraping2(input_ingredients, recipe_add)
 for recipe in result:
     print(recipe)
-"""
+
 
 
