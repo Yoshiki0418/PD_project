@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, url_for, jsonify
+from flask import Flask, request, render_template, url_for, jsonify, current_app
 from flask_sqlalchemy import SQLAlchemy
 import os
 from werkzeug.utils import secure_filename
@@ -9,6 +9,8 @@ from sqlalchemy import func
 from scraping import scraping
 from flask_migrate import Migrate
 from object_detection import detect_food_items
+import re
+
   
 
 
@@ -67,10 +69,58 @@ class AddIngredientsRecipes(db.Model):
     RecipeID = db.Column(db.Integer)
     Must = db.Column(db.Boolean)
 
+class unit_conversion(db.Model):
+    __tablename__ = 'unit_conversion'
+
+    id = db.Column(db.Integer, primary_key=True)
+    FoodName = db.Column(db.String(255))
+    Unit = db.Column(db.String(50))
+    Weight = db.Column(db.Integer)
+
+# 数量を数値と単位に分割するヘルパー関数
+def split_quantity(quantity_str):
+    match = re.match(r"(\d+)\s*(\S+)", quantity_str)
+    if match:
+        return int(match.group(1)), match.group(2)
+    else:
+        return None, None
+
+# 単位変換用の関数
+def unit_conversion2(ingredients_dict, people_num):
+    with current_app.app_context():
+        converted_weights_per_person = {}
+        for food_name, quantity_str in ingredients_dict.items():
+            # 数量と単位を分割
+            match = re.match(r"(\d+)\s*(\S+)", quantity_str)
+            if match:
+                quantity, unit = match.groups()
+                quantity = int(quantity)
+
+                # データベースから食材の単位あたりの重量を検索
+                unit_data = unit_conversion.query.filter_by(FoodName=food_name, Unit=unit).first()
+
+                if unit_data and unit_data.Weight:
+                    # 重量を計算（数量 x 単位あたりの重量）
+                    total_weight = quantity * unit_data.Weight
+                    # 一人あたりの重量を計算
+                    weight_per_person = total_weight / people_num
+                    converted_weights_per_person[food_name] = weight_per_person
+                else:
+                    # データベースに食材が見つからない場合、重量をNoneとする
+                    converted_weights_per_person[food_name] = None
+            else:
+                converted_weights_per_person[food_name] = None
+
+        return converted_weights_per_person
+
 
 
 @app.route('/')
 def index():
+    ingredients = {'卵': "3本", 'にんじん': "2本"}
+    people_num = 4
+    weights = unit_conversion2(ingredients, people_num)
+    print(weights)
     return render_template('index.html')
 
 @app.route('/Login')
@@ -557,4 +607,3 @@ def process_card_data():
 
 if __name__ == '__main__': 
     app.run(debug=True)
-  
