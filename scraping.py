@@ -22,7 +22,8 @@ def extract_numeric_value(text):
 def create_ingredients_dict(ingredient_names, ingredient_amount):
     if len(ingredient_names) != len(ingredient_amount):
         print("食材の名前と量のリストの長さが一致しません。")
-        raise ValueError("食材の名前と量のリストの長さが一致しません。")
+        return None
+        #raise ValueError("食材の名前と量のリストの長さが一致しません。")
 
     ingredients_dict = {}
     for name, amount in zip(ingredient_names, ingredient_amount):
@@ -202,7 +203,7 @@ def scraping2(input_ingredients, recipe_add):
                     ingredient_names.append(ingredient)
             recipe_info['ingredients'] = ','.join(ingredient_names)
 
-        recipes.append(recipe_info)
+        #recipes.append(recipe_info)
 
         #各食材の必要な量を取得
         material_list = soup.find('div', class_='recipeMaterialList')
@@ -212,7 +213,7 @@ def scraping2(input_ingredients, recipe_add):
                 ingredient = dd.get_text().strip()
                 if ingredient:  # Only add if the text is not empty
                     ingredient_amount.append(ingredient)
-            recipe_info["ingredients_amount"] = ingredient_amount
+            recipe_info["ingredients_amount"] = ','.join(ingredient_amount)
 
        # 料理の作成手順を取得
         make_list = soup.find('div', class_='makeList')
@@ -271,10 +272,12 @@ def scraping2(input_ingredients, recipe_add):
         print(unit_change)
         """
 
-        recipes.append(recipe_info)
+        
 
         recipe_info["changed_unit"] = ingredients_dict
         #recipes.append(ingredients_dict)
+
+        recipes.append(recipe_info)
 
     return recipes  # 修正: 複数のレシピ情報をリストで返す
 

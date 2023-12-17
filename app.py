@@ -10,6 +10,7 @@ from scraping import scraping, scraping2
 from flask_migrate import Migrate
 from object_detection import detect_food_items
 import re
+import json
 
   
 
@@ -44,6 +45,12 @@ class Recipe(db.Model):
     ImageURL = db.Column(db.String(255), nullable=True)
     Ingredients = db.Column(db.Text, nullable=True)
     Instructions = db.Column(db.Text, nullable=True)
+    IngredientsAmount = db.Column(db.Text, nullable=True)
+    Calorie = db.Column(db.Numeric(10, 2), nullable=True)
+    Salt = db.Column(db.Numeric(10, 2), nullable=True)
+    Protein = db.Column(db.Numeric(10, 2), nullable=True)
+    VegetableIntake = db.Column(db.Numeric(10, 2), nullable=True)
+    ChangedUnit = db.Column(db.JSON, nullable=True)
 
 class IngredientsRecipes(db.Model):
     __tablename__ = 'IngredientsRecipes'  # テーブル名を指定
@@ -190,51 +197,36 @@ def handle_data():
     # ここで selected_items に対する処理を行う
     print(selected_items)
     # SQLクエリの構築と実行
-   # MUST属性が1の食材を含むレシピの検索
-    must_recipes = db.session.query(IngredientsRecipes.RecipeID)\
-        .filter(IngredientsRecipes.Must == True)\
-        .filter(db.or_(
-            IngredientsRecipes.IngredientID.in_(selected_items),
-            db.and_(
-                IngredientSubstitutes.RecipeID == IngredientsRecipes.RecipeID,
-                IngredientsRecipes.IngredientID == IngredientSubstitutes.PrimaryIngredientID,
-                IngredientSubstitutes.SubstituteIngredientID.in_(selected_items)
-            )
-        ))\
-        .subquery()
-
-   # 各レシピにおけるMUST以外の食材の総数を計算するサブクエリ
-    non_must_ingredient_count = db.session.query(
+    # 各レシピにおける必要な食材の総数を計算するサブクエリ
+    total_ingredient_count = db.session.query(
         IngredientsRecipes.RecipeID,
-        func.count(IngredientsRecipes.IngredientID).label('total_non_must')
-    ).filter(IngredientsRecipes.Must.isnot(True))\
-    .group_by(IngredientsRecipes.RecipeID)\
+        func.count(IngredientsRecipes.IngredientID).label('total_count')
+    ).group_by(IngredientsRecipes.RecipeID)\
     .subquery()
 
-    # MUST以外の食材を含むレシピの検索
-    non_must_recipes = db.session.query(
+    # 選択された食材に基づいて、各レシピの選択された食材のカウントを行う
+    selected_recipes = db.session.query(
         IngredientsRecipes.RecipeID,
-        func.count(db.distinct(IngredientsRecipes.IngredientID)).label('selected_non_must_count'),
-        non_must_ingredient_count.c.total_non_must
+        func.count(db.distinct(IngredientsRecipes.IngredientID)).label('selected_count'),
+        total_ingredient_count.c.total_count
     ).join(
-        non_must_ingredient_count,
-        IngredientsRecipes.RecipeID == non_must_ingredient_count.c.RecipeID
+        total_ingredient_count,
+        IngredientsRecipes.RecipeID == total_ingredient_count.c.RecipeID
     ).filter(
-        IngredientsRecipes.IngredientID.in_(selected_items),
-        IngredientsRecipes.Must.isnot(True)
+        IngredientsRecipes.IngredientID.in_(selected_items)
     ).group_by(
         IngredientsRecipes.RecipeID,
-        non_must_ingredient_count.c.total_non_must
+        total_ingredient_count.c.total_count
     ).having(
-        func.count(db.distinct(IngredientsRecipes.IngredientID)) >= func.ceil(2/3 * non_must_ingredient_count.c.total_non_must)
-    ).subquery()
+        func.count(db.distinct(IngredientsRecipes.IngredientID)) >= func.ceil(2/3 * total_ingredient_count.c.total_count)
+    )
 
-    # 最終的に作成可能なレシピの特定　
-    possible_recipes = db.session.query(must_recipes.c.RecipeID)\
-        .join(non_must_recipes, non_must_recipes.c.RecipeID == must_recipes.c.RecipeID)
-    recipe_ids = [recipe.RecipeID for recipe in possible_recipes.all()]
+    recipe_ids = [recipe.RecipeID for recipe in selected_recipes.all()]
 
     print(recipe_ids)
+
+    
+        
 
     #作成できるレシピIDを用いてレシピIDを参照する
     # 指定されたRecipeIDのレシピを取得
@@ -242,7 +234,7 @@ def handle_data():
     
     print(len(recipes)) #作成可能なレシピがいくつあったか
     #初期表示レシピ数を８に設定する
-    recipes_num = 3
+    recipes_num = 10
     recipe_add = recipes_num - len(recipes)
 
     ingredients = Ingredients.query.filter(Ingredients.IngredientID.in_(selected_items)).all()
@@ -250,6 +242,7 @@ def handle_data():
     ingredient_names_str = ",".join(ingredient_names)
 
     print(ingredient_names_str)
+    print(recipe_add)
     scraped_data_list = scraping2(ingredient_names_str, recipe_add)
 
     print(scraped_data_list)
@@ -257,8 +250,10 @@ def handle_data():
     # スクレイピングされた各レシピに対してループを行い、データベースに追加
     for scraped_data in scraped_data_list:
         #一人あたりの重さを算出する
-        changed_unit = unit_conversion2(scraped_data["changed_unit"], scraped_data["number_of_people"])
-        print(changed_unit)
+        if scraped_data.get("changed_unit") and isinstance(scraped_data["changed_unit"], dict):
+            changed_unit = unit_conversion2(scraped_data["changed_unit"], scraped_data["number_of_people"])
+            print(changed_unit)
+            ChangedUnit=json.dumps(changed_unit)
 
         # 既にデータベースに存在するレシピ名をチェック
         existing_recipe = Recipe.query.filter_by(RecipeName=scraped_data['title']).first()
@@ -273,12 +268,12 @@ def handle_data():
                 ImageURL=scraped_data['image_path'],
                 Ingredients=scraped_data['ingredients'],
                 Instructions=scraped_data['procedures'],
-                IngredientsAmount=scraped_data["IngredientsAmount"],
-                Calorie=scraped_data["Calorie"],
-                Salt=scraped_data["Salt"],
-                Protein=scraped_data["Protein"],
-                VegetableIntake=scraped_data["VegetableIntake"],
-                ChangedUnit =scraped_data["ChangedUnit "],
+                IngredientsAmount=scraped_data["ingredients_amount"],
+                Calorie=scraped_data["calorie"],
+                Salt=scraped_data["salt"],
+                Protein=scraped_data["protein"],
+                VegetableIntake=scraped_data["vegetable_intake"],
+                ChangedUnit =ChangedUnit,
             )
             db.session.add(new_recipe)
             db.session.flush()  # レシピIDを取得するためにflushを使用
@@ -292,7 +287,7 @@ def handle_data():
                 "玉ねぎ" : ["玉ねぎ", "タマネギ","たまねぎ"],
                 "じゃがいも" : ["じゃがいも","ジャガイモ"],
                 "なす" : ["茄子", "なす","ナス"],
-                "ねぎ" : ["ねぎ","ネギ"],
+                "ねぎ" : ["ねぎ","ネギ","小ねぎ","長ネギ"],
                 "大根" : ["大根","だいこん", "ダイコン"],
                 "レンコン" : ["蓮根","レンコン","れんこん"],
                 "さつまいも" : ["さつまいも","サツマイモ"],
@@ -301,9 +296,10 @@ def handle_data():
                 "とうもろこし" : ["とうもろこし","トウモロコシ"],
                 "鶏むね肉" : ["鶏むね肉","鶏胸肉","鶏肉","鶏肉(むね)","鶏肉(胸)","鶏肉(ムネ)"],
                 "鶏もも肉" : ["鶏もも肉","鶏モモ肉","鶏肉","鶏肉(もも)","鶏肉(モモ)"],
-                "ひき肉" : ["ひき肉","挽き肉","鶏ひき肉"],
+                "ひき肉" : ["ひき肉","挽き肉","鶏ひき肉","合いびき肉"],
                 "牛小間切れ" : ["牛小間切れ","牛肉"],
                 "牛バラ" : ["牛バラ","牛肉"],
+                "牛ヒレ" : ["牛肉","牛ひれ肉","牛ヒレ肉"],
                 "豚小間切れ" : ["豚小間切れ","豚肉"],
                 "豚ヒレ" : ["豚肉","豚ひれ肉","豚ヒレ肉"],
                 "豚バラ" : ["豚肉","豚バラ","豚バラ肉"],
