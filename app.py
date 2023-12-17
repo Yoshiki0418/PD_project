@@ -269,9 +269,16 @@ def handle_data():
             new_recipe = Recipe(
                 RecipeName=scraped_data['title'],
                 Description=scraped_data['explanation'],
+                CookingTime=scraped_data["time"],
                 ImageURL=scraped_data['image_path'],
                 Ingredients=scraped_data['ingredients'],
-                Instructions=scraped_data['procedures']
+                Instructions=scraped_data['procedures'],
+                IngredientsAmount=scraped_data["IngredientsAmount"],
+                Calorie=scraped_data["Calorie"],
+                Salt=scraped_data["Salt"],
+                Protein=scraped_data["Protein"],
+                VegetableIntake=scraped_data["VegetableIntake"],
+                ChangedUnit =scraped_data["ChangedUnit "],
             )
             db.session.add(new_recipe)
             db.session.flush()  # レシピIDを取得するためにflushを使用
