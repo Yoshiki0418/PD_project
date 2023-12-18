@@ -130,5 +130,43 @@
 <!--このテンプレート専用のスクリプト-->
 <script src="{{url_for('static' , filename='js/main.js') }}"></script>
 
+<script>
+	document.getElementById('fixed-button2').addEventListener('click', function() {
+		console.log('Button clicked');
+
+		// レシピデータをJSON形式に変換
+		var recipeData = {
+			RecipeName: "{{ recipe.RecipeName }}",
+			Description: "{{ recipe.Description }}",
+			CookingTime: "{{ recipe.CookingTime }}",
+			ImageURL: "{{ recipe.ImageURL }}",
+			Ingredients: "{{ recipe.Ingredients }}",
+			Instructions: "{{ recipe.Instructions }}",
+			Calorie: "{{ recipe.Calorie }}",
+			Salt: "{{ recipe.Salt }}",
+			Protein: "{{ recipe.Protein }}",
+			VegetableIntake: "{{ recipe.VegetableIntake }}",
+			ChangedUnit:"{{recipe.ChangedUnit}}"
+		};
+
+		// Ajaxリクエストを使ってサーバーにデータを送信
+		fetch('/nutririon', { // ここにはサーバーのエンドポイントURLを設定
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(recipeData)
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	});
+</script>
+
+
 </body>
 </html>

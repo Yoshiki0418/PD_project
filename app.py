@@ -625,10 +625,17 @@ def process_card_data():
 
     # データベースの変更をコミット
     db.session.commit()
-    print(1)
+    #print(1)
 
     # 応答を返す
     return render_template('foods.html')
+
+@app.route('/nutririon', methods=['POST'])
+def nutririon():
+    nutririon_data = request.json
+    print(nutririon_data)
+
+    return jsonify({'OK': 'Nice'}), 400
 
 
 if __name__ == '__main__': 

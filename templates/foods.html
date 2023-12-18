@@ -1006,13 +1006,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
 	document.getElementById('confirm').addEventListener('click', function() {
-    console.log('Button clicked');
-    var selectedItems = document.querySelectorAll('.item.selected');
-    var selectedNames = Array.from(selectedItems).map(item => item.querySelector('.item_IngredientID').textContent);
+		console.log('Button clicked');
+		var selectedItems = document.querySelectorAll('.item.selected');
+		var selectedNames = Array.from(selectedItems).map(item => item.querySelector('.item_IngredientID').textContent);
 
-    // 選択された食材の名前をサーバーに送信
-    sendDataToServer(selectedNames);
-});
+		// 選択された食材の名前をサーバーに送信
+		sendDataToServer(selectedNames);
+	});
 
 function displayRecipes(recipes) {
     recipes.forEach(recipe => {
