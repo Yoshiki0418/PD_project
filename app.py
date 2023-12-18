@@ -479,7 +479,12 @@ def recipe_details(recipe_id):
         'CookingTime': recipe.CookingTime,
         'ImageURL': recipe.ImageURL, 
         'Ingredients': recipe.Ingredients,
-        'Instructions': recipe.Instructions
+        'Instructions': recipe.Instructions,
+        "Calorie": recipe.Calorie,
+        "Salt":recipe.Salt,
+        "Protein":recipe.Protein,
+        "VegetableIntake":recipe.VegetableIntake,
+        "ChangedUnit":recipe.ChangedUnit,
     }
 
     return render_template('recipe_details.html', recipe=recipe_data)

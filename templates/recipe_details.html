@@ -61,9 +61,10 @@
 			<div class="sub_title"><h2>材料</h2></div>
 			<div class="Cookitem_block">
 				{% set ingredients = recipe.Ingredients.split(',') %}
+				{% set column_size = (ingredients | length / 3) | round(0, 'ceil') %}
 				{% for ingredient in ingredients %}
 					{# 新しい<ul>タグを4要素ごとに開始 #}
-					{% if loop.index0 % 4 == 0 %}
+					{% if loop.index0 % column_size == 0 %}
 						{% if not loop.first %}</ul>{% endif %}
 						<ul>
 					{% endif %}
@@ -83,8 +84,19 @@
 				{% set instructions = recipe.Instructions.split(',') %}
 				<ul>
 					{% for instruction in instructions %}
-						<li>{{ instruction.strip() }}</li>
+						<li>{{ loop.index }}: {{ instruction.strip() }}</li>
 					{% endfor %}
+				</ul>
+			</div>
+		</div>		
+		<div class="nutrition_info_container">
+			<div class="sub_title"><h2>栄養情報</h2></div>
+			<div class="Cookitem_block">
+				<ul>
+					<li>エネルギー　　{{ recipe.Calorie  }}kcal</li>
+					<li>塩分　　　　　{{ recipe.Salt }}g</li>
+					<li>タンパク質　　{{ recipe.Protein }}g</li>
+					<li>野菜摂取量　　{{ recipe.VegetableIntake  }}g</li>
 				</ul>
 			</div>
 		</div>

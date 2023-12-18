@@ -57,7 +57,7 @@ hr {
     margin-left: 50px;
     margin-right: 50px;
     display: flex;
-    height: 240px;
+    height: auto;
 }
 .sub_title{
     background-color: rgb(249, 113, 1);
@@ -104,6 +104,17 @@ hr {
     display: flex;
     flex-direction: column;
 }
-.Instruction, .Cookitem_block {
+.nutrition_info_container{
+    margin-top: 50px;
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+    display: flex;
+    width: 27%;
+}
+.nutrition_info_container .Cookitem_block ul{
+    margin-right: 0px;
+}
+.Instruction, .Cookitem_block, .nutrition_info_container{
     box-sizing: border-box; /* パディングとボーダーを要素の次元に含める */
 }
