@@ -12,7 +12,7 @@ from object_detection import detect_food_items
 import re
 import json
 import html
-  
+from nutrition_calculation import nutrients
 
 
 app = Flask(__name__) 
@@ -642,6 +642,8 @@ def nutririon():
     changed_unit_dict = json.loads(decoded_str)
 
     print(changed_unit_dict)
+
+    print(nutrients(changed_unit_dict))
 
     return jsonify({'OK': 'Nice'}), 400
 

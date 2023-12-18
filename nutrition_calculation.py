@@ -90,6 +90,10 @@ def nutrients(food_list):
     total_nutrients = {}
 
     for food_name, quantity in food_list.items():
+        # Noneの場合は処理をスキップ
+        if quantity is None:
+            continue
+
         ingredient_id = fetch_data(food_name)
         if ingredient_id:
             nutrient_data = fetch_nutrients(ingredient_id, quantity)
@@ -106,6 +110,7 @@ def nutrients(food_list):
         total_nutrients[nutrient] = round(total_nutrients[nutrient], 2)
 
     return total_nutrients
+
 
 """
 #使用例
