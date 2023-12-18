@@ -1,0 +1,72 @@
+.nutrition{
+    width: 90%;
+    height: auto;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.calorie_container {
+    width: 580px;
+    height: 300px;
+    display: flex;
+    border: 1px solid rgba(71, 71, 71, 0.338); /* 2pxの太さ、実線、黒色の枠線 */
+    border-radius: 40px;
+    position: relative;
+}
+
+.calorie_pic{
+    margin-top: 10px;
+    margin-left: 20px;
+    width: 13%;
+    height: 17%;
+}
+
+.calorie_font {
+    margin-top: 2px !important; /* 上下左右のマージンを0に設定 */
+    font-size: 35px !important; /* フォントサイズを継承する */
+    padding: 0 !important; /* パディングを0に設定 */
+    border-bottom: none !important; /* 下線を非表示にする */
+    font-weight: inherit !important; /* フォントの太さを継承する */
+}
+
+.nomar_fire{
+    position: absolute;
+    top: 64px;
+    left: 40px;
+    font-size: 20px;
+}
+
+.nomar_fire h4 {
+    margin-block-start: 0; /* 上マージンを0に */
+    margin-block-end: 0; /* 下マージンを0に */
+    margin-inline-start: 0; /* 左マージンを0に */
+    margin-inline-end: 0; /* 右マージンを0に */
+}
+
+.value{
+    margin-left: 50px;
+}
+
+.value2{
+    margin-left: 62px;
+}
+
+.nomar_fire2{
+    position: absolute;
+    top: 136px;
+    left: 40px;
+    font-size: 20px;
+}
+
+.nomar_fire2 h4 {
+    margin-block-start: 0; /* 上マージンを0に */
+    margin-block-end: 0; /* 下マージンを0に */
+    margin-inline-start: 0; /* 左マージンを0に */
+    margin-inline-end: 0; /* 右マージンを0に */
+}
+
+#gaugeCanvas{
+    margin-left: 30px;
+    margin-top: 15px;
+}

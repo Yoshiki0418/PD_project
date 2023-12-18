@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>PD_project</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="ここにサイト説明を入れます">
+<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+<link rel="stylesheet" href="{{url_for('static', filename='css/nutrition.css')}}">
+</head>
+
+<body>
+
+<div id="container">
+
+<header>
+	<h1 id="logo"><a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/top.png') }}" class ="top_pic" alt="SAMPLE COMPANY"></a></h1>
+	<!--開閉ブロック-->
+	<div id="menubar">
+	<nav>
+	<ul>
+	<li><a href="index.html">HOME</a></li> 
+	<li><a href="{{ url_for('foods') }}">FOODS</a></li>
+	<li class="current"><a href="">HELTH</a>
+		<ul>
+		<li><a href="works.html">HELTH.HELTH.</a></li>
+		<li><a href="works.html">WORKS</a></li>
+		<li><a href="works.html">WORKS</a></li>
+		</ul>
+	</li>
+	<li><a href="{{ url_for('contact') }}">CONTACT</a></li>
+	</ul>
+	</nav>
+	</div>
+	<!--/#menubar-->
+</header>
+<div id="contents">
+<main>
+	<div class="nutririon">
+		<div class="title_block">
+			<h2><span class="uline">栄養サマリー</span></h2>
+		</div>
+        <div class="calorie_container">
+            <img src="{{ url_for('static', filename='images/fire 1.png') }}" class="calorie_pic">
+            <h3 class="calorie_font">カロリー</h3>
+            <div class="nomar_fire">
+                <h4>基礎代謝量</h4>
+                <div class="value"><h4>1620kcal</h4></div> <!--実際のデータに変更-->
+            </div>
+            <div class="nomar_fire2">
+                <h4>燃焼エネルギー</h4>
+                <div class="value2"><h4>720kcal</h4></div> <!--実際のデータに変更-->
+            </div>
+            <canvas id="gaugeCanvas" width="340" height="340"></canvas>
+        </div>
+	</div>
+</main>
+</div>
+<!--/#contents-->
+
+<ul id="footermenu">
+<li><a href="index.html">ホーム</a></li>
+<li><a href="company.html">会社概要</a></li>
+<li><a href="works.html">業務内容</a></li>
+<li><a href="contact.html">コンタクト</a></li>
+</ul>
+
+<footer>
+<small>Copyright&copy; <a href="index.html">SAMPLE COMPANY</a> All Rights Reserved.</small>
+<span class="pr"><a href="https://template-party.com/" target="_blank">《Web Design:Template-Party》</a></span>
+</footer>
+
+<!--ページの上部へ戻るボタン-->
+<div class="pagetop"><a href="#"><i class="fas fa-angle-double-up"></i></a></div>
+
+</div>
+<!--/#container-->
+
+<!--開閉ボタン（ハンバーガーアイコン）-->
+<div id="menubar_hdr">
+<span></span><span></span><span></span>
+</div>
+
+<!--jQueryの読み込み-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!--このテンプレート専用のスクリプト-->
+<script src="{{url_for('static' , filename='js/main.js') }}"></script>
+
+<script>
+    const canvas = document.getElementById('gaugeCanvas');
+const ctx = canvas.getContext('2d');
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
+const radius = 150;
+const startAngle = Math.PI * 0.7;
+const endAngle = Math.PI * 2.3;
+const maxValue = 3000;
+let currentVal = 0;
+const targetValue = 1500; // 目標値
+const animationSpeed = 1; // アニメーションの速さ
+
+function animateGauge() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // 背景の円弧
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+  ctx.lineWidth = 25;
+  ctx.strokeStyle = '#e6e6e6';
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  // 値の円弧
+  const valueAngle = (endAngle - startAngle) * (currentVal / maxValue) + startAngle;
+  ctx.beginPath();
+  ctx.arc(centerX, centerY, radius, startAngle, valueAngle);
+  ctx.lineWidth = 25;
+  ctx.strokeStyle = '#3e9';
+  ctx.lineCap = 'round';
+  ctx.stroke();
+
+  // ゲージの値のテキスト
+  ctx.font = '30px Arial';
+  ctx.fillStyle = '#333';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(currentVal.toString(), centerX, centerY);
+
+  if (currentVal < targetValue) {
+    currentVal += animationSpeed; // 値を増加
+    requestAnimationFrame(animateGauge); // 次のフレームで関数を呼び出す
+  }
+}
+
+animateGauge(); // アニメーションの開始
+
+
+</script>
+
+</body>
+</html>

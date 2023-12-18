@@ -157,6 +157,10 @@ def recipe():
 def works():
     return render_template('works.html')
 
+@app.route("/main_nutrition")
+def main_nutrition():
+    return render_template("nutrition.html")
+
 @app.route('/foods')
 def foods():
     vegetables = Ingredients.query.all()

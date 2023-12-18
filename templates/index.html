@@ -19,9 +19,9 @@
 	<div id="menubar">
 	<nav>
 	<ul>
-	<li class="current"><a href="index.html">HOME</a></li> 
+	<li class="current"><a href="{{ url_for('index') }}">HOME</a></li> 
 	<li><a href="{{ url_for('foods') }}">FOODS</a></li>
-	<li><a href="">HELTH</a>
+	<li><a href="{{ url_for('main_nutrition') }}">HELTH</a>
 		<ul>
 		<li><a href="works.html">HELTH.HELTH.</a></li>
 		<li><a href="works.html">WORKS</a></li>
