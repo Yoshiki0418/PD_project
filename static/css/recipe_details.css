@@ -118,3 +118,27 @@ hr {
 .Instruction, .Cookitem_block, .nutrition_info_container{
     box-sizing: border-box; /* パディングとボーダーを要素の次元に含める */
 }
+.button1{
+    background-color: #f79156e5;
+    width: 153px;
+    height: 55px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center; /* 水平方向の中心に配置 */
+    align-items: center; /* 垂直方向の中心に配置 */
+    cursor: pointer;
+    position: absolute;
+    right: 20%;
+    top: 20%;
+}
+.button1 div{
+    text-align: center;
+    font-size: 20px;
+    margin-top: 6px;
+    font-weight: bold;
+}
+.under_container{
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+}
