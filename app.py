@@ -11,7 +11,7 @@ from flask_migrate import Migrate
 from object_detection import detect_food_items
 import re
 import json
-
+import html
   
 
 
@@ -632,8 +632,16 @@ def process_card_data():
 
 @app.route('/nutririon', methods=['POST'])
 def nutririon():
-    nutririon_data = request.json
-    print(nutririon_data)
+    nutrition_data = request.json
+    changed_unit_str = nutrition_data['ChangedUnit']
+
+    # HTMLエンティティをデコード
+    decoded_str = html.unescape(changed_unit_str)
+
+    # JSON文字列を辞書に変換
+    changed_unit_dict = json.loads(decoded_str)
+
+    print(changed_unit_dict)
 
     return jsonify({'OK': 'Nice'}), 400
 
