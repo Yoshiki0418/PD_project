@@ -40,18 +40,37 @@
 		<div class="title_block">
 			<h2><span class="uline">栄養サマリー</span></h2>
 		</div>
-        <div class="calorie_container">
-            <img src="{{ url_for('static', filename='images/fire 1.png') }}" class="calorie_pic">
-            <h3 class="calorie_font">カロリー</h3>
-            <div class="nomar_fire">
-                <h4>基礎代謝量</h4>
-                <div class="value"><h4>1620kcal</h4></div> <!--実際のデータに変更-->
+        <div class="samry_container">
+            <div class="calorie_container">
+                <img src="{{ url_for('static', filename='images/fire 1.png') }}" class="calorie_pic">
+                <h3 class="calorie_font">カロリー</h3>
+                <div class="nomar_fire">
+                    <h4>基礎代謝量</h4>
+                    <div class="value"><h4>1620kcal</h4></div> <!--実際のデータに変更-->
+                </div>
+                <div class="nomar_fire2">
+                    <h4>燃焼エネルギー</h4>
+                    <div class="value2"><h4>720kcal</h4></div> <!--実際のデータに変更-->
+                </div>
+                <canvas id="gaugeCanvas" width="340" height="340"></canvas>
             </div>
-            <div class="nomar_fire2">
-                <h4>燃焼エネルギー</h4>
-                <div class="value2"><h4>720kcal</h4></div> <!--実際のデータに変更-->
+            <div class="three_container">
+                <div class="item1">
+                    <div class="circle"></div>
+                    <h3 class="protain_font">タンパク質</h3>
+                    <canvas id="gaugeCanvas2" width="650" height="70"></canvas>
+                </div>
+                <div class="item2">
+                    <div class="circle2"></div>
+                    <h3 class="lipid_font">脂質</h3>
+                    <canvas id="gaugeCanvas3" width="650" height="70"></canvas>
+                </div>
+                <div class="item3">
+                    <div class="circle3"></div>
+                    <h3 class="lipid_font">炭水化物</h3>
+                    <canvas id="gaugeCanvas4" width="650" height="70"></canvas>
+                </div>
             </div>
-            <canvas id="gaugeCanvas" width="340" height="340"></canvas>
         </div>
 	</div>
 </main>
@@ -89,53 +108,126 @@
 
 <script>
     const canvas = document.getElementById('gaugeCanvas');
-const ctx = canvas.getContext('2d');
-const centerX = canvas.width / 2;
-const centerY = canvas.height / 2;
-const radius = 150;
-const startAngle = Math.PI * 0.7;
-const endAngle = Math.PI * 2.3;
-const maxValue = 3000;
-let currentVal = 0;
-const targetValue = 1500; // 目標値
-const animationSpeed = 1; // アニメーションの速さ
+    const ctx = canvas.getContext('2d');
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 150;
+    const startAngle = Math.PI * 0.7;
+    const endAngle = Math.PI * 2.3;
+    const maxValue = 3000; // 最大値
+    let currentVal = 0;
+    const targetValue = 3000; // 目標値
+    const targetValue_main = 5000; // 実際の目標値
+    const animationSpeed = 8; // アニメーションの速さ
 
-function animateGauge() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function animateGauge() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 背景の円弧
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-  ctx.lineWidth = 25;
-  ctx.strokeStyle = '#e6e6e6';
-  ctx.lineCap = 'round';
-  ctx.stroke();
+        // 背景の円弧
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.lineWidth = 25;
+        ctx.strokeStyle = '#e6e6e6';
+        ctx.lineCap = 'round';
+        ctx.stroke();
 
-  // 値の円弧
-  const valueAngle = (endAngle - startAngle) * (currentVal / maxValue) + startAngle;
-  ctx.beginPath();
-  ctx.arc(centerX, centerY, radius, startAngle, valueAngle);
-  ctx.lineWidth = 25;
-  ctx.strokeStyle = '#3e9';
-  ctx.lineCap = 'round';
-  ctx.stroke();
+        // 現在値または目標値までの円弧
+        const maxAngle = (endAngle - startAngle) * Math.min(currentVal, targetValue) / maxValue + startAngle;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, startAngle, maxAngle);
+        ctx.lineWidth = 25;
+        ctx.strokeStyle = '#3e9'; // 目標値未満の部分の色
+        ctx.lineCap = 'round';
+        ctx.stroke();
 
-  // ゲージの値のテキスト
-  ctx.font = '30px Arial';
-  ctx.fillStyle = '#333';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(currentVal.toString(), centerX, centerY);
+        // 目標値を超えた部分の円弧
+        if (currentVal > targetValue) {
+            const valueAngle = (endAngle - startAngle) * (currentVal / maxValue) + startAngle;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, maxAngle, valueAngle);
+            ctx.lineWidth = 25;
+            ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)'; // 目標値を超えた部分の色（例：赤色）
+            ctx.lineCap = 'round';
+            ctx.stroke();
+        }
 
-  if (currentVal < targetValue) {
-    currentVal += animationSpeed; // 値を増加
-    requestAnimationFrame(animateGauge); // 次のフレームで関数を呼び出す
-  }
-}
+        // ゲージの値のテキスト
+        ctx.font = '30px Arial';
+        ctx.fillStyle = '#333';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(currentVal.toString(), centerX, centerY);
 
-animateGauge(); // アニメーションの開始
+        if (currentVal < targetValue_main) {
+            currentVal += animationSpeed; // 値を増加
+            requestAnimationFrame(animateGauge); // 次のフレームで関数を呼び出す
+        }
+    }
+
+    animateGauge(); // アニメーションの開始
+</script>
 
 
+<script>
+    function roundedRect(ctx, x, y, width, height, radius) {
+        ctx.beginPath();
+        ctx.moveTo(x + radius, y);
+        ctx.lineTo(x + width - radius, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+        ctx.lineTo(x + width, y + height - radius);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+        ctx.lineTo(x + radius, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+        ctx.lineTo(x, y + radius);
+        ctx.quadraticCurveTo(x, y, x + radius, y);
+        ctx.closePath();
+    }
+
+    function animateBar(canvasId, color, targetValue) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = canvas.getContext('2d');
+        const barWidth = 600; // 棒グラフの幅
+        const barHeight = 30; // 棒グラフの高さ
+        const startX = 50; // 棒グラフの開始位置 X
+        const startY = canvas.height / 2 - barHeight / 2; // 棒グラフの開始位置 Y
+        const maxValue = 3000;
+        let currentVal = 0;
+        const animationSpeed = 8; // アニメーションの速さ
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 背景の棒グラフに丸みを追加
+            ctx.fillStyle = '#e6e6e6';
+            roundedRect(ctx, startX, startY, barWidth, barHeight, 15);
+            ctx.fill();
+
+            // 値の棒グラフに丸みを追加
+            const currentValueWidth = (barWidth * currentVal) / maxValue;
+            ctx.fillStyle = color;
+            roundedRect(ctx, startX, startY, currentValueWidth, barHeight, 15);
+            ctx.fill();
+
+            // ゲージの値のテキスト
+            ctx.font = '30px Arial';
+            ctx.fillStyle = '#333';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(currentVal.toString(), startX + barWidth / 2, startY + barHeight / 2);
+
+            if (currentVal < targetValue) {
+                currentVal += animationSpeed;
+                requestAnimationFrame(draw);
+            }
+        }
+
+        draw();
+    }
+
+    // タンパク質、脂質、炭水化物用の棒グラフをアニメーションで描画
+    animateBar('gaugeCanvas2', '#1BB5F6', 1500); // タンパク質用
+    animateBar('gaugeCanvas3', '#FA0505', 1200); // 脂質用
+    animateBar('gaugeCanvas4', '#FFD805', 1800); // 炭水化物用
 </script>
 
 </body>
