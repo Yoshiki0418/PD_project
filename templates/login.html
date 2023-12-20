@@ -4,16 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
     <title>Document</title>
 </head>
 <body>
     <header>
-        <div>
-            <h1 class = "head_rogo">
-                ナビクック
-            </h1>
-        </div>
-    </header>
+        <h1 id="logo"><a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/top.png') }}" class ="top_pic" alt="SAMPLE COMPANY"></a></h1>
+            <!--開閉ブロック-->
+            <div id="menubar">
+            <nav>
+            <ul>
+            <li class="current"><a href="{{ url_for('index') }}">HOME</a></li> 
+            <li><a href="{{ url_for('foods') }}">FOODS</a></li>
+            <li><a href="{{ url_for('main_nutrition') }}">HELTH</a>
+                <ul>
+                <li><a href="works.html">HELTH.HELTH.</a></li>
+                <li><a href="works.html">WORKS</a></li>
+                <li><a href="works.html">WORKS</a></li>
+                </ul>
+            </li>
+            <li><a href="{{ url_for('contact') }}">CONTACT</a></li>
+            <li><a href="{{ url_for('Login') }}">CONTACT</a></li>
+            </ul>
+            </nav>
+            </div>
+            <!--/#menubar-->
+        </header>
     <main>
         <div>
             <div >
@@ -39,5 +55,15 @@
         </div>
 
     </main>
+    <!--jQueryの読み込み-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!--lightbox用jsファイルの読み込み-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.10.0/js/lightbox-plus-jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vegas/2.5.4/vegas.min.js"></script>
+    <script src="{{url_for('static' , filename='js/vegas.js') }}"></script>
+
+    <!--このテンプレート専用のスクリプト-->
+    <script src="{{url_for('static' , filename='js/main.js') }}"></script>
 </body>
 </html>

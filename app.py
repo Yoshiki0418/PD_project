@@ -144,7 +144,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/Login')
-def rogin():
+def Login():
     return render_template('login.html')
 
 @app.route('/recipe')
