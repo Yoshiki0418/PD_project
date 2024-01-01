@@ -28,16 +28,17 @@
 			<div id="menubar">
 			<nav>
 			<ul>
-			<li><a href="{{ url_for('index') }}">HOME</a></li>
-			<li class="current"><a href="{{ url_for('foods') }}">FOODS</a></li>
-			<li><a href="">HELTH</a>
+			<li class="current"><a href="{{ url_for('index') }}">HOME</a></li> 
+			<li><a href="{{ url_for('foods') }}">FOODS</a></li>
+			<li><a href="{{ url_for('main_nutrition') }}">HELTH</a>
 				<ul>
-				<li><a href="works.html">HELTH.WORKS.</a></li>
-				<li><a href="works.html">WORKS</a></li>
-				<li><a href="works.html">WORKS</a></li>
+				<li><a href="{{ url_for('main_nutrition') }}">HELTH.HELTH.</a></li>
+				<li><a href="{{ url_for('main_nutrition') }}">WORKS</a></li>
+				<li><a href="{{ url_for('main_nutrition') }}">WORKS</a></li>
 				</ul>
 			</li>
 			<li><a href="{{ url_for('contact') }}">CONTACT</a></li>
+			<li><a href="{{ url_for('Login') }}">LOGIN</a></li>
 			</ul>
 			</nav>
 			</div>
@@ -341,7 +342,7 @@
 			</div>
 		</div>
 	</div>
-	<!--食材編集画面-->
+	<!--食材編集画面--
 	<div class="foods_container" id="display1">
 		{% for item in items %}
 			{% if item.category == 1 %}
@@ -353,7 +354,7 @@
 							<div class="date-circle">{{ item.days_left }}</div> 
 						</div>
 						<span class="item_name">{{ item.name }}</span>
-						<!--<span>{{ item.expiry if item.expiry}}</span>-->
+						
 					</div>
 				</div>
 			{% endif %}
@@ -361,6 +362,7 @@
 		<a><div id="edit-button" style="display: none;" class="button1"><div>編集</div></div></a>
 		<a><div id="fixed-button" style="display: none;" class="button1"><div>レシピ</div></div></a>
 	</div>
+-->
 
 	
 </section>
