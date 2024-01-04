@@ -7,6 +7,23 @@
 <meta name="description" content="ここにサイト説明を入れます">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vegas/2.5.4/vegas.min.css">
 <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+<script>
+	// Firebaseの設定
+	var firebaseConfig = {
+            apiKey: "AIzaSyD8aV--jbu877Xv_1pIlaXnbyEz6TCmyXA",
+            authDomain: "pdproject-3df2c.firebaseapp.com",
+            projectId: "pdproject-3df2c",
+            storageBucket: "pdproject-3df2c.appspot.com",
+            messagingSenderId: "1019548338817",
+            appId: "1:1019548338817:web:0566f23ddf9bd270659b80",
+            measurementId: "G-X16QFGDGKC"
+        };
+
+        // Firebaseの初期化
+        firebase.initializeApp(firebaseConfig);
+</script>
 </head>
 
 <body class="home">
@@ -139,6 +156,9 @@
 		</section>
 		
 	</section>
+
+	<div id="user-uid"></div>
+
 	
 	
 	
@@ -195,6 +215,39 @@
 
 <!--このテンプレート専用のスクリプト-->
 <script src="{{url_for('static' , filename='js/main.js') }}"></script>
+
+<!-- Firebaseのスクリプト -->
+<script type="module">
+    // Firebaseモジュールのインポート
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js';
+
+    // Firebaseの設定
+    const firebaseConfig = {
+        apiKey: "AIzaSyD8aV--jbu877Xv_1pIlaXnbyEz6TCmyXA",
+        authDomain: "pdproject-3df2c.firebaseapp.com",
+        projectId: "pdproject-3df2c",
+        storageBucket: "pdproject-3df2c.appspot.com",
+        messagingSenderId: "1019548338817",
+        appId: "1:1019548338817:web:0566f23ddf9bd270659b80",
+        measurementId: "G-X16QFGDGKC"
+    };
+
+    // Firebaseの初期化
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // ユーザーがログインしている場合
+            console.log("ログイン中のユーザーUID: " + user.uid);
+            document.getElementById("user-uid").textContent = "UID: " + user.uid;
+        } else {
+            // ユーザーがログインしていない場合
+            console.log("ユーザーはログインしていません。");
+        }
+    });
+</script>
 
 </body>
 </html>
