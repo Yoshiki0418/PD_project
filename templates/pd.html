@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/pd.css')}}">
+</head>
+<body>
+    <header>
+        <div class="top_b_set">
+            <form action="/Login">
+                <button type="submit" class="top_button">ログイン</button>
+            </form>
+            <button class="top_button">会員登録</button>
+        </div>
+    </header>
+    <main>
+        <section class="top_section">
+            <div class="top_page">
+                <img src="{{ url_for('static', filename='images/back.png') }}" class ="back_pic">
+                <div class="left_container">
+                    <img src="{{ url_for('static', filename='images/catch.png') }}" class ="top_pic">
+                    <form action="/Login">
+                        <button type="submit" class="start_button">今すぐ無料で始める！</button>
+                    </form>
+                </div>
+                <img src="{{ url_for('static', filename='images/image.png') }}" class ="top_pic2">
+            </div>
+            <div class="top_bottom">
+                
+            </div>
+        </section>
+    </main>
+</body>
+</html>

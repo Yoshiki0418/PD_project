@@ -1,0 +1,85 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* サイズ計算をより予測しやすくするためのプロパティ */
+}
+
+header{
+    background-color: rgba(0, 0, 0, 0.681);
+    height:  62px;
+    width: 100%;
+    padding: auto;
+    position: relative;
+}
+
+.top_b_set{
+    display: flex;
+    position: absolute;
+    right: 5%;
+}
+
+.top_button{
+    background-color: rgb(246, 207, 36);
+    width: 100px;
+    height: 40px;
+    margin: 12px;
+}
+
+.top_page {
+    position: relative;
+    width: 100%;
+    height: 642px;
+}
+
+.back_pic {
+    width: 100%; 
+    height: 100%; 
+    position: absolute; 
+    top: 0;
+    left: 0;
+    z-index: -1; 
+}
+
+.top_pic2{
+    position: absolute; 
+    width: 56%;
+    z-index: 1; 
+    top: 180px;
+    right: 0px;
+}
+
+.start_button{
+    color: white;
+    font-size: 20px;
+    width: 440px;
+    height: 60px;
+    background-color: #f69a22;
+    border-radius: 20px;
+    border: 1px solid #e68a00; /* ボタンの境界線にわずかなハイライトを加える */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 影を下側に設定 */
+    transition: all 0.3s ease; /* クリック時の挙動を滑らかに */
+    margin-top: 30px;
+    margin-left: 80px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), /* 下部の外側のシャドー */
+                 0 2px 4px rgba(0, 0, 0, 0.2), /* 上部の外側のシャドー */
+                 inset 0 2px 2px rgba(255, 255, 255, 0.1); /* 上部の内側のシャドー */
+}
+
+.start_button:active {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* クリック時に影を小さくして押された感じを出す */
+    transform: translateY(2px); /* クリック時にボタンを少し下に動かす */
+}
+
+.left_container{
+    position: absolute; 
+    width: 40%;
+    z-index: 1; 
+    top: 200px;
+    left: 4%;
+}
+
+.top_bottom{
+    width: 100%;
+    height: 400px;
+    background-color: #FDBF9D;
+}

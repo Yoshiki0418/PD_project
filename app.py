@@ -136,10 +136,15 @@ def unit_conversion2(ingredients_dict, people_num):
 
         return converted_weights_per_person
 
-
-
+@app.route('/')
+def open():
+    return render_template('pd.html')
 
 @app.route('/')
+def logout():
+    return render_template('pd.html')
+
+@app.route('/home')
 def index():
     return render_template('index.html')
 

@@ -13,27 +13,28 @@
 
 <div id="container">
 
-<header>
-<h1 id="logo"><a href="index.html"><img src="images/logo.png" alt="SAMPLE COMPANY"></a></h1>
-	<!--開閉ブロック-->
-	<div id="menubar">
-	<nav>
-	<ul>
-	<li><a href="index.html">HOME</a></li>
-	<li><a href="company.html">COMPANY</a></li>
-	<li><a href="">WORKS</a>
-		<ul>
-		<li><a href="works.html">WORKS.WORKS.</a></li>
-		<li><a href="works.html">WORKS</a></li>
-		<li><a href="works.html">WORKS</a></li>
-		</ul>
-	</li>
-	<li class="current"><a href="contact.html">CONTACT</a></li>
-	</ul>
-	</nav>
-	</div>
-	<!--/#menubar-->
-</header>
+	<header>
+		<h1 id="logo"><a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/top.png') }}" class ="top_pic" alt="SAMPLE COMPANY"></a></h1>
+			<!--開閉ブロック-->
+			<div id="menubar">
+			<nav>
+			<ul>
+			<li><a href="{{ url_for('index') }}">HOME</a></li> 
+			<li><a href="{{ url_for('foods') }}">FOODS</a></li>
+			<li><a href="{{ url_for('main_nutrition') }}">HELTH</a>
+				<ul>
+				<li><a href="{{ url_for('main_nutrition') }}">HELTH.HELTH.</a></li>
+				<li><a href="{{ url_for('main_nutrition') }}">WORKS</a></li>
+				<li><a href="{{ url_for('main_nutrition') }}">WORKS</a></li>
+				</ul>
+			</li>
+			<li class="current"><a href="{{ url_for('contact') }}">CONTACT</a></li>
+			<li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
+			</ul>
+			</nav>
+			</div>
+			<!--/#menubar-->
+		</header>
 
 <div id="contents">
 
