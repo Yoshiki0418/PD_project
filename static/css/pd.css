@@ -78,8 +78,65 @@ header{
     left: 4%;
 }
 
-.top_bottom{
+.top_bottom {
+    display: flex;
+    flex-direction: column; /* 子要素を縦方向に並べる */
+    align-items: center; /* 水平方向での中央揃え */
     width: 100%;
-    height: 400px;
+    height: 620px;
     background-color: #FDBF9D;
+    text-align: center; /* テキストを中央揃えにする */
 }
+
+.top_bottom h1, .top_bottom p {
+    width: 100%; /* 必要に応じて幅を調整 */
+}
+
+.topic_title{
+    margin-top: 50px;
+}
+
+.top_bottom h1{
+    font-size: 32px;
+}
+
+.top_bottom p{
+    font-size: 20px;
+}
+
+.topic_pic2{
+    margin-top: 10px;
+    width: 140px;
+    margin-bottom: 15px;
+}
+
+.topic_pic3{
+    width: 180px;
+    margin-bottom: -25px;
+}
+
+.topic_pic4{
+    width: 190px;
+    margin-bottom: -35px;
+}
+
+.topic_pic{
+    width: 180px;
+}
+
+.topic_block{
+    display: flex;
+}
+
+.topic_container{
+    width: 200px;
+    margin-right: 50px;
+    margin-left: 50px;
+    margin-top: 50px;
+}
+
+/*
+.service{
+    height: 700px;
+    width: 100%;
+}*/
