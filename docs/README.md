@@ -1,11 +1,18 @@
 # PD_project
 ## 冷蔵庫管理システム
-- 完成予定:1月
-- オンプレミス版(クラウド版はこのプロジェクトが終了次第挑戦予定)
-- URL:
+- 制作期間:4ヶ月
+- オンプレミス版
   
 ## 目的
 食品ロスを減らすために、画像処理を用いて食材管理を手軽にできるサービスを目指しています。
+
+## アプリの説明動画
+
+[![Watch the video](https://img.youtube.com/vi/wmUcvecm1J0/maxresdefault.jpg)](https://www.youtube.com/watch?v=wmUcvecm1J0)
+https://www.youtube.com/watch?v=wmUcvecm1J0
+
+## 執筆
+https://zenn.dev/yoshi_tech/articles/ad3aaa1cd55c73
 
 ## 特徴
 
