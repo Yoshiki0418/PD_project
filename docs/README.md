@@ -14,6 +14,10 @@ https://www.youtube.com/watch?v=wmUcvecm1J0
 ## 執筆
 https://zenn.dev/yoshi_tech/articles/ad3aaa1cd55c73
 
+## アーキテクチャ
+
+![image](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/3687042/6ec179bf-e116-5957-eb9f-fc9e7fc7df5b.png)
+
 ## 特徴
 
 - 食材の画像を撮影するだけで、作成できるレシピを考案する
