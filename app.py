@@ -19,7 +19,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'static/UPLOAD_FOLDER'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # MySQLの設定
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///local.db'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -27,6 +27,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 class Ingredients(db.Model): 
+    __tablename__ = 'Ingredients'
     IngredientID = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     expiration_date = db.Column(db.Date)
@@ -140,7 +141,7 @@ def unit_conversion2(ingredients_dict, people_num):
 def open():
     return render_template('pd.html')
 
-@app.route('/')
+@app.route('/logout')
 def logout():
     return render_template('pd.html')
 
@@ -184,13 +185,13 @@ def foods():
         else:
             # expiration_dateが設定されていない場合の処理
             expiry_date = None
-            days_left = '不明'  # または適切なデフォルト値
+            days_left = '無'  # または適切なデフォルト値
  
         veg_data = {
             "IngredientID": vegetable.IngredientID,
             'name': vegetable.name,
             'image_file': vegetable.image_path,
-            'expiry': expiry_date.strftime('%Y-%m-%d') if expiry_date else '不明',  # 日付を文字列に変換、または'不明'
+            'expiry': expiry_date.strftime('%Y-%m-%d') if expiry_date else '無',  # 日付を文字列に変換、または'不明'
             'days_left': days_left,
             'is_present': vegetable.is_present,
             'category': vegetable.category  # 新しく追加されたカテゴリー情報
@@ -658,5 +659,5 @@ def nutririon():
 
 
 if __name__ == '__main__': 
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
 

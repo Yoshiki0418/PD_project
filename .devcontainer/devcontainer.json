@@ -1,0 +1,20 @@
+{
+    "name": "rumina-dev-container",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "backend",
+    "workspaceFolder": "/workspace",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "ms-python.flake8"
+            ]
+        }
+    },
+    "postCreateCommand": "pip install -r .devcontainer/requirements.dev.txt",
+    "forwardPorts": [
+        5001
+    ]
+}

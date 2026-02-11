@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const circle = item.querySelector('.circle');
         const circle2 = item.querySelector('.date-circle');
 
-        if (daysLeft === '不明') {
+        if (daysLeft === '無') {
             if (isPresent === '1') {
                 circle.style.backgroundColor = 'blue';
                 circle2.style.backgroundColor = 'blue';
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const circle2 = item.querySelector('.date-circle');
         const circle3 = item.querySelector('.edit-circle');
 
-        if (daysLeft === '不明') {
+        if (daysLeft === '無') {
             if (isPresent === '1') {
                 circle.style.backgroundColor = 'blue';
                 circle2.style.backgroundColor = 'blue';
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isPresent = item.getAttribute('data-is-present');
         const circle = item.querySelector('.circle');
 
-        if (daysLeft === '不明') {
+        if (daysLeft === '無') {
             if (isPresent === '1') {
                 circle.style.backgroundColor = 'blue';
             } else {

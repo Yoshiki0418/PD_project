@@ -147,6 +147,7 @@ def scraping2(input_ingredients, recipe_add):
         soup = BeautifulSoup(response.text, 'html.parser')
 
         recipe_info = {}
+        nutrients = {}
 
         # レシピ名を取得
         recipe_title_tag = soup.find('h1', class_='recipeTitle')

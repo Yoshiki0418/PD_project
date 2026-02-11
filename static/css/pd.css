@@ -5,7 +5,7 @@
 }
 
 header{
-    background-color: rgba(0, 0, 0, 0.681);
+    background-color: rgba(255, 255, 255, 0.681);
     height:  62px;
     width: 100%;
     padding: auto;
@@ -19,7 +19,7 @@ header{
 }
 
 .top_button{
-    background-color: rgb(246, 207, 36);
+    background-color: rgb(255, 255, 255);
     width: 100px;
     height: 40px;
     margin: 12px;

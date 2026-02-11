@@ -1,4 +1,4 @@
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 from PIL import Image
 import numpy as np
 
@@ -8,6 +8,7 @@ model = load_model("model/new_keras_model.h5", compile=False)
 # Load the labels
 with open("model/new_labels.txt", "r", encoding="utf-8") as file:
     class_names = [line.strip() for line in file.readlines()]
+
 
 def process_image(image_path):
     # PILを使って画像を読み込み

@@ -1,0 +1,37 @@
+flask
+flask_sqlalchemy
+flask_migrate
+werkzeug
+sqlalchemy
+pymysql         # ← MySQL接続用（`SQLALCHEMY_DATABASE_URI` がMySQL想定）
+gunicorn        # ← 本番運用時用のWSGIサーバー（必要に応じて）
+
+# 標準ライブラリではないので明示的に記載が必要なもの
+# 以下はおそらく自作モジュール（food_judge, meat_judgeなど）は除外しています
+
+# HTML文字列のデコード用（Python標準ライブラリに含まれるが念のため）
+html5lib
+
+# スクレイピング用のライブラリを使っている可能性があるなら（scraping, scraping2 の中身による）
+requests
+beautifulsoup4
+lxml
+
+# 画像処理系のモジュールが `process_image` 内部で使われていそうなら
+Pillow
+opencv-python-headless<4.10
+
+keras==2.14.0
+tensorflow==2.14.0
+
+google-cloud-vision
+numpy<2
+matplotlib
+pandas
+seaborn
+scipy
+tqdm
+pyyaml
+torch
+torchvision
+psutil
