@@ -1,0 +1,36 @@
+flask
+flask_sqlalchemy
+flask_migrate
+werkzeug
+sqlalchemy
+pymysql
+gunicorn
+
+# Scraping
+requests
+beautifulsoup4
+lxml
+html5lib
+
+# Image Processing
+Pillow
+opencv-python-headless<4.10
+numpy<2
+
+# Machine Learning
+keras==2.14.0
+tensorflow==2.14.0
+torch
+torchvision
+
+# Google Cloud
+google-cloud-vision
+
+# Utilities
+matplotlib
+pandas
+seaborn
+scipy
+tqdm
+pyyaml
+psutil

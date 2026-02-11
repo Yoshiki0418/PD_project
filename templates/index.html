@@ -31,22 +31,22 @@
 <div id="container">
 
 <header>
-<h1 id="logo"><a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/top.png') }}" class ="top_pic" alt="SAMPLE COMPANY"></a></h1>
+<h1 id="logo"><a href="{{ url_for('main.index') }}"><img src="{{ url_for('static', filename='images/top.png') }}" class ="top_pic" alt="SAMPLE COMPANY"></a></h1>
 	<!--開閉ブロック-->
 	<div id="menubar">
 	<nav>
 	<ul>
-	<li class="current"><a href="{{ url_for('index') }}">HOME</a></li> 
-	<li><a href="{{ url_for('foods') }}">FOODS</a></li>
-	<li><a href="{{ url_for('main_nutrition') }}">HELTH</a>
+	<li class="current"><a href="{{ url_for('main.index') }}">HOME</a></li> 
+	<li><a href="{{ url_for('foods.foods') }}">FOODS</a></li>
+	<li><a href="{{ url_for('main.main_nutrition') }}">HELTH</a>
 		<ul>
-		<li><a href="{{ url_for('main_nutrition') }}">HELTH.HELTH.</a></li>
-		<li><a href="{{ url_for('main_nutrition') }}">WORKS</a></li>
-		<li><a href="{{ url_for('main_nutrition') }}">WORKS</a></li>
+		<li><a href="{{ url_for('main.main_nutrition') }}">HELTH.HELTH.</a></li>
+		<li><a href="{{ url_for('main.main_nutrition') }}">WORKS</a></li>
+		<li><a href="{{ url_for('main.main_nutrition') }}">WORKS</a></li>
 		</ul>
 	</li>
-	<li><a href="{{ url_for('contact') }}">CONTACT</a></li>
-	<li><a href="{{ url_for('logout') }}">LOGOUT</a></li>
+	<li><a href="{{ url_for('main.contact') }}">CONTACT</a></li>
+	<li><a href="{{ url_for('main.logout') }}">LOGOUT</a></li>
 	</ul>
 	</nav>
 	</div>
@@ -65,94 +65,29 @@
 			<img src="{{ url_for('static', filename='images/4.jpeg') }}"  class ="opening_pic">
 		</div>	
 
-		<div class="upload_place">
-			<form id="upload-form" enctype="multipart/form-data">
-				<input type="file" id="image-upload" name="image" accept="image/*" required>
-				<button type="submit">画像をアップロード</button>
-			</form>
-			<div id="image-container" style="position: relative;">
-				<div id="class-name"></div>
-				<img id="uploaded-image" style="width: 30%; height: auto;">
-			</div>
-			  <!--Jsを使って処理を定義-->
-			  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-			  <script>
-				let ingredient_id;
-				$(document).ready(function() {
-				  $('#upload-form').on('submit', function(e) {
-					e.preventDefault();
-					const formData = new FormData(this);
-					$.ajax({
-					  url: '/upload',
-					  type: 'POST',
-					  data: formData,
-					  contentType: false,
-					  processData: false,
-					  success: function(response) {
-						ingredient_id = response.ingredient_id; // responseからingredient_idを取得
-						if(response.image_url) {
-						  $('#uploaded-image').attr('src', response.image_url);
-						  if(response.class_name) {
-							$('#class-name').text(response.class_name);
-						  }
-						  if ($('#image-container').find('.recipe_button').length === 0) {
-							$('#image-container').append('<button class="recipe_button">レシピを検索</button>');
-						  }
-						}
-					  },
-					  error: function(error) {
-						console.log('Error:', error);
-					  }
-					});
-				  });
-			  
-				  // イベント委譲を使用して、動的に追加されたボタンにイベントハンドラを設定
-				  $(document).on('click', '.recipe_button', function() {
-					console.log('レシピ検索ボタンがクリックされました。');
-					$('.recipe_section').empty();
-					// サーバーにAjaxリクエストを送信
-					$.ajax({
-					  url: '/get-recipes', // サーバーのレシピを取得するルート
-					  type: 'POST',
-					  contentType: 'application/json',
-					  data: JSON.stringify({ 'ingredient_id': ingredient_id }), // リクエストボディにingredient_idを含める
-					  dataType: 'json',
-					  success: function(recipes) {
-						// 成功した場合の処理
-						console.log(recipes);
-						recipes.forEach(function(recipe) {
-							// 'https'で始まるURLかどうかをチェックし、画像パスを適切に設定
-							if (recipe.ImageURL.startsWith('https')) {
-								imageUrl = recipe.ImageURL;
-							} else {
-								imageUrl = `static/images/recipe/${recipe.ImageURL}`;
-							}
-							const recipeCardHtml = `
-							<a href="/recipe-details/${recipe.RecipeID}" class="recipe-link">
-								<div class="recipe-card">
-									<img src="${imageUrl}" alt="${recipe.RecipeName}" class="recipe-image">
-									<div class="recipe-content">
-										<h2 class="recipe-title">${recipe.RecipeName}</h2>
-										<p class="recipe-description">${recipe.Description}</p>
-									</div>
+		<section class="recommended_recipes">
+			<h2 class="section_title">Recommended Recipes</h2>
+			<div class="recipe_grid">
+				{% for recipe in recipes %}
+					<a href="{{ url_for('recipes.recipe_details', recipe_id=recipe.RecipeID) }}" class="recipe_card_link">
+						<div class="recipe_card">
+							{% if recipe.ImageURL.startswith('http') %}
+								<img src="{{ recipe.ImageURL }}" alt="{{ recipe.RecipeName }}" class="recipe_image">
+							{% else %}
+								<img src="{{ url_for('static', filename='images/recipe/' + recipe.ImageURL) }}" alt="{{ recipe.RecipeName }}" class="recipe_image">
+							{% endif %}
+							<div class="recipe_info">
+								<h3>{{ recipe.RecipeName }}</h3>
+								<div class="meta">
+									<span class="cooking_time"><i class="far fa-clock"></i> {{ recipe.CookingTime }} min</span>
+									<span class="calories"><i class="fas fa-fire"></i> {{ recipe.Calorie }} kcal</span>
 								</div>
-							</a>
-							`;
-							// 新しいレシピカードをrecipe_sectionに追加します。
-							$('.recipe_section').append(recipeCardHtml);
-						});					
-					  },
-					  error: function(error) {
-						// エラーが発生した場合の処理
-						console.error('Error fetching recipes:', error);
-					  }
-					});
-				  });
-				});
-			  </script>	  
-		</div>
-		<section class="recipe_section">
-			<!-- カードがここに追加される -->
+								<p class="recipe_desc">{{ recipe.Description[:60] }}...</p>
+							</div>
+						</div>
+					</a>
+				{% endfor %}
+			</div>
 		</section>
 		
 	</section>

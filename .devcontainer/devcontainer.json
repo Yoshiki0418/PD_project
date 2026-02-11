@@ -13,7 +13,7 @@
             ]
         }
     },
-    "postCreateCommand": "pip install -r .devcontainer/requirements.dev.txt",
+    "postCreateCommand": "pip install -r requirements.txt",
     "forwardPorts": [
         5001
     ]

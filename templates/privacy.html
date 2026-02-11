@@ -14,13 +14,13 @@
 <div id="container">
 
 <header>
-	<h1 id="logo"><a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/top.png') }}" class ="top_pic" alt="SAMPLE COMPANY"></a></h1>
+	<h1 id="logo"><a href="{{ url_for('main.index') }}"><img src="{{ url_for('static', filename='images/top.png') }}" class ="top_pic" alt="SAMPLE COMPANY"></a></h1>
 	<!--開閉ブロック-->
 	<div id="menubar">
 	<nav>
 	<ul>
 	<li><a href="index.html">HOME</a></li> 
-	<li><a href="{{ url_for('foods') }}">FOODS</a></li>
+	<li><a href="{{ url_for('foods.foods') }}">FOODS</a></li>
 	<li><a href="">HELTH</a>
 		<ul>
 		<li><a href="works.html">HELTH.HELTH.</a></li>
@@ -28,7 +28,7 @@
 		<li><a href="works.html">WORKS</a></li>
 		</ul>
 	</li>
-	<li class="current"><a href="{{ url_for('contact') }}">CONTACT</a></li>
+	<li class="current"><a href="{{ url_for('main.contact') }}">CONTACT</a></li>
 	</ul>
 	</nav>
 	</div>

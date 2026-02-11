@@ -1,1 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+
+# Environment
+.env
+
+# IDE
+.vscode/
 .history/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node
+node_modules/
+package-lock.json
+
+# Database
+instance/
+*.db
+
+# ML Models (large binary files - see README for setup)
+model/*.h5
+
+# Upload folder (user data)
+static/UPLOAD_FOLDER/
+
+# YOLO runs (generated outputs)
+runs/
+
+# Reference images (development only)
+参考画像/

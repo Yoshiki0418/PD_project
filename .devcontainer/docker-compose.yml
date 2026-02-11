@@ -8,6 +8,6 @@ services:
     volumes:
       - ..:/workspace:cached
     ports:
-      - "5001:5000"
+      - "5001:5001"
     command: sleep infinity
-    # command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--reload"]
+    # command: ["python", "run.py"]

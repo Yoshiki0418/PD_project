@@ -26,5 +26,5 @@ RUN pip install --upgrade pip setuptools
 WORKDIR /workspace
 
 # 必要なPythonライブラリをインストール
-COPY requirements.dev.txt /workspace/
-RUN pip install -r requirements.dev.txt
+COPY ../requirements.txt /workspace/
+RUN pip install -r requirements.txt
